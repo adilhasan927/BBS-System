@@ -5,8 +5,8 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   console.log(req);
   res.send(JSON.stringify([
-    { username: 'author1', body: 'body1' },
-    { username: 'author2', body: 'body2' },
+    { author: 'author1', body: 'body1' },
+    { author: 'author2', body: 'body2' },
   ]));
 });
 

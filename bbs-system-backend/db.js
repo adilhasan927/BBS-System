@@ -1,23 +1,12 @@
-const mongoClient = require('mongodb').MongoClient;
-const mongoDbUrl = 'mongodb://127.0.0.1:27017';
-let mongodb;
+/**
+ * Initialising MongoDB connection
+ */
 
-function connect(callback){
-    mongoClient.connect(mongoDbUrl, (err, db) => {
-        mongodb = db;
-        callback();
-    });
-}
-function get(){
-    return mongodb;
-}
+const MongoClient = require('mongodb').MongoClient;
 
-function close(){
-    mongodb.close();
-}
+// Connection URL
+const url = 'mongodb://localhost:27017';
 
-module.exports = {
-    connect,
-    get,
-    close
-};
+// Use connect method to connect to the Server
+const connection = MongoClient.connect(url);
+module.exports = connection;

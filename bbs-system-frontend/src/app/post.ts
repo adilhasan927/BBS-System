@@ -1,4 +1,4 @@
 export class Post {
-    author: string;
+    username: string;
     body: string;
 }

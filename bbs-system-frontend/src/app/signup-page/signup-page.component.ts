@@ -44,4 +44,8 @@ export class SignupPageComponent implements OnInit {
     })
   }
 
+  get username() { return this.signupForm.get('username'); }
+
+  get password() { return this.signupForm.get('password'); }
+
 }

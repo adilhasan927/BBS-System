@@ -5,7 +5,9 @@ const connection = require('../db.js');
 router.post('/', function(req, res, next) {
   connection.then(dbs => {
     console.log(req.body.token)
-    dbs.db("documents").collection("credentials").updateOne(
+    dbs.db("documents")
+    .collection("credentials")
+    .updateOne(
       { token: req.body.token },
       { $set: { token: '0' } },
     ).then(val => {

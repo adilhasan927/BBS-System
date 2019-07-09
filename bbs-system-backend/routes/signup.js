@@ -5,7 +5,9 @@ const connection = require('../db.js');
 router.post('/', function(req, res, next) {
   connection.then(dbs => {
     token = req.body.username + '@' + req.body.password;
-    dbs.db("documents").collection("credentials").insertOne({
+    dbs.db("documents")
+    .collection("credentials")
+    .insertOne({
       username: req.body.username,
       password: req.body.password,
       token: token,

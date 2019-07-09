@@ -1,12 +1,23 @@
 var express = require('express');
 var router = express.Router();
+const connection = require('../db.js');
 
-// TODO: Add proper request handling.
 router.post('/', function(req, res, next) {
-  //console.log(req);
-  res.send(JSON.stringify({
-    logoutSuccessful: true,
-  }));
+  connection.then(dbs => {
+    console.log(req.body.token)
+    dbs.db("documents").collection("credentials").updateOne(
+      { token: req.body.token },
+      { $set: { token: '0' } },
+    ).then(val => {
+      res.send(JSON.stringify({
+        logoutSuccessful: true,
+      }));
+    }).catch(err => {
+      res.send(JSON.stringify({
+        logoutSuccessful: false,
+      }));
+    });
+  });
 });
 
 module.exports = router;

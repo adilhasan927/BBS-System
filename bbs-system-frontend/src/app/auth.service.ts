@@ -19,7 +19,6 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(credentials: Credentials): Observable<AuthResponse> {
-    // TODO: Write login query implementation.
     const url = this.queryURL + '/login';
     return this.http.post<AuthResponse>(url, JSON.stringify(credentials), this.httpOptions)
     .pipe(
@@ -28,7 +27,6 @@ export class AuthService {
   }
 
   signup(credentials: Credentials): Observable<AuthResponse> {
-    // TODO: Write signup query implementation.
     const url = this.queryURL + '/signup';
     return this.http.post<AuthResponse>(url, JSON.stringify(credentials), this.httpOptions)
       .pipe(
@@ -36,10 +34,9 @@ export class AuthService {
       );
   }
 
-  logout() {
-    // TODO: Write signup query implementation.
+  logout(token) {
     const url = this.queryURL + '/logout';
-    return this.http.post(url, this.httpOptions)
+    return this.http.post(url, JSON.stringify({ token: token }), this.httpOptions)
       .pipe(
         catchError(this.handleError)
       );

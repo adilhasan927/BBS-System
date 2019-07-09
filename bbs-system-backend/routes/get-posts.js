@@ -4,7 +4,6 @@ const connection = require('../db.js')
 
 // TODO: Add user authorisation check.
 router.get('/', function(req, res, next) {
-  console.log(req);
   connection.then(dbs => {
     var cursor = dbs.db('documents').collection('posts').find().sort({_id:1}).limit(5);
     cursor.toArray().then(posts => {

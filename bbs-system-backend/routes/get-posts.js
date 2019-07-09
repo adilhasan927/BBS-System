@@ -6,7 +6,7 @@ const connection = require('../db.js')
 router.get('/', function(req, res, next) {
   console.log(req);
   connection.then(dbs => {
-    var cursor = (dbs.db('documents').collection('posts').find().sort({_id:1}).limit(5));
+    var cursor = dbs.db('documents').collection('posts').find().sort({_id:1}).limit(5);
     cursor.toArray().then(posts => {
       res.send(JSON.stringify(posts));    
     });

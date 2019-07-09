@@ -18,10 +18,10 @@ router.get('/', function(req, res, next) {
         cursor.toArray().then(posts => {
           res.send(JSON.stringify(posts));    
         });    
+      } else {
+        throw new Error("Invalid token.") 
       }
-    } else {
-      throw new Error("Invalid token.") 
-    }
+    } 
   }).catch(err => {
     res.send(JSON.stringify([{
       username: "Placeholder",

@@ -4,7 +4,6 @@ const connection = require('../db.js');
 
 router.post('/', function(req, res, next) {
   connection.then(dbs => {
-    console.log(req.body.token)
     dbs.db("documents")
     .collection("credentials")
     .updateOne(

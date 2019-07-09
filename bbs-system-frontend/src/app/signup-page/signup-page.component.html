@@ -4,13 +4,13 @@
 
     <label>
         username:<br>
-        <input type="text" formControlName="username">
+        <input type="text" formControlName="username" required>
     </label><br>
 
     <label>
         password:<br>
-        <input type="password" formControlName="password">
+        <input type="password" formControlName="password" required>
     </label><br>
 
-    <button type="submit">Submit</button>
+    <button type="submit" [disabled]="!signupForm.valid">Submit</button>
 </form>

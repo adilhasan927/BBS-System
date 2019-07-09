@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
       .find({ token: req.header('AuthToken')})
       .count()
       .then(val => {
-        if (val == 0) {
+        if (val == 1) {
           dbs.db('documents')
           .collection('posts')
           .find()
@@ -21,6 +21,7 @@ router.get('/', function(req, res, next) {
             res.send(JSON.stringify(arr))
           })
         } else {
+          console.log(val)
           res.send(JSON.stringify([{
             username: 'Placeholder',
             body: 'Incorrect token.'
@@ -30,7 +31,6 @@ router.get('/', function(req, res, next) {
     } else {
         throw new Error("Invalid token.") 
       }
-    } 
   }).catch(err => {
     res.send(JSON.stringify([{
       username: "Placeholder",

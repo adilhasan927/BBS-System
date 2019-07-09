@@ -28,8 +28,8 @@ export class NavComponent implements OnInit {
   logout() {
     var loginReturn = this.auth.logout(this.token.retrieveToken()).subscribe(res => {
       window.alert("Logged out.")
-      this.token.deleteToken();
-      this.isLoggedIn = false;  
     })
+    this.token.deleteToken();
+    this.isLoggedIn = false;  
   }
 }

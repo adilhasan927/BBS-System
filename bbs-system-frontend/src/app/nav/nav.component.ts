@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TokenService } from '../token.service';
+import { StorageService } from '../storage.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 
@@ -12,7 +12,7 @@ export class NavComponent implements OnInit {
   isLoggedIn: boolean;
 
   constructor(
-    private token: TokenService,
+    private token: StorageService,
     private router: Router,
     private auth: AuthService,
   ) { }

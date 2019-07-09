@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse } from '@angul
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Post } from './post';
-import { TokenService } from './token.service';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class FetchContentService {
 
   constructor(
     private http: HttpClient,
-    private token: TokenService,
+    private token: StorageService,
   ) { }
 
   getContent(): Observable<Post[]> {

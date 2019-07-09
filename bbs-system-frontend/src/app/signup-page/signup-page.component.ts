@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from "@angular/router"
 import { AuthService } from '../auth.service';
-import { TokenService } from '../token.service';
+import { StorageService } from '../storage.service';
 
 @Component({
   selector: 'app-signup-page',
@@ -23,7 +23,7 @@ export class SignupPageComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
-    private token: TokenService,
+    private token: StorageService,
     private router: Router,
   ) { }
 

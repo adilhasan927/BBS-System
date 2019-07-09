@@ -18,4 +18,16 @@ export class StorageService {
   retrieveToken() {
     return sessionStorage.getItem('bbs-token');
   }
+
+  storeUsername(username: string) {
+    sessionStorage.setItem('bbs-username', username);
+  }
+
+  deleteUsername() {
+    sessionStorage.removeItem('bbs-username');
+  }
+
+  retrieveUsername() {
+    return sessionStorage.getItem('bbs-username');
+  }
 }

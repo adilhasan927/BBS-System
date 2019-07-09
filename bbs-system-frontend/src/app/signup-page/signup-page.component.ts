@@ -23,7 +23,7 @@ export class SignupPageComponent implements OnInit {
 
   constructor(
     private auth: AuthService,
-    private token: StorageService,
+    private storage: StorageService,
     private router: Router,
   ) { }
 
@@ -36,7 +36,8 @@ export class SignupPageComponent implements OnInit {
       this.signupForm.value
     ).subscribe(res => {
       if (res.authSuccessful) {
-        this.token.storeToken(res.token);
+        this.storage.storeToken(res.token);
+        this.storage.storeUsername(this.signupForm.get('username').value);
         this.router.navigate(['/members-only']);
       } else {
         window.alert("Incorrect values.")

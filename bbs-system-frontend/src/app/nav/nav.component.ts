@@ -10,9 +10,10 @@ import { AuthService } from '../auth.service';
 })
 export class NavComponent implements OnInit {
   isLoggedIn: boolean;
+  username: string;
 
   constructor(
-    private token: StorageService,
+    private storage: StorageService,
     private router: Router,
     private auth: AuthService,
   ) { }
@@ -20,16 +21,17 @@ export class NavComponent implements OnInit {
   ngOnInit() {
     this.router.events.subscribe(event => {
       if (event.constructor.name === "NavigationEnd") {
-       this.isLoggedIn = this.token.retrieveToken() != null;
+       this.isLoggedIn = this.storage.retrieveToken() != null;
+       this.username = this.storage.retrieveUsername();
       }
     })
   }
 
   logout() {
-    var loginReturn = this.auth.logout(this.token.retrieveToken()).subscribe(res => {
+    var loginReturn = this.auth.logout(this.storage.retrieveToken()).subscribe(res => {
       window.alert("Logged out.")
     })
-    this.token.deleteToken();
+    this.storage.deleteToken();
     this.isLoggedIn = false;  
   }
 }

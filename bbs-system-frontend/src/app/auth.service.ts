@@ -11,7 +11,9 @@ import { AuthResponse } from './auth-response';
 export class AuthService {
   private queryURL: string = 'http://localhost:3000/api';
   private httpOptions = {
-    headers: new HttpHeaders(),
+    headers: new HttpHeaders({
+      'Content-Type':  'application/json',
+    }),
   };
 
   constructor(private http: HttpClient) { }
@@ -19,7 +21,7 @@ export class AuthService {
   login(credentials: Credentials): Observable<AuthResponse> {
     // TODO: Write login query implementation.
     const url = this.queryURL + '/login';
-    return this.http.post<AuthResponse>(url, credentials, this.httpOptions)
+    return this.http.post<AuthResponse>(url, JSON.stringify(credentials), this.httpOptions)
     .pipe(
       catchError(this.handleError)
     );
@@ -28,7 +30,7 @@ export class AuthService {
   signup(credentials: Credentials): Observable<AuthResponse> {
     // TODO: Write signup query implementation.
     const url = this.queryURL + '/signup';
-    return this.http.post<AuthResponse>(url, credentials, this.httpOptions)
+    return this.http.post<AuthResponse>(url, JSON.stringify(credentials), this.httpOptions)
       .pipe(
         catchError(this.handleError)
       );
@@ -37,7 +39,7 @@ export class AuthService {
   logout() {
     // TODO: Write signup query implementation.
     const url = this.queryURL + '/logout';
-    return this.http.get(url, this.httpOptions)
+    return this.http.post(url, this.httpOptions)
       .pipe(
         catchError(this.handleError)
       );

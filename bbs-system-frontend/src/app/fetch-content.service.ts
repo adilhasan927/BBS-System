@@ -19,6 +19,7 @@ export class FetchContentService {
   getContent(): Observable<Post[]> {
     const httpOptions = {
       headers: new HttpHeaders({
+        'Content-Type':  'application/json',
         'AuthToken': this.token.retrieveToken() || '0',
       }),
     };

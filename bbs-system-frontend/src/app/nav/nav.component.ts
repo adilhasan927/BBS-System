@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TokenService } from '../token.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-nav',
@@ -13,6 +14,7 @@ export class NavComponent implements OnInit {
   constructor(
     private token: TokenService,
     private router: Router,
+    private auth: AuthService,
   ) { }
 
   ngOnInit() {
@@ -24,7 +26,10 @@ export class NavComponent implements OnInit {
   }
 
   logout() {
-    this.token.deleteToken();
-    this.isLoggedIn = false;
+    var loginReturn = this.auth.logout().subscribe(res => {
+      window.alert("Logged out.")
+      this.token.deleteToken();
+      this.isLoggedIn = false;  
+    })
   }
 }

@@ -2,7 +2,7 @@ const express = require('express');
 var router = express.Router();
 const connection = require('../db.js')
 
-// TODO: Add proper request handling.
+// TODO: Add user authorisation check.
 router.get('/', function(req, res, next) {
   console.log(req);
   connection.then(dbs => {

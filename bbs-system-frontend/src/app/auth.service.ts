@@ -34,6 +34,15 @@ export class AuthService {
       );
   }
 
+  logout() {
+    // TODO: Write signup query implementation.
+    const url = this.queryURL + '/logout';
+    return this.http.get(url, this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.

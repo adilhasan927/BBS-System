@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const connection = require('../db.js')
 
-// TODO: Add proper request handling.
+// TODO: Add proper token handling.
 router.post('/', function(req, res, next) {
   console.log(req);
   connection.then(dbs => {

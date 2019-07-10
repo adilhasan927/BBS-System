@@ -1,10 +1,16 @@
 var express = require('express');
 var router = express.Router();
 const connection = require('../db.js');
+const jwt = require('jsonwebtoken');
+const getSecret = require('../secrets.js');
 
 router.post('/', function(req, res, next) {
   connection.then(dbs => {
-    token = req.body.username + '@' + req.body.password;
+    payload = JSON.stringify({
+      username: req.body.username,
+      timestamp: Date.now().toString(),
+    })
+    token = jwt.sign(payload, getSecret())
     dbs.db("documents")
     .collection("credentials")
     .updateOne(
@@ -15,13 +21,13 @@ router.post('/', function(req, res, next) {
       { $set: { token: token } },
     ).then(val => {
       res.send(JSON.stringify({
-        authSuccessful: true,
+        successful: true,
         token: token,
       }));
     }).catch(err => {
       res.send(JSON.stringify({
-        authSuccessful: false,
-        token: 0,
+        successful: false,
+        token: null,
       }));
     });
   });

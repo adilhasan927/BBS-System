@@ -1,12 +1,32 @@
 const express = require('express');
 var router = express.Router();
 const connection = require('../db.js')
+const jwt = require('jsonwebtoken');
+const getSecret = require('../secrets.js');
 
 router.get('/', function(req, res, next) {
+  const token = req.header('AuthToken')
+  var timestamp
+  jwt.verify(token, getSecret(), (err, val) => {
+    if (err) {
+      res.send(JSON.stringify({
+        successful: false,
+        arr: [],
+      }))  
+      return null;
+    }
+    timestamp = Number(val.timestamp)
+  })
+  if ((Date.now() - timestamp) > (1000*60*60*24)) {
+    res.send(JSON.stringify({
+      successful: false,
+      arr: [],
+    }))
+  } 
   connection.then(dbs => {
     dbs.db('documents')
     .collection('credentials')
-    .find({ token: req.header('AuthToken') })
+    .find({ token: token })
     .count()
     .then(val => {
       if (val == 1) {
@@ -17,13 +37,16 @@ router.get('/', function(req, res, next) {
         .limit(5)
         .toArray()
         .then(arr => {
-          res.send(JSON.stringify(arr));
+          res.send(JSON.stringify({
+            successful: true,
+            arr: arr,
+          }));
         });
       } else {
         console.log(val)
         res.send(JSON.stringify([{
-          username: 'Placeholder',
-          body: 'Incorrect token.'
+          successful: false,
+          arr: [],
         }]));
       }
     });

@@ -8,14 +8,14 @@ router.post('/', function(req, res, next) {
     .collection("credentials")
     .updateOne(
       { token: req.body.token },
-      { $set: { token: '0' } },
+      { $set: { token: null } },
     ).then(val => {
       res.send(JSON.stringify({
-        logoutSuccessful: true,
+        successful: true,
       }));
     }).catch(err => {
       res.send(JSON.stringify({
-        logoutSuccessful: false,
+        successful: false,
       }));
     });
   });

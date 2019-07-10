@@ -12,7 +12,6 @@ router.get('/', function(req, res, next) {
         successful: false,
         body: [],
       }))
-      console.log(err)  
     }
   })
   connection.then(dbs => {

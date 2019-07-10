@@ -19,20 +19,10 @@ router.post('/', function(req, res, next) {
     .count()
     .then(val => {
       if (val == 1) {
-        dbs.db("documents")
-        .collection("credentials")
-        .updateOne(
-          {
-            username: req.body.username,
-            password: req.body.password,
-          },
-          { $set: { token: token } },
-        ).then(val => {
-          res.send(JSON.stringify({
-            successful: true,
-            body: token,
-          }));
-        });
+        res.send(JSON.stringify({
+          successful: true,
+          body: token,
+        }));
       } else {
         res.send(JSON.stringify({
           successful: false,

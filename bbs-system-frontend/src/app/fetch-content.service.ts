@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Post } from './post';
+import { Response } from './response';
 import { StorageService } from './storage.service';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class FetchContentService {
     private storage: StorageService,
   ) { }
 
-  getContent(): Observable<Post[]> {
+  getContent(): Observable<Response> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
@@ -24,7 +24,7 @@ export class FetchContentService {
       }),
     };
     const url = this.queryURL + '/get-posts';
-    return this.http.get<Post[]>(url, httpOptions)
+    return this.http.get<Response>(url, httpOptions)
       .pipe(
         catchError(this.handleError)
       );

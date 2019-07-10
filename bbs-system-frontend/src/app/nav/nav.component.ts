@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../storage.service';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth.service';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-nav',
@@ -15,7 +15,7 @@ export class NavComponent implements OnInit {
   constructor(
     private storage: StorageService,
     private router: Router,
-    private auth: AuthService,
+    private api: ApiService,
   ) { }
 
   ngOnInit() {
@@ -28,10 +28,8 @@ export class NavComponent implements OnInit {
   }
 
   logout() {
-    var loginReturn = this.auth.logout(this.storage.retrieveToken()).subscribe(res => {
-      this.storage.deleteToken();
-      this.isLoggedIn = false;  
-      window.alert("Logged out.")
-    })
+    this.storage.deleteToken();
+    this.isLoggedIn = false;  
+    window.alert("Logged out.");
   }
 }

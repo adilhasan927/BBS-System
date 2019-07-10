@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from "@angular/router"
-import { AuthService } from '../auth.service';
+import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
 
 @Component({
@@ -22,7 +22,7 @@ export class SignupPageComponent implements OnInit {
   });
 
   constructor(
-    private auth: AuthService,
+    private api: ApiService,
     private storage: StorageService,
     private router: Router,
   ) { }
@@ -32,11 +32,11 @@ export class SignupPageComponent implements OnInit {
   
   onSubmit() {
     // TODO: Add validation, routing.
-    var signupReturn = this.auth.signup(
+    var signupReturn = this.api.signup(
       this.signupForm.value
     ).subscribe(res => {
-      if (res.authSuccessful) {
-        this.storage.storeToken(res.token);
+      if (res.successful) {
+        this.storage.storeToken(res.body);
         this.storage.storeUsername(this.signupForm.get('username').value);
         this.router.navigate(['/members-only']);
       } else {

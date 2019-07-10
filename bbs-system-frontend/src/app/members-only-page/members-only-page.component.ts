@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from "@angular/router"
 import { FetchContentService } from '../fetch-content.service';
 import { Post } from '../post';
-import { AuthService } from '../auth.service';
+import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
 
 @Component({
@@ -21,7 +21,7 @@ export class MembersOnlyPageComponent implements OnInit {
 
   constructor(
     private fetchContent: FetchContentService,
-    private auth: AuthService,
+    private api: ApiService,
     private storage: StorageService,
     private router: Router,
   ) { }
@@ -32,20 +32,22 @@ export class MembersOnlyPageComponent implements OnInit {
 
   refreshContents() {
     this.fetchContent.getContent().subscribe(res => {
-      this.posts = res;
+      this.posts = res.body;
     });
   }
 
   onSubmit() {
-    var loginReturn = this.auth.post(
+    var loginReturn = this.api.post(
       this.storage.retrieveToken(),
       this.postForm.get('post').value,
     ).subscribe(res => {
-      if (res.authSuccessful) {
+      console.log(res);
+      if (res.successful) {
         this.refreshContents();
         window.alert("Post submitted.");
       } else {
-        window.alert("Incorrect token. Logout and login again.")
+        window.alert("Incorrect token.");
+        this.router.navigate(['/login']);
       }
     })
   }

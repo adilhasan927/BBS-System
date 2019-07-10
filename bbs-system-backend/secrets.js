@@ -2,18 +2,7 @@ const crypto = require('crypto')
 const fs = require('fs')
 const jsonwebtoken = require('jsonwebtoken')
 
-var secret;
-fs.readFile('./secret.json', (err, data) => {
-    secret = JSON.parse(data);
-})
-
-function getSecret() {
-    if (secret.month != Date.prototype.getMonth()) {
-        secret.secret = crypto.randomBytes(16);
-        secret.month != Date.prototype.getMonth();
-        fs.writeFile('./secret.json');
-    }
-    return secret.secret;
+//todo: implement proper secret generation.
+module.exports = function getSecret() {
+    return "445d327cf6b58463ea4453a167ff6894"
 }
-
-module.exports = getSecret;

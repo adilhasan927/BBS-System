@@ -6,11 +6,10 @@ const getSecret = require('../secrets.js');
 
 router.post('/', function(req, res, next) {
   connection.then(dbs => {
-    payload = JSON.stringify({
+    var payload = {
       username: req.body.username,
-      timestamp: Date.now(),
-    })
-    token = jwt.sign(payload, getSecret())
+    }
+    var token = jwt.sign(payload, getSecret(), { expiresIn: "2 days" });
     dbs.db("documents")
     .collection("credentials")
     .insertOne({
@@ -20,12 +19,12 @@ router.post('/', function(req, res, next) {
     }).then(val => {
       res.send(JSON.stringify({
         successful: true,
-        token: token,
+        body: token,
       }));
     }).catch(err => {
       res.send(JSON.stringify({
         successful: false,
-        token: null,
+        body: null,
       }));
     });
   });

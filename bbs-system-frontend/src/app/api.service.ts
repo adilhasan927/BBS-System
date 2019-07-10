@@ -3,12 +3,12 @@ import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse } from '@angul
 import { Credentials } from './credentials';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AuthResponse } from './auth-response';
+import { Response } from './response';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class ApiService {
   private queryURL: string = 'http://localhost:3000/api';
   private httpOptions = {
     headers: new HttpHeaders({
@@ -18,33 +18,25 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  login(credentials: Credentials): Observable<AuthResponse> {
+  login(credentials: Credentials): Observable<Response> {
     const url = this.queryURL + '/login';
-    return this.http.post<AuthResponse>(url, JSON.stringify(credentials), this.httpOptions)
+    return this.http.post<Response>(url, JSON.stringify(credentials), this.httpOptions)
     .pipe(
       catchError(this.handleError)
     );
   }
 
-  signup(credentials: Credentials): Observable<AuthResponse> {
+  signup(credentials: Credentials): Observable<Response> {
     const url = this.queryURL + '/signup';
-    return this.http.post<AuthResponse>(url, JSON.stringify(credentials), this.httpOptions)
+    return this.http.post<Response>(url, JSON.stringify(credentials), this.httpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
-  logout(token) {
-    const url = this.queryURL + '/logout';
-    return this.http.post(url, JSON.stringify({ token: token }), this.httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
-
-  post(token, body): Observable<AuthResponse> {
+  post(token, body): Observable<Response> {
     const url = this.queryURL + '/submit-post';
-    return this.http.post<AuthResponse>(url, JSON.stringify({
+    return this.http.post<Response>(url, JSON.stringify({
       AuthToken: token,
       body: body,
     }), this.httpOptions)

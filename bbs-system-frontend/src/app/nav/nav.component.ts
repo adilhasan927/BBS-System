@@ -29,6 +29,7 @@ export class NavComponent implements OnInit {
 
   logout() {
     this.storage.deleteToken();
+    this.storage.deleteUsername();
     this.isLoggedIn = false;  
     window.alert("Logged out.");
   }

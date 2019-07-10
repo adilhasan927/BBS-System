@@ -6,7 +6,6 @@ const getSecret = require('../secrets.js');
 
 router.get('/', function(req, res, next) {
   const token = req.header('AuthToken')
-  var timestamp
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
       res.send(JSON.stringify({

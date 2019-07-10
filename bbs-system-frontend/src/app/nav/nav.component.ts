@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, NavigationStart, NavigationEnd } from '@angular/router';
 import { StorageService } from '../storage.service';
-import { Router } from '@angular/router';
-import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-nav',
@@ -9,20 +8,19 @@ import { ApiService } from '../api.service';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
-  isLoggedIn: boolean;
-  username: string;
+  isLoggedIn: boolean = false;
+  username: string = "";
 
   constructor(
-    private storage: StorageService,
     private router: Router,
-    private api: ApiService,
+    private storage: StorageService,
   ) { }
 
   ngOnInit() {
     this.router.events.subscribe(event => {
-      if (event.constructor.name === "NavigationEnd") {
-       this.isLoggedIn = this.storage.retrieveToken() != null;
-       this.username = this.storage.retrieveUsername();
+      if (event instanceof NavigationEnd) {
+        this.isLoggedIn = this.storage.retrieveToken() != null;
+        this.username = this.storage.retrieveUsername();
       }
     })
   }

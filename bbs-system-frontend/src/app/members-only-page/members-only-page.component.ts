@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from "@angular/router"
-import { FetchContentService } from '../fetch-content.service';
 import { Post } from '../post';
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
@@ -20,7 +19,6 @@ export class MembersOnlyPageComponent implements OnInit {
   });
 
   constructor(
-    private fetchContent: FetchContentService,
     private api: ApiService,
     private storage: StorageService,
     private router: Router,
@@ -31,7 +29,7 @@ export class MembersOnlyPageComponent implements OnInit {
   }
 
   refreshContents() {
-    this.fetchContent.getContent().subscribe(res => {
+    this.api.getContent().subscribe(res => {
       this.posts = res.body;
     });
   }

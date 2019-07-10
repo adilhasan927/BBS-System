@@ -4,6 +4,7 @@ import { Credentials } from './credentials';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Response } from './response';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,10 @@ export class ApiService {
     }),
   };
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private storage: StorageService,
+  ) { }
 
   login(credentials: Credentials): Observable<Response> {
     const url = this.queryURL + '/login';
@@ -40,6 +44,20 @@ export class ApiService {
       AuthToken: token,
       body: body,
     }), this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  getContent(): Observable<Response> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        'AuthToken': this.storage.retrieveToken(),
+      }),
+    };
+    const url = this.queryURL + '/get-posts';
+    return this.http.get<Response>(url, httpOptions)
       .pipe(
         catchError(this.handleError)
       );

@@ -40,7 +40,6 @@ router.post('/', function(req, res, next) {
               }));
             });
         } else {
-          console.log(val)
           res.send(JSON.stringify([{
             successful: false,
           }]));

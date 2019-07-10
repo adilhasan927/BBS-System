@@ -3,3 +3,25 @@
     Author: {{ post.username }}<br>
     Body: {{ post.body }}<br>
 </div>
+
+<p>Post</p>
+
+<form [formGroup]="postForm" (ngSubmit)='onSubmit()'>
+
+    <label>
+        post:<br>
+        <input type="post" formControlName="post" required>
+    </label><br>
+
+    <div *ngIf="post.invalid && (post.dirty || post.touched)"
+    class="alert alert-danger">
+
+        <div *ngIf="post.errors.required">
+            post is required.
+        </div>
+
+    </div>
+
+    <button type="submit" [disabled]="!postForm.valid">Submit</button>
+
+</form>

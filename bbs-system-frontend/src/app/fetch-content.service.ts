@@ -13,14 +13,14 @@ export class FetchContentService {
 
   constructor(
     private http: HttpClient,
-    private token: StorageService,
+    private storage: StorageService,
   ) { }
 
   getContent(): Observable<Post[]> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        'AuthToken': this.token.retrieveToken() || '0',
+        'AuthToken': this.storage.retrieveToken(),
       }),
     };
     const url = this.queryURL + '/get-posts';

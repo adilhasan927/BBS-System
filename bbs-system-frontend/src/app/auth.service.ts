@@ -42,7 +42,16 @@ export class AuthService {
       );
   }
 
-  post(token, username) { }
+  post(token, body): Observable<AuthResponse> {
+    const url = this.queryURL + '/submit-post';
+    return this.http.post<AuthResponse>(url, JSON.stringify({
+      AuthToken: token,
+      body: body,
+    }), this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {

@@ -31,7 +31,6 @@ export class LoginPageComponent implements OnInit {
   }
   
   onSubmit() {
-    // TODO: Add validation, routing.
     var loginReturn = this.auth.login(
       this.loginForm.value,
     ).subscribe(res => {

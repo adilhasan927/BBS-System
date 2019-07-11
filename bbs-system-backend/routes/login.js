@@ -11,7 +11,7 @@ router.post('/', function(req, res, next) {
     }
     var token = jwt.sign(payload, getSecret(), { expiresIn: "2 days" });
     dbs.db("documents")
-    .collection("credentials")
+    .collection("users")
     .find({
       username: req.body.username,
       password: req.body.password,

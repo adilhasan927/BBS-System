@@ -39,7 +39,7 @@ export class ApiService {
   }
 
   post(token, body): Observable<Response> {
-    const url = this.queryURL + '/submit-post';
+    const url = this.queryURL + '/post';
     return this.http.post<Response>(url, JSON.stringify({
       AuthToken: token,
       body: body,
@@ -56,7 +56,7 @@ export class ApiService {
         'AuthToken': this.storage.retrieveToken(),
       }),
     };
-    const url = this.queryURL + '/get-posts';
+    const url = this.queryURL + '/post';
     return this.http.get<Response>(url, httpOptions)
       .pipe(
         catchError(this.handleError)

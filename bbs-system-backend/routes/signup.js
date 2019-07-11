@@ -15,6 +15,7 @@ router.post('/', function(req, res, next) {
     .insertOne({
       username: req.body.username,
       password: req.body.password,
+      profiletext: "",
     }).then(val => {
       res.send(JSON.stringify({
         successful: true,

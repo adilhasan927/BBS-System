@@ -4,7 +4,8 @@ const connection = require('../db.js');
 const jwt = require('jsonwebtoken');
 const getSecret = require('../secrets.js');
 
-router.get('/', function(req, res, next) {
+router.get('/:userName', function(req, res, next) {
+  res.send(req.params)
   var token = req.body.AuthToken;
   var username;
   jwt.verify(token, getSecret(), (err, val) => {

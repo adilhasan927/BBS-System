@@ -29,4 +29,30 @@ router.get('/', function(req, res, next) {
     });
   });
 });
+
+router.post('/', function(req, res, next) {
+  var token = req.body.AuthToken
+  var username
+  jwt.verify(token, getSecret(), (err, val) => {
+    if (err) {
+      res.send(JSON.stringify({
+        successful: false,
+      }))  
+    }
+    username = val.username
+  })
+  connection.then(dbs => {
+    dbs.db("documents")
+    .collection("posts")
+    .insertOne({
+      username: username,
+      body: req.body.body,
+    }).then(val => {
+      res.send(JSON.stringify({
+        successful: true,
+      }));
+    });
+  });
+});
+
 module.exports = router;

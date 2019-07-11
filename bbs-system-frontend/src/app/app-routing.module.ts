@@ -4,6 +4,7 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { SignupPageComponent } from './signup-page/signup-page.component';
 import { PostsComponent } from './posts/posts.component';
 import { ProfileComponent } from './profile/profile.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
@@ -11,6 +12,9 @@ const routes: Routes = [
   { path: 'signup', component: SignupPageComponent },
   { path: 'posts', component: PostsComponent, canActivate: [AuthGuard] },
   { path: 'profile/:name', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'not-found', component: NotFoundComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full'},
+  { path: '**', redirectTo: 'not-found', pathMatch: 'full'},
 ];
 
 @NgModule({

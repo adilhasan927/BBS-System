@@ -10,6 +10,7 @@ import { SignupPageComponent } from './signup-page/signup-page.component';
 import { MembersOnlyPageComponent } from './members-only-page/members-only-page.component';
 import { NavComponent } from './nav/nav.component';
 import { ProfileEditorComponent } from './profile-editor/profile-editor.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ProfileEditorComponent } from './profile-editor/profile-editor.componen
     SignupPageComponent,
     MembersOnlyPageComponent,
     NavComponent,
-    ProfileEditorComponent
+    ProfileEditorComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

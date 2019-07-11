@@ -6,11 +6,11 @@ import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
 
 @Component({
-  selector: 'app-members-only-page',
-  templateUrl: './members-only-page.component.html',
-  styleUrls: ['./members-only-page.component.css']
+  selector: 'app-posts',
+  templateUrl: './posts.component.html',
+  styleUrls: ['./posts.component.css']
 })
-export class MembersOnlyPageComponent implements OnInit {
+export class PostsComponent implements OnInit {
   posts: Post[];
   postForm = new FormGroup({
     post: new FormControl('', [

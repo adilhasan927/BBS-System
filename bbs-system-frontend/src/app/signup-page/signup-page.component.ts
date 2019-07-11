@@ -38,7 +38,7 @@ export class SignupPageComponent implements OnInit {
       if (res.successful) {
         this.storage.storeToken(res.body);
         this.storage.storeUsername(this.signupForm.get('username').value);
-        this.router.navigate(['/members-only']);
+        this.router.navigate(['/posts']);
       } else {
         window.alert("Incorrect values.")
       }

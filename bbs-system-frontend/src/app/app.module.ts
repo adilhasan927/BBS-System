@@ -7,7 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { SignupPageComponent } from './signup-page/signup-page.component';
-import { MembersOnlyPageComponent } from './members-only-page/members-only-page.component';
+import { PostsComponent } from './posts/posts.component';
 import { NavComponent } from './nav/nav.component';
 import { ProfileComponent } from './profile/profile.component';
 
@@ -16,7 +16,7 @@ import { ProfileComponent } from './profile/profile.component';
     AppComponent,
     LoginPageComponent,
     SignupPageComponent,
-    MembersOnlyPageComponent,
+    PostsComponent,
     NavComponent,
     ProfileComponent
   ],

@@ -17,11 +17,11 @@ export class AuthGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): boolean {
-    console.log('AuthGuard#canActivate called');
     if (this.token.retrieveToken()) {
       return true;
     } else {
       this.router.navigate(['/login']);
+      window.alert("You must log in or sign up first.")
       return false;
     }
   }

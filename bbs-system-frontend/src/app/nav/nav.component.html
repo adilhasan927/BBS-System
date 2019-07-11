@@ -1,8 +1,9 @@
 <nav>
-    <a *ngIf="!isLoggedIn" routerLink="/login" routerLinkActive="active">Login</a>
-    <a *ngIf="!isLoggedIn" routerLink="/signup" routerLinkActive="active">Signup</a>
-    <a *ngIf="isLoggedIn" routerLink="/login" routerLinkActive="active" (click)="logout()">Logout</a>
-    <a routerLink="/posts" routerLinkActive="active">Posts</a>
-    <a *ngIf="isLoggedIn" [routerLink]="['/profile', username]" routerLinkActive="active">Profile</a>
-    <p *ngIf="isLoggedIn">{{ username }}</p>
+    <ul>
+    <li><a *ngIf="!isLoggedIn" routerLink="/login" routerLinkActive="active">Login</a></li>
+    <li><a *ngIf="!isLoggedIn" routerLink="/signup" routerLinkActive="active">Signup</a></li>
+    <li><a *ngIf="isLoggedIn" routerLink="/login" routerLinkActive="active" (click)="logout()">Logout</a></li>
+    <li><a routerLink="/posts" routerLinkActive="active">Posts</a></li>
+    <li><a *ngIf="isLoggedIn" [routerLink]="['/profile', username]" routerLinkActive="active">{{ username }}</a></li>
+    </ul>
 </nav>

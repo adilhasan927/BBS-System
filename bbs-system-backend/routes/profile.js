@@ -25,7 +25,6 @@ router.get('/:username', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-  res.send(req.params)
   var token = req.body.AuthToken;
   var username;
   jwt.verify(token, getSecret(), (err, val) => {

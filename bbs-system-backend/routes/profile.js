@@ -5,22 +5,22 @@ const jwt = require('jsonwebtoken');
 const getSecret = require('../secrets.js');
 
 router.get('/', function(req, res, next) {
-  var username  = req.body.username;
+  var username = req.query.username;
   connection.then(dbs => {
     dbs.db('documents')
     .collection('users')
     .find({ "username": username })
     .toArray()
     .then(arr => {
-      res.send({
+      res.send(JSON.stringify({
         successful: true,
-        body: arr,
-      });
+        body: arr[0].profile.profileText,
+      }));
     }).catch(err => {
-      res.send({
+      res.send(JSON.stringify({
         successful: false,
         body: null,
-      });
+      }));
     });
   });
 });
@@ -33,21 +33,21 @@ router.post('/', function(req, res, next) {
       res.send(JSON.stringify({
         successful: false,
       }))  
-      return null;
     }
     username = val.username;
   });
-  var profileText = req.body.profileText;
+  var profileText = req.body.profile;
+  console.log(req.body)
   connection.then(dbs => {
     dbs.db('documents')
     .collection('users')
     .updateOne(
       { "username": username },
-      { $set: { "profile.profileText": "profileText"} }
-    ).then(arr => {
+      { $set: { "profile.profileText": profileText } },
+    ).then(val => {
       res.send({
         successful: true,
-        body: arr,
+        body: null,
       });
     }).catch(err => {
       res.send({

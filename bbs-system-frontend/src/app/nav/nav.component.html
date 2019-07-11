@@ -3,6 +3,6 @@
     <a *ngIf="!isLoggedIn" routerLink="/signup" routerLinkActive="active">Signup</a>
     <a *ngIf="isLoggedIn" routerLink="/login" routerLinkActive="active" (click)="logout()">Logout</a>
     <a routerLink="/members-only" routerLinkActive="active">Members Only</a>
-    <a *ngIf="isLoggedIn" routerLink="/profile-editor" routerLinkActive="active" (click)="logout()">Profile Editor</a>
+    <a *ngIf="isLoggedIn" [routerLink]="['/profile', username]" routerLinkActive="active">Profile</a>
     <p *ngIf="isLoggedIn">{{ username }}</p>
 </nav>

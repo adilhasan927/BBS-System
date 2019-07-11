@@ -1,7 +1,7 @@
 <p>Members-only content</p>
 
 <div *ngFor="let post of posts">
-    Author: {{ post.username }}<br>
+    <a [routerLink]="['/profile', post.username]">Author: {{ post.username }}<br></a>
     Body: {{ post.body }}<br>
 </div>
 
@@ -11,7 +11,7 @@
 
     <label>
         post:<br>
-        <input type="post" formControlName="post" required>
+        <input type="text" formControlName="post" required>
     </label><br>
 
     <div *ngIf="post.invalid && (post.dirty || post.touched)"

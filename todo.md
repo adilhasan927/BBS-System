@@ -6,5 +6,5 @@
     * ~~Implement customisable profile backend.~~
     * Implement customisable profile frontend.'
         * ~~Implement API code.~~
-        * implement UI code.
+        * ~~implement UI code.~~
 * Add CSS styling to frontend.

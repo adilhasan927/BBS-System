@@ -1,1 +1,23 @@
-<p>profile works!</p>
+<p>Profile page of {{ username }}</p>
+
+<p>Profile text: {{ profile }}</p>
+
+<form *ngIf="username == localusername" [formGroup]="profileForm" (ngSubmit)='onSubmit()'>
+
+    <label>
+        Profile text:<br>
+        <input type="profileText" formControlName="profileText" required>
+    </label><br>
+
+    <div *ngIf="profileText.invalid && (profileText.dirty || profileText.touched)"
+    class="alert alert-danger">
+
+        <div *ngIf="profileText.errors.required">
+            Profile text is required.
+        </div>
+
+    </div>
+
+    <button type="submit" [disabled]="!profileForm.valid">Submit</button>
+
+</form>

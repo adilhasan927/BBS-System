@@ -66,16 +66,16 @@ export class ApiService {
   getProfile(username: string): Observable<Response> {
     const httpOptions = {
       headers: this.httpOptions.headers,
-      params : {
+      params: {
         username: username,
-      }
+      },
     }
     const url = this.queryURL + '/profile';
-    return this.http.get<Response>(url, this.httpOptions);
+    return this.http.get<Response>(url, httpOptions);
   }
 
   editProfile(token, profileText: string): Observable<Response> {
-    const url = this.queryURL + '/post';
+    const url = this.queryURL + '/profile';
     return this.http.post<Response>(url, JSON.stringify({
       AuthToken: token,
       profile: profileText,

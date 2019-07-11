@@ -63,6 +63,28 @@ export class ApiService {
       );
   }
 
+  getProfile(username: string): Observable<Response> {
+    const httpOptions = {
+      headers: this.httpOptions.headers,
+      params : {
+        username: username,
+      }
+    }
+    const url = this.queryURL + '/profile';
+    return this.http.get<Response>(url, this.httpOptions);
+  }
+
+  editProfile(token, profileText: string): Observable<Response> {
+    const url = this.queryURL + '/post';
+    return this.http.post<Response>(url, JSON.stringify({
+      AuthToken: token,
+      profile: profileText,
+    }), this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.

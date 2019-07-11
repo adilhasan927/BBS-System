@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from "@angular/router"
+import { Post } from '../post';
+import { ApiService } from '../api.service';
+import { StorageService } from '../storage.service';
+
 
 @Component({
   selector: 'app-profile-editor',
@@ -7,7 +13,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileEditorComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private api: ApiService,
+    private storage: StorageService,
+    private router: Router,
+  ) { }
 
   ngOnInit() {
   }

@@ -4,11 +4,12 @@ const connection = require('../db.js');
 const jwt = require('jsonwebtoken');
 const getSecret = require('../secrets.js');
 
-router.get('/:username', function(req, res, next) {
+router.get('/', function(req, res, next) {
+  var username  = req.body.username;
   connection.then(dbs => {
     dbs.db('documents')
     .collection('users')
-    .find({ username: req.params.username })
+    .find({ "username": username })
     .toArray()
     .then(arr => {
       res.send({
@@ -36,13 +37,13 @@ router.post('/', function(req, res, next) {
     }
     username = val.username;
   });
-  var post = req.body.post;
+  var profileText = req.body.profileText;
   connection.then(dbs => {
     dbs.db('documents')
     .collection('users')
     .updateOne(
       { "username": username },
-      { $set: { "profile.profileText": "post"} }
+      { $set: { "profile.profileText": "profileText"} }
     ).then(arr => {
       res.send({
         successful: true,

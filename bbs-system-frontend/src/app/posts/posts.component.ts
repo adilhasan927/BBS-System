@@ -50,7 +50,7 @@ export class PostsComponent implements OnInit {
 
   onSubmit() {
     var username = this.storage.retrieveUsername();
-    var text = this.postForm.get('comment').value;
+    var text = this.postForm.get('post').value;
     var loginReturn = this.api.post(
       this.storage.retrieveToken(),
       text,

@@ -4,6 +4,6 @@
     * ~~Fix bugs.~~
 * Make comments page load comments in stages.
     * Refactor comment.js to use mongodb aggregate.
-    * Implement slice operator on backend.
-    * Implement loading in stages on frontend.
+    * Implement pagination on backend.
+    * Implement paginination on frontend.
 * ~~Reset form field after submitting.~~

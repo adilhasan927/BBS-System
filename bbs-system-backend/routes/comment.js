@@ -15,34 +15,38 @@ router.get('/', function(req, res, next) {
         successful: false,
         body: [],
       }))
+    } else {
+      sendRes();
     }
   })
-  connection.then(dbs => {
-    dbs.db('documents')
-    .collection('posts')
-    .aggregate([
-      { $match: { _id: new ObjectID(postID) } },
-      { $unwind: '$comments' },
-      { $skip: position },
-      { $limit: 20 },
-      { $project: {
-        username: '$comments.username',
-        body: '$comments.body',
-      } },
-    ])
-    .toArray()
-    .then(comments => {
-      res.send(JSON.stringify({
-        successful: true,
-        body: comments,
-      }));
-    }).catch(err => {
-      res.send(JSON.stringify({
-        successful: false,
-        body: [],
-      }))
+  function sendRes() {
+    connection.then(dbs => {
+      dbs.db('documents')
+      .collection('posts')
+      .aggregate([
+        { $match: { _id: new ObjectID(postID) } },
+        { $unwind: '$comments' },
+        { $skip: position },
+        { $limit: 20 },
+        { $project: {
+          username: '$comments.username',
+          body: '$comments.body',
+        } },
+      ])
+      .toArray()
+      .then(comments => {
+        res.send(JSON.stringify({
+          successful: true,
+          body: comments,
+        }));
+      }).catch(err => {
+        res.send(JSON.stringify({
+          successful: false,
+          body: [],
+        }))
+      });
     });
-  });
+  }
 });
 
 router.post('/', function(req, res, next) {

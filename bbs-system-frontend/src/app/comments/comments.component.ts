@@ -50,20 +50,21 @@ export class CommentsComponent implements OnInit {
     });
   }
 
-  refreshContents() {
-    this.position = 0;
-    this.loadComments();
+  addComment(username, body) {
+    this.comments.push(new Comment(username, body));
   }
 
   onSubmit() {
+    var username = this.storage.retrieveUsername();
+    var text = this.commentForm.get('comment').value;
     var loginReturn = this.api.comment(
       this.storage.retrieveToken(),
       this.postID,
-      this.commentForm.get('comment').value,
+      text,
     ).subscribe(res => {
       console.log(res);
       if (res.successful) {
-        this.refreshContents();
+        this.addComment(username, text);
         this.commentForm.reset();
       } else {
         this.router.navigate(['/login']);

@@ -6,6 +6,8 @@
     Body: {{ post.body }}<br>
 </div>
 
+<button *ngIf="!endReached" (click)="loadComments()">Load further posts.</button>
+
 <p>Write post</p>
 
 <form [formGroup]="postForm" (ngSubmit)='onSubmit()'>

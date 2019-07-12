@@ -11,7 +11,9 @@ import { StorageService } from '../storage.service';
   styleUrls: ['./posts.component.css']
 })
 export class PostsComponent implements OnInit {
-  posts: Post[];
+  posts: Post[] = [];
+  position: number = 0;
+  endReached: boolean = false;
   postForm = new FormGroup({
     post: new FormControl('', [
       Validators.required,
@@ -25,23 +27,37 @@ export class PostsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.refreshContents();
+    this.loadPosts();
   }
 
-  refreshContents() {
-    this.api.getContent().subscribe(res => {
-      this.posts = res.body;
+  loadPosts() {
+    this.api.getContent(this.position).subscribe(res => {
+      if (res.successful) {
+        this.posts.push(...res.body);
+        this.position += 20;
+        if (res.body.length < 20) {
+          this.endReached = true;
+        } else {
+          this.router.navigate(['/login']);
+        }
+      }
     });
   }
 
+  addPost(username, body) {
+    this.posts.push(new Post(username, body));
+  }
+
   onSubmit() {
+    var username = this.storage.retrieveUsername();
+    var text = this.postForm.get('comment').value;
     var loginReturn = this.api.post(
       this.storage.retrieveToken(),
-      this.postForm.get('post').value,
+      text,
     ).subscribe(res => {
       console.log(res);
       if (res.successful) {
-        this.refreshContents();
+        this.addPost(username, text);
         this.postForm.reset();
       } else {
         this.router.navigate(['/login']);

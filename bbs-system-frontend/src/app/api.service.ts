@@ -38,7 +38,7 @@ export class ApiService {
       );
   }
 
-  post(token, body): Observable<Response> {
+  post(token:string, body:string): Observable<Response> {
     const url = this.queryURL + '/post';
     return this.http.post<Response>(url, JSON.stringify({
       AuthToken: token,
@@ -49,11 +49,12 @@ export class ApiService {
       );
   }
 
-  getContent(): Observable<Response> {
+  getContent(position: number = 0): Observable<Response> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
         'AuthToken': this.storage.retrieveToken(),
+        'position': position.toString(),
       }),
     };
     const url = this.queryURL + '/post';
@@ -63,7 +64,7 @@ export class ApiService {
       );
   }
 
-  comment(token, postID, body): Observable<Response> {
+  comment(token: string, postID: string, body:string): Observable<Response> {
     const url = this.queryURL + '/comment';
     return this.http.post<Response>(url, JSON.stringify({
       AuthToken: token,
@@ -75,7 +76,7 @@ export class ApiService {
       );
   }
 
-  getComments(postID, position=0): Observable<Response> {
+  getComments(postID: string, position: number = 0): Observable<Response> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
@@ -105,7 +106,7 @@ export class ApiService {
     return this.http.get<Response>(url, httpOptions);
   }
 
-  editProfile(token, profileText: string): Observable<Response> {
+  editProfile(token: string, profileText: string): Observable<Response> {
     const url = this.queryURL + '/profile';
     return this.http.post<Response>(url, JSON.stringify({
       AuthToken: token,

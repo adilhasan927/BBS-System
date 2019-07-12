@@ -6,7 +6,8 @@ const getSecret = require('../secrets.js');
 const crypto = require('crypto')
 
 router.get('/', function(req, res, next) {
-  const token = req.header('AuthToken')
+  const token = req.header('AuthToken');
+  const position = JSON.parse(req.header('position'));
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
       res.send(JSON.stringify({
@@ -23,6 +24,7 @@ router.get('/', function(req, res, next) {
       .collection('posts')
       .find()
       .sort({ _id: -1 })
+      .skip(position)
       .limit(20)
       .toArray()
       .then(arr => {

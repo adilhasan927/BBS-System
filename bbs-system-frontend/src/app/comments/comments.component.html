@@ -5,6 +5,8 @@
     Body: {{ comment.body }}<br>
 </div>
 
+<button *ngIf="!endReached" (click)="loadComments()">Load further comments.</button>
+
 <p>Write comment:</p>
 
 <form [formGroup]="commentForm" (ngSubmit)='onSubmit()'>

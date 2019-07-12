@@ -8,7 +8,7 @@ const ObjectID = require('mongodb').ObjectID;
 router.get('/', function(req, res, next) {
   const token = req.header('AuthToken');
   const postID = req.header('PostID');
-  const position = req.header('position') | 0;
+  const position = JSON.parse(req.header('position'));
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
       res.send(JSON.stringify({

@@ -75,13 +75,13 @@ export class ApiService {
       );
   }
 
-  getComments(postID): Observable<Response> {
+  getComments(postID, position=0): Observable<Response> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
         'AuthToken': this.storage.retrieveToken(),
         'PostID': postID,
-        'position': JSON.stringify(0),
+        'position': position.toString(),
       }),
     };
     const url = this.queryURL + '/comment';

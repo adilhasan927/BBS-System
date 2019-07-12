@@ -11,8 +11,10 @@ import { StorageService } from '../storage.service';
   styleUrls: ['./comments.component.css']
 })
 export class CommentsComponent implements OnInit {
-  comments: Comment[];
+  comments: Comment[] = [];
   postID: string;
+  position: number = 0;
+  endReached: boolean = false;
   commentForm = new FormGroup({
     comment: new FormControl('', [
       Validators.required,
@@ -30,18 +32,27 @@ export class CommentsComponent implements OnInit {
     this.route.paramMap.subscribe(paramMap => {
       this.postID = paramMap.get('id');
     })
-    this.refreshContents();
+    this.loadComments();
   }
 
-  refreshContents() {
-    this.api.getComments(this.postID).subscribe(res => {
+  loadComments() {
+    this.api.getComments(this.postID, this.position).subscribe(res => {
       console.log(res);
       if (res.successful) {
-        this.comments = res.body;
+        this.comments.push(...res.body);
+        this.position += 20;
+        if (res.body.length < 20) {
+          this.endReached = true;
+        } 
       } else {
         this.router.navigate(['/login']);
       }
     });
+  }
+
+  refreshContents() {
+    this.position = 0;
+    this.loadComments();
   }
 
   onSubmit() {

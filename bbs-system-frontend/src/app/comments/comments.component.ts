@@ -35,8 +35,8 @@ export class CommentsComponent implements OnInit {
 
   refreshContents() {
     this.api.getComments(this.postID).subscribe(res => {
+      console.log(res);
       if (res.successful) {
-        console.log(res);
         this.comments = res.body;
       } else {
         this.router.navigate(['/login']);

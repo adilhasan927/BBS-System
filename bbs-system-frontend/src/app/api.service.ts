@@ -81,6 +81,7 @@ export class ApiService {
         'Content-Type':  'application/json',
         'AuthToken': this.storage.retrieveToken(),
         'PostID': postID,
+        'position': JSON.stringify(0),
       }),
     };
     const url = this.queryURL + '/comment';

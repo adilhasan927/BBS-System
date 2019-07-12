@@ -49,6 +49,18 @@ export class ApiService {
       );
   }
 
+  comment(token, postID, body): Observable<Response> {
+    const url = this.queryURL + '/comment';
+    return this.http.post<Response>(url, JSON.stringify({
+      AuthToken: token,
+      PostID: postID,
+      body: body,
+    }), this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   getContent(): Observable<Response> {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -63,9 +75,27 @@ export class ApiService {
       );
   }
 
+  getComments(postID): Observable<Response> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        'AuthToken': this.storage.retrieveToken(),
+        'PostID': postID,
+      }),
+    };
+    const url = this.queryURL + '/post';
+    return this.http.get<Response>(url, httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   getProfile(username: string): Observable<Response> {
     const httpOptions = {
-      headers: this.httpOptions.headers,
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        'AuthToken': this.storage.retrieveToken(),
+      }),
       params: {
         username: username,
       },

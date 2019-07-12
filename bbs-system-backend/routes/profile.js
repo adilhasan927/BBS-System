@@ -6,23 +6,34 @@ const getSecret = require('../secrets.js');
 
 router.get('/', function(req, res, next) {
   var username = req.query.username;
-  connection.then(dbs => {
-    dbs.db('documents')
-    .collection('users')
-    .find({ "username": username })
-    .toArray()
-    .then(arr => {
-      res.send(JSON.stringify({
-        successful: true,
-        body: arr[0].profile.profileText,
-      }));
-    }).catch(err => {
+  jwt.verify(token, getSecret(), (err, val) => {
+    if (err) {
       res.send(JSON.stringify({
         successful: false,
-        body: null,
-      }));
-    });
+      }))  
+    } else {
+      sendRes();
+    }
   });
+  function sendRes() {
+    connection.then(dbs => {
+      dbs.db('documents')
+      .collection('users')
+      .find({ "username": username })
+      .toArray()
+      .then(arr => {
+        res.send(JSON.stringify({
+          successful: true,
+          body: arr[0].profile.profileText,
+        }));
+      }).catch(err => {
+        res.send(JSON.stringify({
+          successful: false,
+          body: null,
+        }));
+      });
+    });
+  }
 });
 
 router.post('/', function(req, res, next) {
@@ -33,29 +44,33 @@ router.post('/', function(req, res, next) {
       res.send(JSON.stringify({
         successful: false,
       }))  
+    } else {
+      username = val.username;
+      sendRes();
     }
-    username = val.username;
   });
-  var profileText = req.body.profile;
-  console.log(req.body)
-  connection.then(dbs => {
-    dbs.db('documents')
-    .collection('users')
-    .updateOne(
-      { "username": username },
-      { $set: { "profile.profileText": profileText } },
-    ).then(val => {
-      res.send({
-        successful: true,
-        body: null,
-      });
-    }).catch(err => {
-      res.send({
-        successful: false,
-        body: null,
+    function sendRes() {
+    var profileText = req.body.profile;
+    console.log(req.body)
+    connection.then(dbs => {
+      dbs.db('documents')
+      .collection('users')
+      .updateOne(
+        { "username": username },
+        { $set: { "profile.profileText": profileText } },
+      ).then(val => {
+        res.send({
+          successful: true,
+          body: null,
+        });
+      }).catch(err => {
+        res.send({
+          successful: false,
+          body: null,
+        });
       });
     });
-  });
+  }
 });
 
 module.exports = router;

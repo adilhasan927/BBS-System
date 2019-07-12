@@ -42,9 +42,7 @@ export class PostsComponent implements OnInit {
       console.log(res);
       if (res.successful) {
         this.refreshContents();
-        window.alert("Post submitted.");
       } else {
-        window.alert("Incorrect token.");
         this.router.navigate(['/login']);
       }
     })

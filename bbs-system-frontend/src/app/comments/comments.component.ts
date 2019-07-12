@@ -1,20 +1,20 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from "@angular/router"
+import { Comment } from '../comment';
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  selector: 'app-comments',
+  templateUrl: './comments.component.html',
+  styleUrls: ['./comments.component.css']
 })
-export class ProfileComponent implements OnInit, OnDestroy {
-  profile: string = "";
-  username: string = "";
-  localusername: string = this.storage.retrieveUsername();
-  profileForm = new FormGroup({
-    profileText: new FormControl('', [
+export class CommentsComponent implements OnInit {
+  comments: Comment[];
+  postID: string;
+  commentForm = new FormGroup({
+    comment: new FormControl('', [
       Validators.required,
     ]),
   });
@@ -22,22 +22,22 @@ export class ProfileComponent implements OnInit, OnDestroy {
   constructor(
     private api: ApiService,
     private storage: StorageService,
-    private route: ActivatedRoute,
     private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(paramMap => {
-      this.username = paramMap.get('name')
+      this.postID = paramMap.get('id');
     })
     this.refreshContents();
   }
 
   refreshContents() {
-    this.api.getProfile(this.username).subscribe(res => {
+    this.api.getContent().subscribe(res => {
       if (res.successful) {
         console.log(res);
-        this.profile = res.body;
+        this.comments = res.body;
       } else {
         this.router.navigate(['/login']);
       }
@@ -45,9 +45,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.api.editProfile(
+    var loginReturn = this.api.comment(
       this.storage.retrieveToken(),
-      this.profileForm.get('profileText').value,
+      this.postID,
+      this.commentForm.get('comment').value,
     ).subscribe(res => {
       console.log(res);
       if (res.successful) {
@@ -58,9 +59,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     })
   }
 
-  ngOnDestroy() {
-  }
-
-  get profileText() { return this.profileForm.get('profileText'); }
+  get comment() { return this.commentForm.get('comment'); }
 
 }

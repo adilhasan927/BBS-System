@@ -11,6 +11,7 @@ import { PostsComponent } from './posts/posts.component';
 import { NavComponent } from './nav/nav.component';
 import { ProfileComponent } from './profile/profile.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { CommentsComponent } from './comments/comments.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     PostsComponent,
     NavComponent,
     ProfileComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    CommentsComponent
   ],
   imports: [
     BrowserModule,

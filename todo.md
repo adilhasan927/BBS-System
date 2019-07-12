@@ -1,3 +1,4 @@
 * Implement commenting.
-    * Implement commenting backend.
-    * Implement commenting frontend.
+    * ~~Implement commenting backend.~~
+    * ~~Implement commenting frontend.~~
+    * Fix bugs.

@@ -1,4 +1,4 @@
-export class Post {
+export class Comment {
     _id: string;
     username: string;
     body: string;

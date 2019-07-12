@@ -19,6 +19,11 @@ export class SignupPageComponent implements OnInit {
       Validators.required,
       Validators.minLength(6),
     ]),
+
+    confirmPassword: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6),
+    ]),
   });
 
   constructor(

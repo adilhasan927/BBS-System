@@ -38,5 +38,23 @@
 
     </div>
 
+    <label>
+        confirm password:<br>
+        <input type="password" formControlName="confirmPassword" required>
+    </label><br>
+
+    <div *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched)"
+    class="alert alert-danger">
+
+        <div *ngIf="confirmPassword.errors.required">
+            password confirmation is required.
+        </div>
+
+        <div *ngIf="confirmPassword.errors.minlength">
+            password confirmation must be at least 6 characters long.
+        </div>
+
+    </div>
+
     <button type="submit" [disabled]="!signupForm.valid">Submit</button>
 </form>

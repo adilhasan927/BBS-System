@@ -8,6 +8,7 @@ const ObjectID = require('mongodb').ObjectID;
 router.get('/', function(req, res, next) {
   const token = req.header('AuthToken');
   const postID = req.header('PostID');
+  const position = req.header('position') | 0;
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
       res.send(JSON.stringify({
@@ -19,14 +20,21 @@ router.get('/', function(req, res, next) {
   connection.then(dbs => {
     dbs.db('documents')
     .collection('posts')
-    .findOne(
-      { _id: new ObjectID(postID) },
-    )
-    .then(post => {
-      console.log(post)
+    .aggregate([
+      { $match: { _id: new ObjectID(postID) } },
+      { $unwind: '$comments' },
+      { $skip: position },
+      { $limit: 20 },
+      { $project: {
+        username: '$comments.username',
+        body: '$comments.body',
+      } },
+    ])
+    .toArray()
+    .then(comments => {
       res.send(JSON.stringify({
         successful: true,
-        body: post.comments,
+        body: comments,
       }));
     }).catch(err => {
       res.send(JSON.stringify({

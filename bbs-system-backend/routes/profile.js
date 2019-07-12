@@ -51,7 +51,6 @@ router.post('/', function(req, res, next) {
   });
     function sendRes() {
     var profileText = req.body.profile;
-    console.log(req.body)
     connection.then(dbs => {
       dbs.db('documents')
       .collection('users')

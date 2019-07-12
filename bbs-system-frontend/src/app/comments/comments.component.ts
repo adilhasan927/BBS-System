@@ -52,6 +52,7 @@ export class CommentsComponent implements OnInit {
     ).subscribe(res => {
       console.log(res);
       if (res.successful) {
+        this.commentForm.reset();
         this.refreshContents();
       } else {
         this.router.navigate(['/login']);

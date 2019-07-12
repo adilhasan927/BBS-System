@@ -19,12 +19,16 @@ router.get('/', function(req, res, next) {
   connection.then(dbs => {
     dbs.db('documents')
     .collection('posts')
-    .findOne({ _id: new ObjectID(postID)})
-    .then(post => {
-      console.log(post.comments)
+    .aggregate(
+      { $match: { _id: new ObjectID(postID) } },
+      { $unwind: '$list' },
+    )
+    .toArray()
+    .then(comments => {
+      console.log(post)
       res.send(JSON.stringify({
         successful: true,
-        body: post.comments,
+        body: comments,
       }));
     }).catch(err => {
       res.send(JSON.stringify({

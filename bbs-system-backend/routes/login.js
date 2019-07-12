@@ -30,6 +30,7 @@ router.post('/', function(req, res, next) {
         }));
       }
     }).catch(err => {
+      console.log(err);
       res.send(JSON.stringify({
         successful: false,
         body: null,

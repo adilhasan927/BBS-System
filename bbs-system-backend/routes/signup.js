@@ -24,6 +24,7 @@ router.post('/', function(req, res, next) {
         body: token,
       }));
     }).catch(err => {
+      console.log(err);
       res.send(JSON.stringify({
         successful: false,
         body: null,

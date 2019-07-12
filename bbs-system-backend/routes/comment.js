@@ -40,6 +40,7 @@ router.get('/', function(req, res, next) {
           body: comments,
         }));
       }).catch(err => {
+        console.log(err);
         res.send(JSON.stringify({
           successful: false,
           body: [],

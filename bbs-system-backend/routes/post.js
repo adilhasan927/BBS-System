@@ -50,7 +50,6 @@ router.post('/', function(req, res, next) {
     }
   })
   function sendRes() {
-    console.log("err");
     connection.then(dbs => {
       dbs.db("documents")
       .collection("posts")
@@ -62,6 +61,8 @@ router.post('/', function(req, res, next) {
         res.send(JSON.stringify({
           successful: true,
         }));
+      }).catch(err => {
+        console.log(err);
       });
     });
   }

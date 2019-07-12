@@ -27,6 +27,7 @@ router.get('/', function(req, res, next) {
           body: user.profile.profileText,
         }));
       }).catch(err => {
+        console.log(err);
         res.send(JSON.stringify({
           successful: false,
           body: null,

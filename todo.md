@@ -1,4 +1,5 @@
 * Implement commenting.
     * ~~Implement commenting backend.~~
     * ~~Implement commenting frontend.~~
-    * Fix bugs.
+    * ~~Fix bugs.~~
+    * Refactor comment.js to use mongodb aggregate.

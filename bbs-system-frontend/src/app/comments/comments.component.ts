@@ -34,7 +34,7 @@ export class CommentsComponent implements OnInit {
   }
 
   refreshContents() {
-    this.api.getContent().subscribe(res => {
+    this.api.getComments(this.postID).subscribe(res => {
       if (res.successful) {
         console.log(res);
         this.comments = res.body;

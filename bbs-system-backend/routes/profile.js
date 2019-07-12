@@ -6,11 +6,12 @@ const getSecret = require('../secrets.js');
 
 router.get('/', function(req, res, next) {
   var username = req.query.username;
+  var token =  req.header('AuthToken');
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
       res.send(JSON.stringify({
         successful: false,
-      }))  
+      }));
     } else {
       sendRes();
     }
@@ -19,12 +20,11 @@ router.get('/', function(req, res, next) {
     connection.then(dbs => {
       dbs.db('documents')
       .collection('users')
-      .find({ "username": username })
-      .toArray()
-      .then(arr => {
+      .findOne({ "username": username })
+      .then(user => {
         res.send(JSON.stringify({
           successful: true,
-          body: arr[0].profile.profileText,
+          body: user.profile.profileText,
         }));
       }).catch(err => {
         res.send(JSON.stringify({

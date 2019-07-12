@@ -9,6 +9,7 @@ var loginRouter = require('./routes/login');
 var signupRouter = require('./routes/signup');
 var postRouter = require('./routes/post');
 var profileRouter = require('./routes/profile');
+var commentRouter = require('./routes/comment');
 
 var app = express();
 
@@ -27,6 +28,7 @@ app.use('/api/login', loginRouter);
 app.use('/api/signup', signupRouter);
 app.use('/api/post', postRouter);
 app.use('/api/profile', profileRouter);
+app.use('/api/comment', commentRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -37,6 +39,7 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
+  console.log(err)
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page

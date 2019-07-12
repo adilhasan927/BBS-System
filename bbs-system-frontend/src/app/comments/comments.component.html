@@ -1,16 +1,16 @@
 <p>Comments</p>
 
 <div *ngFor="let comment of comments">
-    <a [routerLink]="['/profile', post.username]">Author: {{ comment.username }}<br></a>
+    <a [routerLink]="['/profile', comment.username]">Author: {{ comment.username }}<br></a>
     Body: {{ comment.body }}<br>
 </div>
 
-<p>Post</p>
+<p>Write comment:</p>
 
 <form [formGroup]="commentForm" (ngSubmit)='onSubmit()'>
 
     <label>
-        post:<br>
+        comment:<br>
         <input type="text" formControlName="comment" required>
     </label><br>
 
@@ -18,7 +18,7 @@
     class="alert alert-danger">
 
         <div *ngIf="comment.errors.required">
-            post is required.
+            comment is required.
         </div>
 
     </div>

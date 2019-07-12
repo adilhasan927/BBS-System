@@ -21,6 +21,7 @@ router.get('/', function(req, res, next) {
     .collection('posts')
     .findOne({ _id: new ObjectID(postID)})
     .then(post => {
+      console.log(post.comments)
       res.send(JSON.stringify({
         successful: true,
         body: post.comments,

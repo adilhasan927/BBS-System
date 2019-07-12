@@ -23,7 +23,7 @@ router.get('/', function(req, res, next) {
       .collection('posts')
       .find()
       .sort({ _id: -1 })
-      .limit(5)
+      .limit(20)
       .toArray()
       .then(arr => {
         res.send(JSON.stringify({

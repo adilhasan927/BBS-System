@@ -51,8 +51,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     ).subscribe(res => {
       console.log(res);
       if (res.successful) {
-        this.profileForm.reset();
         this.refreshContents();
+        this.profileForm.reset();
       } else {
         this.router.navigate(['/login']);
       }

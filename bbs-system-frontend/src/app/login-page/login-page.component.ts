@@ -35,10 +35,10 @@ export class LoginPageComponent implements OnInit {
       this.loginForm.value,
     ).subscribe(res => {
       if (res.successful) {
-        this.loginForm.reset();
         this.storage.storeToken(res.body);
         this.storage.storeUsername(this.loginForm.get('username').value);
         this.router.navigate(['/posts']);
+        this.loginForm.reset();
       } else {
         window.alert("Incorrect credentials.")
       }

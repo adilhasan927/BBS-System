@@ -36,10 +36,10 @@ export class SignupPageComponent implements OnInit {
       this.signupForm.value
     ).subscribe(res => {
       if (res.successful) {
-        this.signupForm.reset();
         this.storage.storeToken(res.body);
         this.storage.storeUsername(this.signupForm.get('username').value);
         this.router.navigate(['/posts']);
+        this.signupForm.reset();
       } else {
         window.alert("Incorrect values.")
       }

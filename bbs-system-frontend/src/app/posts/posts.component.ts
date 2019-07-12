@@ -41,8 +41,8 @@ export class PostsComponent implements OnInit {
     ).subscribe(res => {
       console.log(res);
       if (res.successful) {
-        this.postForm.reset();
         this.refreshContents();
+        this.postForm.reset();
       } else {
         this.router.navigate(['/login']);
       }

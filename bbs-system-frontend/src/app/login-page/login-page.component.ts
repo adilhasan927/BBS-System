@@ -36,7 +36,6 @@ export class LoginPageComponent implements OnInit {
     ).subscribe(res => {
       if (res.successful) {
         this.storage.storeToken(res.body);
-        this.storage.storeUsername(this.loginForm.get('username').value);
         this.router.navigate(['/posts']);
         this.loginForm.reset();
       } else {

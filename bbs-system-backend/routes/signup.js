@@ -7,7 +7,7 @@ const captcha = require('../captcha');
 const verifyUser = require('../email');
 
 router.post('/', function(req, res, next) {
-  captcha(
+  captcha(req.body.captchaResponse,
     (err, result, body) => {
       if (err) {
         console.log(err);
@@ -32,10 +32,10 @@ router.post('/', function(req, res, next) {
       username: username,
     }
     var token = jwt.sign(payload, getSecret(), { expiresIn: "2 days" } );
-    var emailLink = "localhost:4200" 
+    var emailLink = "http://localhost:3000" 
       + "/api/verify?token="
-      + jwt.sign(email, getSecret(), { expiresIn: "2 days"} );
-    verifyUser(emailLink);
+      + jwt.sign( { email: email }, getSecret(), { expiresIn: "2 days"} );
+    verifyUser(email, emailLink);
     connection.then(dbs => {
       dbs.db("documents")
       .collection("users")

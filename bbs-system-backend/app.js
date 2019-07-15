@@ -10,6 +10,7 @@ var signupRouter = require('./routes/signup');
 var postRouter = require('./routes/post');
 var profileRouter = require('./routes/profile');
 var commentRouter = require('./routes/comment');
+var verifyRouter = require('./routes/verify');
 
 var app = express();
 
@@ -29,6 +30,7 @@ app.use('/api/signup', signupRouter);
 app.use('/api/post', postRouter);
 app.use('/api/profile', profileRouter);
 app.use('/api/comment', commentRouter);
+app.use('/api/verify', verifyRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

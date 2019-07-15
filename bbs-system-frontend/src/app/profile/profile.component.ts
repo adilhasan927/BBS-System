@@ -12,7 +12,6 @@ import { StorageService } from '../storage.service';
 export class ProfileComponent implements OnInit, OnDestroy {
   profile: string = "";
   username: string = "";
-  localusername: string = this.storage.retrieveUsername();
   profileForm = new FormGroup({
     profileText: new FormControl('', [
       Validators.required,

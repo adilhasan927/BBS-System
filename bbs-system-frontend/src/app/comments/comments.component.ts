@@ -55,7 +55,6 @@ export class CommentsComponent implements OnInit {
   }
 
   onSubmit() {
-    var username = this.storage.retrieveUsername();
     var text = this.commentForm.get('comment').value;
     var loginReturn = this.api.comment(
       this.storage.retrieveToken(),
@@ -64,7 +63,7 @@ export class CommentsComponent implements OnInit {
     ).subscribe(res => {
       console.log(res);
       if (res.successful) {
-        this.addComment(username, text);
+        this.addComment("you", text);
         this.commentForm.reset();
       } else {
         this.router.navigate(['/login']);

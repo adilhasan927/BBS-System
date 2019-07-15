@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from "@angular/router"
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
 import { CustomValidators } from '../custom-validators';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-signup-page',
@@ -30,6 +31,9 @@ export class SignupPageComponent implements OnInit {
     recaptchaReactive: new FormControl(null, Validators.required),
   });
 
+  @ViewChild(RecaptchaComponent, {static: false} )
+  recaptchaComponent: RecaptchaComponent;
+
   constructor(
     private api: ApiService,
     private storage: StorageService,
@@ -46,15 +50,19 @@ export class SignupPageComponent implements OnInit {
 
   onSubmit() {
     // TODO: Add validation, routing.
-    var signupReturn = this.api.signup(
-      this.signupForm.value,
-      this.recaptchaResponse,
+    var signupReturn = this.api.signup({
+      username: this.signupForm.get('username').value,
+      password: this.signupForm.get('password.password').value,
+    }, this.recaptchaResponse,
     ).subscribe(res => {
       if (res.successful) {
         this.storage.storeToken(res.body);
-        this.signupForm.controls
         this.router.navigate(['/posts']);
         this.signupForm.reset();
+        this.recaptchaComponent.reset();
+      } else if (!res.captchaSuccess) {
+        this.recaptchaComponent.reset();
+        window.alert("Complete the reCaptcha again.")
       } else {
         window.alert("Incorrect values.")
       }

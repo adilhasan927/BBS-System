@@ -49,7 +49,6 @@ export class PostsComponent implements OnInit {
   }
 
   onSubmit() {
-    var username = this.storage.retrieveUsername();
     var text = this.postForm.get('post').value;
     var loginReturn = this.api.post(
       this.storage.retrieveToken(),
@@ -57,7 +56,7 @@ export class PostsComponent implements OnInit {
     ).subscribe(res => {
       console.log(res);
       if (res.successful) {
-        this.addPost(username, text);
+        this.addPost("you", text);
         this.postForm.reset();
       } else {
         this.router.navigate(['/login']);

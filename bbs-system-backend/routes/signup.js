@@ -3,19 +3,11 @@ var router = express.Router();
 const connection = require('../db.js');
 const jwt = require('jsonwebtoken');
 const getSecret = require('../secrets.js');
-const request = require('request');
-const querystring = require('querystring');
+const captcha = require('../captcha');
+const verifyUser = require('../email');
 
 router.post('/', function(req, res, next) {
-  request({
-    uri: 'https://www.google.com/recaptcha/api/siteverify',
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    json: false,
-    body: querystring.stringify({
-      secret: '6Ld4qa0UAAAAABt7D4dM3FwzOrmUnNI9TLF3e4-f',
-      response: req.body.captchaResponse })
-    },
+  captcha(
     (err, result, body) => {
       if (err) {
         console.log(err);
@@ -30,22 +22,31 @@ router.post('/', function(req, res, next) {
           body: null,
           captchaSuccess: false,
         }));  
-      } else procede();
+      } else procede(); 
     });
   function procede() {
+    const username = req.body.credentials.username;
+    const password = req.body.credentials.password;
+    const email = req.body.credentials.email;
+    var payload = {
+      username: username,
+    }
+    var token = jwt.sign(payload, getSecret(), { expiresIn: "2 days" } );
+    var emailLink = "localhost:4200" 
+      + "/api/verify?token="
+      + jwt.sign(email, getSecret(), { expiresIn: "2 days"} );
+    verifyUser(emailLink);
     connection.then(dbs => {
-      var payload = {
-        username: req.body.credentials.username,
-      }
-      var token = jwt.sign(payload, getSecret(), { expiresIn: "2 days" });
       dbs.db("documents")
       .collection("users")
       .insertOne({
-        username: req.body.credentials.username,
-        password: req.body.credentials.password,
+        username: username,
+        password: password,
         profile: {
           profileText: "",
         },
+        email: email,
+        verified: false,
       }).then(val => {
         res.send(JSON.stringify({
           successful: true,

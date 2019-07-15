@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const getSecret = require('../secrets.js');
 
 router.get('/', function(req, res, next) {
-  var username = req.query.username;
+  var username;
   var token =  req.header('AuthToken');
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
@@ -13,6 +13,7 @@ router.get('/', function(req, res, next) {
         successful: false,
       }));
     } else {
+      username = val.username;
       sendRes();
     }
   });

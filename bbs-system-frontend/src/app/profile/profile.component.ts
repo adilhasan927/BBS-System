@@ -12,6 +12,7 @@ import { StorageService } from '../storage.service';
 export class ProfileComponent implements OnInit, OnDestroy {
   profile: string = "";
   username: string = "";
+  tokenusername: string = "";
   profileForm = new FormGroup({
     profileText: new FormControl('', [
       Validators.required,
@@ -27,7 +28,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.route.paramMap.subscribe(paramMap => {
-      this.username = paramMap.get('name')
+      this.username = paramMap.get('name');
+      this.tokenusername = '';
     })
     this.refreshContents();
   }

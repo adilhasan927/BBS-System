@@ -10,3 +10,4 @@
 * Fix username handling.
     * Add username field to JWT on backend.
     * Change frontend to use JWT username field.
+* Implement private/public key encryption of JWT.

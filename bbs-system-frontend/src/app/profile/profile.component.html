@@ -2,7 +2,7 @@
 
 <p>Profile text: {{ profile }}</p>
 
-<form *ngIf="username == localusername" [formGroup]="profileForm" (ngSubmit)='onSubmit()'>
+<form *ngIf="username == tokenusername" [formGroup]="profileForm" (ngSubmit)='onSubmit()'>
 
     <label>
         Profile text:<br>

@@ -47,7 +47,8 @@ export class SignupPageComponent implements OnInit {
   onSubmit() {
     // TODO: Add validation, routing.
     var signupReturn = this.api.signup(
-      this.signupForm.value
+      this.signupForm.value,
+      this.recaptchaResponse,
     ).subscribe(res => {
       if (res.successful) {
         this.storage.storeToken(res.body);

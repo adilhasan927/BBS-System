@@ -7,14 +7,14 @@ const getSecret = require('../secrets.js');
 router.post('/', function(req, res, next) {
   connection.then(dbs => {
     var payload = {
-      username: req.body.username,
+      username: req.body.credentials.username,
     }
     var token = jwt.sign(payload, getSecret(), { expiresIn: "2 days" });
     dbs.db("documents")
     .collection("users")
     .insertOne({
-      username: req.body.username,
-      password: req.body.password,
+      username: req.body.credentials.username,
+      password: req.body.credentials.password,
       profile: {
         profileText: "",
       },

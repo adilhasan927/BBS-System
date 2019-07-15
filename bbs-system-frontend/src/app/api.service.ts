@@ -30,9 +30,12 @@ export class ApiService {
     );
   }
 
-  signup(credentials: Credentials): Observable<Response> {
+  signup(credentials: Credentials, captchaResponse: string): Observable<Response> {
     const url = this.queryURL + '/signup';
-    return this.http.post<Response>(url, JSON.stringify(credentials), this.httpOptions)
+    return this.http.post<Response>(url, JSON.stringify({
+      credentials: credentials,
+      captchaResponse: captchaResponse,
+    }), this.httpOptions)
       .pipe(
         catchError(this.handleError)
       );

@@ -24,16 +24,13 @@ router.post('/', function(req, res, next) {
           body: null,
           captchaSuccess: null,
         }));
-      } else {
-        if (!JSON.parse(body).success) {
-          res.send(JSON.stringify({
-            successful: false,
-            body: null,
-            captchaSuccess: false,
-          }));  
-        }
-      }
-      procede();
+      } else if (!JSON.parse(body).success) {
+        res.send(JSON.stringify({
+          successful: false,
+          body: null,
+          captchaSuccess: false,
+        }));  
+      } else procede();
     });
   function procede() {
     connection.then(dbs => {

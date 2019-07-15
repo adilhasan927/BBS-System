@@ -14,6 +14,10 @@ import { RecaptchaComponent } from 'ng-recaptcha';
 export class SignupPageComponent implements OnInit {
   recaptchaResponse: string;
   signupForm = new FormGroup({
+    email: new FormControl(null, [
+      Validators.required,
+      Validators.email,
+    ]),
     username: new FormControl(null, [
       Validators.required,
       Validators.minLength(6),
@@ -27,7 +31,7 @@ export class SignupPageComponent implements OnInit {
         Validators.required,
         Validators.minLength(6),
       ]),
-    }, [CustomValidators.confirmPasswordValidator]),
+    }, CustomValidators.confirmPasswordValidator),
     recaptchaReactive: new FormControl(null, Validators.required),
   });
 
@@ -51,15 +55,16 @@ export class SignupPageComponent implements OnInit {
   onSubmit() {
     // TODO: Add validation, routing.
     var signupReturn = this.api.signup({
+      email: this.signupForm.get('email').value,
       username: this.signupForm.get('username').value,
       password: this.signupForm.get('password.password').value,
     }, this.recaptchaResponse,
     ).subscribe(res => {
       if (res.successful) {
         this.storage.storeToken(res.body);
-        this.router.navigate(['/posts']);
         this.signupForm.reset();
         this.recaptchaComponent.reset();
+        this.router.navigate(['/posts']);
       } else if (!res.captchaSuccess) {
         this.recaptchaComponent.reset();
         window.alert("Complete the reCaptcha again.")
@@ -68,6 +73,8 @@ export class SignupPageComponent implements OnInit {
       }
     })
   }
+
+  get email() { return this.signupForm.get('email'); }
 
   get username() { return this.signupForm.get('username'); }
 

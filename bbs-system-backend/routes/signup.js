@@ -6,6 +6,7 @@ const getSecret = require('../secrets.js');
 const captcha = require('../captcha');
 const verifyUser = require('../email');
 const sendError = require('../error');
+const validators = require('../validators');
 
 router.post('/', function(req, res, next) {
   captcha(req.body.captchaResponse,
@@ -21,6 +22,12 @@ router.post('/', function(req, res, next) {
     const username = req.body.credentials.username;
     const password = req.body.credentials.password;
     const email = req.body.credentials.email;
+    var valid = validators.username(res, username)
+    && validators.password(res, password)
+    && validator.email(res, email);
+    if (!valid) {
+      return null;
+    }
     var payload = {
       username: username,
     }

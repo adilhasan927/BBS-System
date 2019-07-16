@@ -1,4 +1,5 @@
 * Sanitise backend inputs.
+    * ~~Sanitise signup.js.~~
 * Change and improve frontend error messages.
     * ~~Create backend error method.~~
     * Refactor error-handling code.

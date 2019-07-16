@@ -7,7 +7,7 @@
         * ~~Email verification backend.~~
         * Allow resending emails if verification fails.
     * Change and improve frontend error messages.
-* Fix username handling.
-    * Add username field to JWT on backend.
-    * Change frontend to use JWT username field.
-* Implement private/public key encryption of JWT.
+* ~~Fix username handling.~~
+* Fix posting.
+    * Make /api/post return post id when posted to.
+    * Edit frontend to use returned post id.

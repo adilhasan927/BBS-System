@@ -56,7 +56,7 @@ export class PostsComponent implements OnInit {
     ).subscribe(res => {
       console.log(res);
       if (res.successful) {
-        this.addPost("you", text);
+        this.addPost(this.storage.retrieveUsername(), text);
         this.postForm.reset();
       } else {
         this.router.navigate(['/login']);

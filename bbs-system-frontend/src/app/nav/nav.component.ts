@@ -20,6 +20,7 @@ export class NavComponent implements OnInit {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.isLoggedIn = this.storage.retrieveToken() != null;
+        this.username = this.storage.retrieveUsername();
       }
     })
   }

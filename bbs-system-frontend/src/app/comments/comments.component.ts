@@ -63,7 +63,7 @@ export class CommentsComponent implements OnInit {
     ).subscribe(res => {
       console.log(res);
       if (res.successful) {
-        this.addComment("you", text);
+        this.addComment(this.storage.retrieveUsername(), text);
         this.commentForm.reset();
       } else {
         this.router.navigate(['/login']);

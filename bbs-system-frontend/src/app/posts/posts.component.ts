@@ -33,6 +33,7 @@ export class PostsComponent implements OnInit {
 
   loadPosts() {
     this.api.getContent(this.limit, this.position).subscribe(res => {
+      this.endReached = false;
       if (res.successful) {
         this.posts.push(...res.body);
         this.position += this.limit;

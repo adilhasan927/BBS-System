@@ -38,6 +38,7 @@ export class CommentsComponent implements OnInit {
 
   loadComments() {
     this.api.getComments(this.postID, this.limit, this.position).subscribe(res => {
+      this.endReached = false;
       console.log(res);
       if (res.successful) {
         this.comments.push(...res.body);

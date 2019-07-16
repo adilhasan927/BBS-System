@@ -12,6 +12,7 @@ const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
   { path: 'signup', component: SignupPageComponent },
   { path: 'posts', component: PostsComponent, canActivate: [AuthGuard] },
+  { path: 'profile', redirectTo: 'profile/', canActivate: [AuthGuard] },
   { path: 'profile/:name', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'comments/:id', component: CommentsComponent, canActivate: [AuthGuard] },
   { path: 'not-found', component: NotFoundComponent },

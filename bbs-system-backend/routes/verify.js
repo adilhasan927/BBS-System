@@ -4,13 +4,16 @@ const connection = require('../db.js');
 const jwt = require('jsonwebtoken');
 const getSecret = require('../secrets.js');
 
-// Refactor code to allow resending email if verification failed.
 router.get('/', function(req, res, next) {
   const token = req.query.token;
+  console.log(token);
   var email;
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
-      res.render('verification', { text: 'Verification failed.' });
+      res.render('verification', {
+        text: 'Verification failed.',
+        link: 'http://127.0.0.1:4200/profile/',
+      });
     } else {
       email = val.email;
       proceed();
@@ -24,7 +27,10 @@ router.get('/', function(req, res, next) {
           { "email": email },
           { $set: { "verified": true } }
         ).then( val => {
-          res.render('verification', { text: 'Verification succeeded.' });
+          res.render('verification', {
+            text: 'Verification succeeded.',
+            link: 'http://127.0.0.1:4200/profile/',
+          });
         });
     })
   }

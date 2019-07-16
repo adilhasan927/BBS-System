@@ -32,7 +32,7 @@ router.post('/', function(req, res, next) {
       username: username,
     }
     var token = jwt.sign(payload, getSecret(), { expiresIn: "2 days" } );
-    verifyUser(email);
+    verifyUser(email, username);
     connection.then(dbs => {
       dbs.db("documents")
       .collection("users")

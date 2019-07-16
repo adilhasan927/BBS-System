@@ -24,7 +24,7 @@ router.post('/', function(req, res, next) {
       .collection('users')
       .findOne({ 'username': username })
       .then(val => {
-        verifyUser(val.email);
+        verifyUser(val.email, username);
       });
     });
   }

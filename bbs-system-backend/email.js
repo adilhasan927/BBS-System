@@ -3,10 +3,13 @@ const getSecret = require('./secrets');
 const jwt = require('jsonwebtoken');
 
 // Refactor to use real email address.
-module.exports = function verifyUser(address) {
-    const link = "http://localhost:3000" 
+module.exports = function verifyUser(address, username) {
+    const link = "http://localhost:3000"
     + "/api/verify?token="
-    + jwt.sign( { email: address }, getSecret(), { expiresIn: "2 days"} );
+    + jwt.sign( {
+        email: address,
+        username: username,
+    }, getSecret(), { expiresIn: "2 days"} );
     const transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
         port: 587,

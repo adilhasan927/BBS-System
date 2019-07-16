@@ -32,7 +32,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.routeUsername = paramMap.get('name');
       this.tokenUsername = this.storage.retrieveUsername();
     })
-    this.refreshContents();
+    if (this.routeUsername == '') {
+      this.router.navigate(['/profile', this.tokenUsername])
+    } else {
+      this.refreshContents();
+    }
   }
 
   refreshContents() {

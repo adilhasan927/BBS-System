@@ -6,6 +6,7 @@
         * ~~Email verification frontend.~~
         * ~~Email verification backend.~~
         * Allow resending emails if verification fails.
+        * Improve email verification page.
     * Change and improve frontend error messages.
 * ~~Fix username handling.~~
 * ~~Fix posting.~~

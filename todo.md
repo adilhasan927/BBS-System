@@ -7,6 +7,7 @@
         * ~~Email verification backend.~~
         * ~~Allow resending emails.~~
         * Improve email verification page.
+            * ~~Fix 404 response to favicon request.~~
     * Change and improve frontend error messages.
 * ~~Fix username handling.~~
 * ~~Fix posting.~~

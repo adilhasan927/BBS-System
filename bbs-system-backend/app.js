@@ -25,6 +25,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// respond with code 204 to favicon requests.
+app.get('/favicon.ico', (req, res) => res.status(204));
+
 app.use('/', indexRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/signup', signupRouter);

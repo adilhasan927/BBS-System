@@ -11,6 +11,7 @@ import { StorageService } from '../storage.service';
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   profile: string = "";
+  verified: boolean = false;
   routeUsername: string = "";
   tokenUsername: string = "";
   profileForm = new FormGroup({
@@ -38,7 +39,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.api.getProfile(this.routeUsername).subscribe(res => {
       if (res.successful) {
         console.log(res);
-        this.profile = res.body;
+        this.profile = res.body.profile;
+        this.verified = res.body.verified;
+      } else {
+        this.router.navigate(['/login']);
+      }
+    });
+  }
+
+  resendEmail() {
+    this.api.resendEmail().subscribe(res => {
+      console.log(res);
+      if (res.successful) {
+        this.refreshContents();
+        this.profileForm.reset();
       } else {
         this.router.navigate(['/login']);
       }

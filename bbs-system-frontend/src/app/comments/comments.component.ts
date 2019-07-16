@@ -59,7 +59,6 @@ export class CommentsComponent implements OnInit {
   onSubmit() {
     var text = this.commentForm.get('comment').value;
     var loginReturn = this.api.comment(
-      this.storage.retrieveToken(),
       this.postID,
       text,
     ).subscribe(res => {

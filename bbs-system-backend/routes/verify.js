@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
     if (err) {
       res.render('verification', { text: 'Verification failed.' });
     } else {
-      email = val.email
+      email = val.email;
       proceed();
   }
   })

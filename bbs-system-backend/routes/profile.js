@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const getSecret = require('../secrets.js');
 
 router.get('/', function(req, res, next) {
-  var username;
+  var username = req.query.username;
   var token =  req.header('AuthToken');
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
@@ -13,7 +13,6 @@ router.get('/', function(req, res, next) {
         successful: false,
       }));
     } else {
-      username = val.username;
       sendRes();
     }
   });
@@ -25,7 +24,10 @@ router.get('/', function(req, res, next) {
       .then(user => {
         res.send(JSON.stringify({
           successful: true,
-          body: user.profile.profileText,
+          body: {
+            profile: user.profile,
+            verified: user.verified,
+          }
         }));
       }).catch(err => {
         console.log(err);

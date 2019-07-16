@@ -1,23 +1,24 @@
 <p>Profile page</p>
-
-<p>Profile text: {{ profile }}</p>
-
-<form *ngIf="routeUsername == tokenUsername" [formGroup]="profileForm" (ngSubmit)='onSubmit()'>
-
-    <label>
-        Profile text:<br>
-        <input type="profileText" formControlName="profileText" required>
-    </label><br>
-
-    <div *ngIf="profileText.invalid && (profileText.dirty || profileText.touched)"
-    class="alert alert-danger">
-
-        <div *ngIf="profileText.errors.required">
-            Profile text is required.
+<p>Profile text: {{ profile.profileText }}</p>
+<div *ngIf="routeUsername == tokenUsername">
+    <div *ngIf="verified" class="alert alert-danger">
+            You have verified your email address.
+        </div>        
+        <div *ngIf="!verified" class="alert alert-danger">
+            You have not verified your email address.<br>
+            <button type="submit" (click)="resendEmail()">Send verification email.</button>
+        </div>    
+    <form *ngIf="routeUsername == tokenUsername" [formGroup]="profileForm" (ngSubmit)='onSubmit()'>
+        <label>
+            Profile text:<br>
+            <input type="profileText" formControlName="profileText" required>
+        </label><br>
+        <div *ngIf="profileText.invalid && (profileText.dirty || profileText.touched)"
+        class="alert alert-danger">
+            <div *ngIf="profileText.errors.required">
+                Profile text is required.
+            </div>
         </div>
-
-    </div>
-
-    <button type="submit" [disabled]="!profileForm.valid">Submit</button>
-
-</form>
+        <button type="submit" [disabled]="!profileForm.valid">Submit</button>
+    </form>
+</div>

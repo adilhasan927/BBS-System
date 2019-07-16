@@ -41,11 +41,21 @@ export class ApiService {
         catchError(this.handleError)
       );
   }
+  
+  resendEmail(): Observable<Response> {
+    const url = this.queryURL + '/email';
+    return this.http.post<Response>(url, JSON.stringify({
+      AuthToken: this.storage.retrieveToken(),
+    }), this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
 
-  post(token:string, body:string): Observable<Response> {
+  post(body:string): Observable<Response> {
     const url = this.queryURL + '/post';
     return this.http.post<Response>(url, JSON.stringify({
-      AuthToken: token,
+      AuthToken: this.storage.retrieveToken(),
       body: body,
     }), this.httpOptions)
       .pipe(
@@ -69,10 +79,10 @@ export class ApiService {
       );
   }
 
-  comment(token: string, postID: string, body:string): Observable<Response> {
+  comment(postID: string, body:string): Observable<Response> {
     const url = this.queryURL + '/comment';
     return this.http.post<Response>(url, JSON.stringify({
-      AuthToken: token,
+      AuthToken: this.storage.retrieveToken(),
       PostID: postID,
       body: body,
     }), this.httpOptions)

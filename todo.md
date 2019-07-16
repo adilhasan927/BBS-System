@@ -8,6 +8,4 @@
         * Allow resending emails if verification fails.
     * Change and improve frontend error messages.
 * ~~Fix username handling.~~
-* Fix posting.
-    * Make /api/post return post id when posted to.
-    * Edit frontend to use returned post id.
+* ~~Fix posting.~~

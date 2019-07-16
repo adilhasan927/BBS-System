@@ -4,7 +4,6 @@ export class Comment {
         this.body = body;
     }
 
-    _id: string;
     username: string;
     body: string;
 }

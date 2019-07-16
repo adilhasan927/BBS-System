@@ -14,6 +14,7 @@ export class CommentsComponent implements OnInit {
   comments: Comment[] = [];
   postID: string;
   position: number = 0;
+  limit: number = 20;
   endReached: boolean = false;
   commentForm = new FormGroup({
     comment: new FormControl('', [
@@ -36,12 +37,12 @@ export class CommentsComponent implements OnInit {
   }
 
   loadComments() {
-    this.api.getComments(this.postID, this.position).subscribe(res => {
+    this.api.getComments(this.postID, this.limit, this.position).subscribe(res => {
       console.log(res);
       if (res.successful) {
         this.comments.push(...res.body);
-        this.position += 20;
-        if (res.body.length < 20) {
+        this.position += this.limit;
+        if (res.body.length < this.limit) {
           this.endReached = true;
         } 
       } else {
@@ -51,7 +52,7 @@ export class CommentsComponent implements OnInit {
   }
 
   addComment(username, body) {
-    this.comments.push(new Comment(username, body));
+    this.comments.unshift(new Comment(username, body));
   }
 
   onSubmit() {

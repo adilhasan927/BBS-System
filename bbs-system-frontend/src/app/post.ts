@@ -1,5 +1,6 @@
 export class Post {
-    constructor(username: string, body: string) {
+    constructor(_id: string, username: string, body: string) {
+        this._id = _id;
         this.username = username;
         this.body = body;
     }

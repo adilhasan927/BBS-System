@@ -3,11 +3,11 @@ var router = express.Router();
 const connection = require('../db.js')
 const jwt = require('jsonwebtoken');
 const getSecret = require('../secrets.js');
-const crypto = require('crypto')
 
 router.get('/', function(req, res, next) {
   const token = req.header('AuthToken');
   const position = JSON.parse(req.header('position'));
+  const limit = JSON.parse(req.header('limit'));
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
       res.send(JSON.stringify({
@@ -25,7 +25,7 @@ router.get('/', function(req, res, next) {
       .find()
       .sort({ _id: -1 })
       .skip(position)
-      .limit(20)
+      .limit(limit)
       .toArray()
       .then(arr => {
         res.send(JSON.stringify({
@@ -43,6 +43,7 @@ router.post('/', function(req, res, next) {
     if (err) {
       res.send(JSON.stringify({
         successful: false,
+        body: null,
       }))  
     } else {
       username = val.username;
@@ -60,6 +61,7 @@ router.post('/', function(req, res, next) {
       }).then(val => {
         res.send(JSON.stringify({
           successful: true,
+          body: val.ops[0]._id,
         }));
       }).catch(err => {
         console.log(err);

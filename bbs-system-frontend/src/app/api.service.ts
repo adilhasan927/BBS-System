@@ -5,6 +5,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Response } from './response';
 import { StorageService } from './storage.service';
+import { CLIENT_RENEG_LIMIT } from 'tls';
 
 @Injectable({
   providedIn: 'root'
@@ -52,12 +53,13 @@ export class ApiService {
       );
   }
 
-  getContent(position: number = 0): Observable<Response> {
+  getContent(limit: number, position: number=0): Observable<Response> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
         'AuthToken': this.storage.retrieveToken(),
         'position': position.toString(),
+        'limit': limit.toString()
       }),
     };
     const url = this.queryURL + '/post';
@@ -79,13 +81,14 @@ export class ApiService {
       );
   }
 
-  getComments(postID: string, position: number = 0): Observable<Response> {
+  getComments(postID: string, limit: number, position: number = 0): Observable<Response> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
         'AuthToken': this.storage.retrieveToken(),
         'PostID': postID,
         'position': position.toString(),
+        'limit': limit.toString(),
       }),
     };
     const url = this.queryURL + '/comment';

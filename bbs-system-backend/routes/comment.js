@@ -9,6 +9,7 @@ router.get('/', function(req, res, next) {
   const token = req.header('AuthToken');
   const postID = req.header('PostID');
   const position = JSON.parse(req.header('position'));
+  const limit = JSON.parse(req.header('limit'));
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
       res.send(JSON.stringify({
@@ -27,7 +28,7 @@ router.get('/', function(req, res, next) {
         { $match: { _id: new ObjectID(postID) } },
         { $unwind: '$comments' },
         { $skip: position },
-        { $limit: 20 },
+        { $limit: limit },
         { $project: {
           username: '$comments.username',
           body: '$comments.body',

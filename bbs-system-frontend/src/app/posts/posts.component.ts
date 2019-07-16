@@ -13,6 +13,7 @@ import { StorageService } from '../storage.service';
 export class PostsComponent implements OnInit {
   posts: Post[] = [];
   position: number = 0;
+  limit: number = 20;
   endReached: boolean = false;
   postForm = new FormGroup({
     post: new FormControl('', [
@@ -31,21 +32,21 @@ export class PostsComponent implements OnInit {
   }
 
   loadPosts() {
-    this.api.getContent(this.position).subscribe(res => {
+    this.api.getContent(this.limit, this.position).subscribe(res => {
       if (res.successful) {
         this.posts.push(...res.body);
-        this.position += 20;
-        if (res.body.length < 20) {
+        this.position += this.limit;
+        if (res.body.length < this.limit) {
           this.endReached = true;
-        } else {
-          this.router.navigate(['/login']);
-        }
+        } 
+      } else {
+        this.router.navigate(['/login']);
       }
     });
   }
 
-  addPost(username, body) {
-    this.posts.push(new Post(username, body));
+  addPost(_id, username, body) {
+    this.posts.unshift(new Post(_id, username, body));
   }
 
   onSubmit() {
@@ -56,7 +57,7 @@ export class PostsComponent implements OnInit {
     ).subscribe(res => {
       console.log(res);
       if (res.successful) {
-        this.addPost(this.storage.retrieveUsername(), text);
+        this.addPost(res.body, this.storage.retrieveUsername(), text);
         this.postForm.reset();
       } else {
         this.router.navigate(['/login']);

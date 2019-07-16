@@ -65,11 +65,13 @@ export class SignupPageComponent implements OnInit {
         this.signupForm.reset();
         this.recaptchaComponent.reset();
         this.router.navigate(['/posts']);
-      } else if (!res.captchaSuccess) {
-        this.recaptchaComponent.reset();
-        window.alert("Complete the reCaptcha again.")
+      } else if (res.err.message = "CaptchaError") {
+        this.recaptchaComponent.reset;
+        window.alert("Complete the recaptcha again.");
+      } else if (res.err.message = "DBError") {
+        window.alert("Incorrect form credentials.")
       } else {
-        window.alert("Incorrect values.")
+        window.alert("An unknown error occurred.")
       }
     })
   }

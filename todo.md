@@ -1,9 +1,8 @@
 * Sanitise backend inputs.
-* Make website look more professional.
-    * ~~Captcha on signup and login.~~
-    * ~~Password confirmation on signup.~~
-    * ~~Implement email verification.~~
-    * ~~Improve email verification page.~~
-    * Change and improve frontend error messages.
+* Change and improve frontend error messages.
+    * ~~Create backend error method.~~
+    * Refactor error-handling code.
+        * ~~Refactor signup page.~~
+* ~~Make website look more professional.~~
 * ~~Fix username handling.~~
 * ~~Fix posting.~~

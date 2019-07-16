@@ -1,5 +1,5 @@
 export class Response {
-    successful;
-    body;
-    captchaSuccess;
+    successful: boolean;
+    body: any;
+    err: Error;
 }

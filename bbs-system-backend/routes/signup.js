@@ -5,23 +5,16 @@ const jwt = require('jsonwebtoken');
 const getSecret = require('../secrets.js');
 const captcha = require('../captcha');
 const verifyUser = require('../email');
+const sendError = require('../error');
 
 router.post('/', function(req, res, next) {
   captcha(req.body.captchaResponse,
     (err, result, body) => {
       if (err) {
         console.log(err);
-        res.send(JSON.stringify({
-          successful: false,
-          body: null,
-          captchaSuccess: null,
-        }));
+        sendError(res, err);
       } else if (!JSON.parse(body).success) {
-        res.send(JSON.stringify({
-          successful: false,
-          body: null,
-          captchaSuccess: false,
-        }));  
+        sendError(res, Error("CaptchaError"))
       } else procede(); 
     });
   function procede() {
@@ -52,11 +45,7 @@ router.post('/', function(req, res, next) {
         }));
       }).catch(err => {
         console.log(err);
-        res.send(JSON.stringify({
-          successful: false,
-          body: null,
-          captchaSuccess: true,
-        }));
+        sendError("DBError")
       });
     });
   }

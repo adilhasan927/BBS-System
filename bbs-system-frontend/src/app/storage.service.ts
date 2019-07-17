@@ -9,22 +9,22 @@ export class StorageService {
   constructor() { }
 
   storeToken(token: string) {
-    sessionStorage.setItem('bbs-token', token);
-    sessionStorage.setItem('username', _(token).username);
+    localStorage.setItem('bbs-token', token);
+    localStorage.setItem('username', _(token).username);
   }
 
   deleteToken() {
-    sessionStorage.removeItem('bbs-token');
-    sessionStorage.removeItem('username');
+    localStorage.removeItem('bbs-token');
+    localStorage.removeItem('username');
 
   }
 
   retrieveToken() {
-    return sessionStorage.getItem('bbs-token');
+    return localStorage.getItem('bbs-token');
   }
   
   retrieveUsername() {
-    return sessionStorage.getItem('username');
+    return localStorage.getItem('username');
   }
 
 }

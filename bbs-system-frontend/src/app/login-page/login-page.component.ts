@@ -42,9 +42,11 @@ export class LoginPageComponent implements OnInit {
   }
 
   onSubmit() {
-    this.api.login(
-      this.loginForm.value,
-    ).subscribe(res => {
+    this.api.login({
+      email: null,
+      username: this.loginForm.get('username').value,
+      password: this.loginForm.get('password').value,
+    }).subscribe(res => {
       if (res.successful) {
         this.storage.storeToken(res.body);
         this.router.navigate(['/posts']);

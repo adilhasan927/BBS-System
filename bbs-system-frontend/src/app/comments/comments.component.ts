@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from "@angular/router"
-import { Comment } from '../comment';
+import { Comment } from '../models/comment';
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
 

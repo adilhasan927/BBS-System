@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from "@angular/router"
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
+import { Profile } from '../models/profile';
 
 @Component({
   selector: 'app-profile',
@@ -10,7 +11,10 @@ import { StorageService } from '../storage.service';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-  profile: string = "";
+  profile: Profile = {
+    profileText: "",
+    profileImage: "",
+  };
   verified: boolean = false;
   routeUsername: string = "";
   tokenUsername: string = "";
@@ -51,6 +55,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.api.getProfile(this.routeUsername).subscribe(res => {
       if (res.successful) {
         this.profile = res.body.profile;
+        console.log(this.profile);
         this.verified = res.body.verified;
         this.profileForm.get('profileText').setValue(res.body.profile.profileText);
       } else if (res.err.message == "TokenError") {

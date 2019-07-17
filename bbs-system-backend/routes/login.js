@@ -7,7 +7,7 @@ const sendError = require('../error');
 const validators = require('../validators');
 
 router.post('/', function(req, res, next) {
-  const username = req.body.username.username;
+  const username = req.body.username;
   const password = req.body.password;
   var valid = validators.username(res, username)
   && validators.password(res, password)

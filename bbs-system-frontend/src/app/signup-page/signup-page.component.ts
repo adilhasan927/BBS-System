@@ -64,7 +64,7 @@ export class SignupPageComponent implements OnInit {
         this.storage.storeToken(res.body);
         this.signupForm.reset();
         this.recaptchaComponent.reset();
-        this.router.navigate(['/posts']);
+        this.router.navigate(['/profile']);
       } else if (res.err.message == "CaptchaError") {
         this.recaptchaComponent.reset;
         window.alert("Complete the recaptcha again.");

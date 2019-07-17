@@ -24,7 +24,7 @@ router.post('/', function(req, res, next) {
     const email = req.body.credentials.email;
     var valid = validators.username(res, username)
     && validators.password(res, password)
-    && validator.email(res, email);
+    && validators.email(res, email);
     if (!valid) {
       return null;
     }
@@ -40,7 +40,8 @@ router.post('/', function(req, res, next) {
         username: username,
         password: password,
         profile: {
-          profileText: "",
+          profileText: null,
+          profileImage: null,
         },
         email: email,
         verified: false,

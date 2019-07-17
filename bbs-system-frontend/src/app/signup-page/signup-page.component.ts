@@ -73,6 +73,7 @@ export class SignupPageComponent implements OnInit {
       } else if (res.err.message == "DBError") {
         window.alert("Database error.")
       } else {
+        console.log(res);
         window.alert("An unknown error occurred.")
       }
     })

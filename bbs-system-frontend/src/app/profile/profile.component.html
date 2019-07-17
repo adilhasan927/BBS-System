@@ -11,12 +11,22 @@
     <form *ngIf="routeUsername == tokenUsername" [formGroup]="profileForm" (ngSubmit)='onSubmit()'>
         <label>
             Profile text:<br>
-            <input type="profileText" formControlName="profileText" required>
+            <input type="text" formControlName="profileText" required>
         </label><br>
         <div *ngIf="profileText.invalid && (profileText.dirty || profileText.touched)"
         class="alert alert-danger">
             <div *ngIf="profileText.errors.required">
                 Profile text is required.
+            </div>
+        </div>
+        <label>
+            Profile image:<br>
+            <input type="file" accept=".png" (change)="onFileChange($event)" formControlName="profileImage" required>
+        </label><br>
+        <div *ngIf="profileImage.invalid && (profileImage.dirty || profileImage.touched)"
+        class="alert alert-danger">
+            <div *ngIf="profileImage.errors.required">
+                Profile image is required.
             </div>
         </div>
         <button type="submit" [disabled]="!profileForm.valid">Submit</button>

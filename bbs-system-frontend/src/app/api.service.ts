@@ -121,11 +121,14 @@ export class ApiService {
     return this.http.get<Response>(url, httpOptions);
   }
 
-  editProfile(token: string, profileText: string): Observable<Response> {
+  editProfile(token: string, profileText: string, profileImage: Object): Observable<Response> {
     const url = this.queryURL + '/profile';
     return this.http.post<Response>(url, JSON.stringify({
       AuthToken: token,
-      profile: profileText,
+      profile: {
+        profileText: profileText,
+        profileImage: profileImage,
+      },
     }), this.httpOptions)
       .pipe(
         catchError(this.handleError)

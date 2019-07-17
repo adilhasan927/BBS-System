@@ -42,10 +42,7 @@ router.post('/', function(req, res, next) {
   const token = req.body.AuthToken;
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
-      res.send(JSON.stringify({
-        successful: false,
-        body: null,
-      }))  
+      sendError("TokenError");
     } else {
       username = val.username;
       sendRes();
@@ -66,6 +63,7 @@ router.post('/', function(req, res, next) {
         }));
       }).catch(err => {
         console.log(err);
+        sendError("DBError");
       });
     });
   }

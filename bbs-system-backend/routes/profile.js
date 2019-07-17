@@ -4,6 +4,7 @@ const connection = require('../db.js');
 const jwt = require('jsonwebtoken');
 const getSecret = require('../secrets.js');
 const sendError = require('../error');
+var sizeOf = require('image-size');
 
 router.get('/', function(req, res, next) {
   var username = req.query.username;
@@ -41,32 +42,47 @@ router.post('/', function(req, res, next) {
   var username;
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
-      res.send(JSON.stringify({
-        successful: false,
-      }))  
+      sendError(res, "TokenError");
     } else {
       username = val.username;
       sendRes();
     }
   });
-    function sendRes() {
-    var profileText = req.body.profile;
+  function sendRes() {
+    const profileText = req.body.profile.profileText;
+    const profileImage = req.body.profile.profileImage;
+    try {
+      var imageProps = sizeOf(new Buffer(profileImage.value, 'base64'));
+    } catch(error) {
+      console.log(error)
+      sendError(res, "TypeError");
+      return null;
+    }
+    console.log(imageProps)
+    if (imageProps.width != 600 ||
+    imageProps.height != 600) {
+      sendError(res, "SizeError");
+      return null;
+    } else if (imageProps.type != 'png') {
+      sendError(res, "TypeError");
+      return null;
+    }
     connection.then(dbs => {
       dbs.db('documents')
       .collection('users')
       .updateOne(
         { "username": username },
-        { $set: { "profile.profileText": profileText } },
+        { $set: {
+          "profile.profileText": profileText,
+          "profile.profileImage": profileImage,
+        } },
       ).then(val => {
         res.send({
           successful: true,
           body: null,
         });
       }).catch(err => {
-        res.send({
-          successful: false,
-          body: null,
-        });
+        sendError("DBError");
       });
     });
   }

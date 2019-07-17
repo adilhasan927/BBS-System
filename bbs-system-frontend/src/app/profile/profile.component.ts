@@ -18,7 +18,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
     profileText: new FormControl('', [
       Validators.required,
     ]),
+    profileImage: new FormControl(null, [
+      Validators.required,
+    ]),
   });
+  image: {
+    filename: string;
+    filetype: string;
+    value: string;
+  };
 
   constructor(
     private api: ApiService,
@@ -44,6 +52,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       if (res.successful) {
         this.profile = res.body.profile;
         this.verified = res.body.verified;
+        this.profileForm.get('profileText').setValue(res.body.profile.profileText);
       } else if (res.err.message == "TokenError") {
         this.router.navigate(['/login']);
       } else if (res.err.message == "DBError") {
@@ -68,20 +77,44 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.api.editProfile(
       this.storage.retrieveToken(),
       this.profileForm.get('profileText').value,
+      this.image,
     ).subscribe(res => {
       console.log(res);
       if (res.successful) {
         this.refreshContents();
         this.profileForm.reset();
-      } else {
+      } else if (res.err.message == "TokenError") {
         this.router.navigate(['/login']);
+      } else if (res.err.message == "SizeError") {
+        window.alert("Image must be 600x600px");
+      } else if (res.err.message == "TypeError") {
+        window.alert("Image must be .png file.");
+      } else if (res.err.message == "DBError") {
+        window.alert("DBError");
       }
     })
+  }
+
+  onFileChange(event) {
+    let reader = new FileReader();
+    if (event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.image = {
+          filename: file.name,
+          filetype: file.type,
+          value: reader.result.toString().split(',')[1]
+        }
+      };
+    }
   }
 
   ngOnDestroy() {
   }
 
   get profileText() { return this.profileForm.get('profileText'); }
+
+  get profileImage() { return this.profileForm.get('profileImage'); }
 
 }

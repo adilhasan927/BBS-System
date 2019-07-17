@@ -42,11 +42,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
   refreshContents() {
     this.api.getProfile(this.routeUsername).subscribe(res => {
       if (res.successful) {
-        console.log(res);
         this.profile = res.body.profile;
         this.verified = res.body.verified;
-      } else {
+      } else if (res.err.message == "TokenError") {
         this.router.navigate(['/login']);
+      } else if (res.err.message == "DBError") {
+        window.alert("DBError");
       }
     });
   }

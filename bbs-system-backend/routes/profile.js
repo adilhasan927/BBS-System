@@ -3,15 +3,15 @@ var router = express.Router();
 const connection = require('../db.js');
 const jwt = require('jsonwebtoken');
 const getSecret = require('../secrets.js');
+const sendError = require('../error');
+const validators = require('../validators');
 
 router.get('/', function(req, res, next) {
   var username = req.query.username;
   var token =  req.header('AuthToken');
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
-      res.send(JSON.stringify({
-        successful: false,
-      }));
+      sendError("TokenError");
     } else {
       sendRes();
     }
@@ -31,10 +31,7 @@ router.get('/', function(req, res, next) {
         }));
       }).catch(err => {
         console.log(err);
-        res.send(JSON.stringify({
-          successful: false,
-          body: null,
-        }));
+        sendError("DBError");
       });
     });
   }

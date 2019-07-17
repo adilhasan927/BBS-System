@@ -43,7 +43,7 @@ export class ApiService {
   }
   
   resendEmail(): Observable<Response> {
-    const url = this.queryURL + '/email';
+    const url = this.queryURL + '/verify';
     return this.http.post<Response>(url, JSON.stringify({
       AuthToken: this.storage.retrieveToken(),
     }), this.httpOptions)

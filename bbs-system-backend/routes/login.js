@@ -3,18 +3,27 @@ var router = express.Router();
 const connection = require('../db.js');
 const jwt = require('jsonwebtoken');
 const getSecret = require('../secrets.js');
+const sendError = require('../error');
+const validators = require('../validators');
 
 router.post('/', function(req, res, next) {
+  const username = req.body.username.username;
+  const password = req.body.password;
+  var valid = validators.username(res, username)
+  && validators.password(res, password)
+  if (!valid) {
+    return null;
+  }
   connection.then(dbs => {
     var payload = {
-      username: req.body.username,
+      username: username,
     }
     var token = jwt.sign(payload, getSecret(), { expiresIn: "2 days" });
     dbs.db("documents")
     .collection("users")
     .find({
-      username: req.body.username,
-      password: req.body.password,
+      username: username,
+      password: password,
     })
     .count()
     .then(val => {
@@ -24,17 +33,11 @@ router.post('/', function(req, res, next) {
           body: token,
         }));
       } else {
-        res.send(JSON.stringify({
-          successful: false,
-          body: null,
-        }));
+        sendError(res, "CredentialsError" );
       }
     }).catch(err => {
       console.log(err);
-      res.send(JSON.stringify({
-        successful: false,
-        body: null,
-      }));
+      sendError(res, "DBError");
     });
   });
 });

@@ -64,6 +64,8 @@
             password fields must match.
         </div>
     </div>
-    <re-captcha formControlName="recaptchaReactive" (resolved)="resolved($event)" siteKey="6Ld4qa0UAAAAAH0UmLH4Zt6eCESPaQGgmiLrhOTr"></re-captcha>
+    <re-captcha formControlName="recaptchaReactive"
+    (resolved)="resolved($event)"
+    siteKey="6Ld4qa0UAAAAAH0UmLH4Zt6eCESPaQGgmiLrhOTr"></re-captcha>
     <button type="submit" [disabled]="!signupForm.valid">Submit</button>
 </form>

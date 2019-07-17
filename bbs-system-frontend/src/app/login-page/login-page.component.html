@@ -1,43 +1,33 @@
 <p>Login</p>
-
 <form [formGroup]="loginForm" (ngSubmit)='onSubmit()'>
-
     <label>
         username:<br>
         <input type="text" formControlName="username" required>
     </label><br>
-
     <div *ngIf="username.invalid && (username.dirty || username.touched)"
     class="alert alert-danger">
-
         <div *ngIf="username.errors.required">
             username is required.
         </div>
-
         <div *ngIf="username.errors.minlength">
             username must be at least 6 characters long.
         </div>
-
     </div>
-
     <label>
         password:<br>
         <input type="password" formControlName="password" required>
     </label><br>
-
     <div *ngIf="password.invalid && (password.dirty || password.touched)"
     class="alert alert-danger">
-
         <div *ngIf="password.errors.required">
             password is required.
         </div>
-
         <div *ngIf="password.errors.minlength">
             password must be at least 6 characters long.
         </div>
-
     </div>
-
+    <re-captcha formControlName="recaptchaReactive"
+    (resolved)="resolved($event)"
+    siteKey="6Ld4qa0UAAAAAH0UmLH4Zt6eCESPaQGgmiLrhOTr"></re-captcha>
     <button type="submit" [disabled]="!loginForm.valid">Submit</button>
-
 </form>

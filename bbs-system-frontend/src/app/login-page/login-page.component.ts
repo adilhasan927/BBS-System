@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from "@angular/router"
 import { ApiService } from '../api.service';
 import { StorageService } from '../storage.service';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-login-page',
@@ -10,6 +11,7 @@ import { StorageService } from '../storage.service';
   styleUrls: ['./login-page.component.css']
 })
 export class LoginPageComponent implements OnInit {
+  recaptchaResponse: string;
   loginForm = new FormGroup({
     username: new FormControl('', [
       Validators.required,
@@ -19,7 +21,11 @@ export class LoginPageComponent implements OnInit {
       Validators.required,
       Validators.minLength(6),
     ]),
+    recaptchaReactive: new FormControl(null, Validators.required),
   });
+
+  @ViewChild(RecaptchaComponent, {static: false} )
+  recaptchaComponent: RecaptchaComponent;
 
   constructor(
     private api: ApiService,
@@ -29,7 +35,12 @@ export class LoginPageComponent implements OnInit {
 
   ngOnInit() {
   }
-  
+
+  resolved(captchaResponse: string) {
+    console.log(`Resolved captcha with response: ${captchaResponse}`);
+    this.recaptchaResponse = captchaResponse;
+  }
+
   onSubmit() {
     this.api.login(
       this.loginForm.value,
@@ -37,9 +48,17 @@ export class LoginPageComponent implements OnInit {
       if (res.successful) {
         this.storage.storeToken(res.body);
         this.router.navigate(['/posts']);
+        this.recaptchaComponent.reset();
         this.loginForm.reset();
-      } else {
-        window.alert("Incorrect credentials.")
+      } else if (res.err.message == "CaptchaError") {
+        this.recaptchaComponent.reset();
+        window.alert("Complete the reCaptcha again.")
+      } else if (res.err.message == "FieldError") {
+        window.alert("Invalid form fields.");
+      } else if (res.err.message == "CredentialsError") {
+        window.alert("Invalid username or password.");
+      } else if (res.err.message == "DBError") {
+        window.alert("Database error.");
       }
     })
   }

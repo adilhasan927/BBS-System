@@ -65,11 +65,13 @@ export class SignupPageComponent implements OnInit {
         this.signupForm.reset();
         this.recaptchaComponent.reset();
         this.router.navigate(['/posts']);
-      } else if (res.err.message = "CaptchaError") {
+      } else if (res.err.message == "CaptchaError") {
         this.recaptchaComponent.reset;
         window.alert("Complete the recaptcha again.");
-      } else if (res.err.message = "DBError") {
-        window.alert("Incorrect form credentials.")
+      } else if (res.err.message == "FieldError") {
+        window.alert("Invalid form fields.")
+      } else if (res.err.message == "DBError") {
+        window.alert("Database error.")
       } else {
         window.alert("An unknown error occurred.")
       }

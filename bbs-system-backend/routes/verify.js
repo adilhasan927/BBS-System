@@ -12,8 +12,8 @@ router.get('/', function(req, res, next) {
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
       res.render('verification', {
-        text: 'Verification failed.',
-        link: 'http://127.0.0.1:4200/profile/',
+        text: "Verification failed: invalid token.",
+        link: "http://127.0.0.1:4200/profile/",
       });
     } else {
       email = val.email;
@@ -29,8 +29,8 @@ router.get('/', function(req, res, next) {
           { $set: { "verified": true } }
         ).then( val => {
           res.render('verification', {
-            text: 'Verification succeeded.',
-            link: 'http://127.0.0.1:4200/profile/',
+            text: "Verification succeeded.",
+            link: "http://127.0.0.1:4200/profile/",
           });
         });
     })

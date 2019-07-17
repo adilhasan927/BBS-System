@@ -4,6 +4,7 @@ const connection = require('../db.js')
 const jwt = require('jsonwebtoken');
 const getSecret = require('../secrets.js');
 const ObjectID = require('mongodb').ObjectID;
+const sendError = require('../error');
 
 router.get('/', function(req, res, next) {
   const token = req.header('AuthToken');
@@ -12,10 +13,7 @@ router.get('/', function(req, res, next) {
   const limit = JSON.parse(req.header('limit'));
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
-      res.send(JSON.stringify({
-        successful: false,
-        body: [],
-      }))
+      sendError("TokenError");
     } else {
       sendRes();
     }
@@ -40,13 +38,10 @@ router.get('/', function(req, res, next) {
           successful: true,
           body: comments,
         }));
-      }).catch(err => {
-        console.log(err);
-        res.send(JSON.stringify({
-          successful: false,
-          body: [],
-        }))
-      });
+      })
+    }).catch(err => {
+      console.log(err);
+      sendError("DBError");
     });
   }
 });

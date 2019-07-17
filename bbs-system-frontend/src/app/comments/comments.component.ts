@@ -66,8 +66,10 @@ export class CommentsComponent implements OnInit {
       if (res.successful) {
         this.addComment(this.storage.retrieveUsername(), text);
         this.commentForm.reset();
-      } else {
+      } else if (res.err.message == "TokenError") {
         this.router.navigate(['/login']);
+      } else if (res.err.message == "DBError") {
+        window.alert("DBError");
       }
     })
   }

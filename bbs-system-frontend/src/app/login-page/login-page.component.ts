@@ -58,7 +58,7 @@ export class LoginPageComponent implements OnInit {
       } else if (res.err.message == "FieldError") {
         window.alert("Invalid form fields.");
       } else if (res.err.message == "CredentialsError") {
-        window.alert("Invalid username or password.");
+        window.alert("Incorrect username or password.");
       } else if (res.err.message == "DBError") {
         window.alert("Database error.");
       }

@@ -14,6 +14,7 @@ import { NavComponent } from './nav/nav.component';
 import { ProfileComponent } from './profile/profile.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { CommentsComponent } from './comments/comments.component';
+import { PostComponent } from './post/post.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { CommentsComponent } from './comments/comments.component';
     NavComponent,
     ProfileComponent,
     NotFoundComponent,
-    CommentsComponent
+    CommentsComponent,
+    PostComponent
   ],
   imports: [
     BrowserModule,

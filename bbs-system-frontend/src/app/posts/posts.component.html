@@ -7,10 +7,9 @@
     <button type="submit" [disabled]="!postForm.valid">Submit</button>
 </form>
 <p>Posts</p>
+<button (click)="resetPosts()">Reset posts.</button>
 <div *ngFor="let post of posts">
-    <a [routerLink]="['/profile', post.username]">Author: {{ post.username }}<br></a>
-    <a [routerLink]="['/comments', post._id]">comments<br></a>
-    Body: {{ post.body }}<br>
+    <app-post [post]=post></app-post>
 </div>
 <button (click)="loadPosts()">Load further posts.</button>
-<p *ngIf=endReached>There don't appear to be further posts right now.</p>
+<p *ngIf=endReached>There don't appear to be further posts.</p>

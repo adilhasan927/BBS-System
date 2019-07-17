@@ -31,6 +31,12 @@ export class PostsComponent implements OnInit {
     this.loadPosts();
   }
 
+  resetPosts() {
+    this.posts = [];
+    this.position = 0;
+    this.loadPosts();
+  }
+
   loadPosts() {
     this.api.getContent(this.limit, this.position).subscribe(res => {
       this.endReached = false;

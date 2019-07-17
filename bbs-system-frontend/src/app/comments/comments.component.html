@@ -7,9 +7,10 @@
     <button type="submit" [disabled]="!commentForm.valid">Submit</button>
 </form>
 <p>Comments</p>
+<button (click)="resetComments()">Reset comments.</button>
 <div *ngFor="let comment of comments">
     <a [routerLink]="['/profile', comment.username]">Author: {{ comment.username }}<br></a>
     Body: {{ comment.body }}<br>
 </div>
 <button (click)="loadComments()">Load further comments.</button>
-<p *ngIf=endReached>There don't appear to be further comments right now.</p>
+<p *ngIf=endReached>There don't appear to be further comments.</p>

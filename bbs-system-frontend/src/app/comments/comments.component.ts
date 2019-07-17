@@ -36,6 +36,12 @@ export class CommentsComponent implements OnInit {
     this.loadComments();
   }
 
+  resetComments() {
+    this.comments = [];
+    this.position = 0;
+    this.loadComments();
+  }
+
   loadComments() {
     this.api.getComments(this.postID, this.limit, this.position).subscribe(res => {
       this.endReached = false;

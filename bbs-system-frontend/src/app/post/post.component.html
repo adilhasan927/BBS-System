@@ -1,0 +1,12 @@
+<div id='border'>
+  <div class='userContainer'>
+    <img *ngIf="profile.profileImage" width="40px" height="40px"
+    [src]="'data:image/jpg;base64,'+profile.profileImage.value"
+    alt="profile image">
+    <a [routerLink]="['/profile', post.username]">Author: {{ post.username }}</a><br>
+  </div>
+  <a [routerLink]="['/comments', post._id]">comments</a><br>
+  Body: {{ post.body }}<br>
+  <hr>
+  <span *ngIf="profile.profileText">Profile text: {{ profile.profileText }}</span><br>
+</div>

@@ -4,7 +4,6 @@ const connection = require('../db.js');
 const jwt = require('jsonwebtoken');
 const getSecret = require('../secrets.js');
 const sendError = require('../error');
-const validators = require('../validators');
 
 router.get('/', function(req, res, next) {
   var username = req.query.username;
@@ -29,10 +28,10 @@ router.get('/', function(req, res, next) {
             verified: user.verified,
           }
         }));
-      }).catch(err => {
-        console.log(err);
-        sendError("DBError");
       });
+    }).catch(err => {
+      console.log(err);
+      sendError("DBError");
     });
   }
 });

@@ -40,8 +40,10 @@ export class PostsComponent implements OnInit {
         if (res.body.length < this.limit) {
           this.endReached = true;
         } 
-      } else {
+      } else if (res.err.message == "TokenError") {
         this.router.navigate(['/login']);
+      } else if (res.err.message == "DBError") {
+        window.alert("DBError");
       }
     });
   }

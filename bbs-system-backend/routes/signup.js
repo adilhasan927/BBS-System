@@ -50,10 +50,10 @@ router.post('/', function(req, res, next) {
           body: token,
           captchaSuccess: true,
         }));
-      }).catch(err => {
-        console.log(err);
-        sendError("DBError")
       });
+    }).catch(err => {
+      console.log(err);
+      sendError("DBError")
     });
   }
 });

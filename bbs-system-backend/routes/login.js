@@ -35,10 +35,10 @@ router.post('/', function(req, res, next) {
       } else {
         sendError(res, "CredentialsError" );
       }
-    }).catch(err => {
-      console.log(err);
-      sendError(res, "DBError");
     });
+  }).catch(err => {
+    console.log(err);
+    sendError(res, "DBError");
   });
 });
 

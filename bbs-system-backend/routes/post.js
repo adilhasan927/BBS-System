@@ -3,6 +3,7 @@ var router = express.Router();
 const connection = require('../db.js')
 const jwt = require('jsonwebtoken');
 const getSecret = require('../secrets.js');
+const sendError = require('../error');
 
 router.get('/', function(req, res, next) {
   const token = req.header('AuthToken');
@@ -10,10 +11,7 @@ router.get('/', function(req, res, next) {
   const limit = JSON.parse(req.header('limit'));
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
-      res.send(JSON.stringify({
-        successful: false,
-        body: [],
-      }))
+      sendError("TokenError");
     } else {
       sendRes();
     }
@@ -33,6 +31,9 @@ router.get('/', function(req, res, next) {
           body: arr,
         }));
       });
+    }).catch(err => {
+      console.log(err);
+      sendError("DBError");
     });
   }
 });

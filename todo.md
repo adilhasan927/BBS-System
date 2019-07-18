@@ -13,4 +13,6 @@
         * ~~Change error-handling code to pass on response.~~
         * Change components to work with refactoring.
             * ~~Edited profile component.~~
+            * ~~Edited comment component.~~
+            * ~~Edited comments commponent.~~
         * Change authorization to use authorization header.

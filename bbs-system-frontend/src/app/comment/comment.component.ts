@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Comment } from '../models/comment';
 import { Profile } from '../models/profile';
 import { ApiService } from '../services/api.service';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
@@ -16,15 +16,17 @@ export class CommentComponent implements OnInit {
   };
 
   constructor(
-    private api: ApiService
+    private api: ApiService,
+    private router: Router
   ) { }
 
   ngOnInit() {
-    this.api.getProfile(this.comment.username).subscribe(res => {
-      if (res.successful) {
-        this.profile = res.body.profile;
-        console.log(this.profile)
-      } else if (res.err.message == "DBError") {
+    this.api.getProfile(this.comment.username).subscribe(next => {
+      this.profile = next.body.profile;
+    }, error => {
+      if (error.error == "TokenError") {
+        this.router.navigate(['/login']);
+      } else if (error.error == "DBError") {
         console.log("DBError");
       }
     });

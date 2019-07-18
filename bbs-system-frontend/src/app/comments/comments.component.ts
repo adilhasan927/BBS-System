@@ -43,16 +43,18 @@ export class CommentsComponent implements OnInit {
   }
 
   loadComments() {
-    this.api.getComments(this.postID, this.limit, this.position).subscribe(res => {
+    this.api.getComments(this.postID, this.limit, this.position).subscribe(next => {
       this.endReached = false;
-      if (res.successful) {
-        this.comments.push(...res.body);
-        this.position += this.limit;
-        if (res.body.length < this.limit) {
-          this.endReached = true;
-        } 
-      } else {
+      this.comments.push(...next.body);
+      this.position += this.limit;
+      if (next.body.length < this.limit) {
+        this.endReached = true;
+      }
+    }, error => {
+      if (error.error = "TokenError") {
         this.router.navigate(['/login']);
+      } else if (error.error == "DBError") {
+        console.log("DBError");
       }
     });
   }
@@ -68,12 +70,12 @@ export class CommentsComponent implements OnInit {
       text,
     ).subscribe(res => {
       console.log(res);
-      if (res.successful) {
-        this.addComment(this.storage.retrieveUsername(), text);
-        this.commentForm.reset();
-      } else if (res.err.message == "TokenError") {
+      this.addComment(this.storage.retrieveUsername(), text);
+      this.commentForm.reset();
+    }, error => {
+      if (error.error == "TokenError") {
         this.router.navigate(['/login']);
-      } else if (res.err.message == "DBError") {
+      } else if (error.error == "DBError") {
         window.alert("DBError");
       }
     })

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Post } from '../models/post';
 import { Profile } from '../models/profile';
-import { ApiService } from '../api.service';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-post',
@@ -23,7 +23,6 @@ export class PostComponent implements OnInit {
     this.api.getProfile(this.post.username).subscribe(res => {
       if (res.successful) {
         this.profile = res.body.profile;
-        console.log(this.profile)
       } else if (res.err.message == "DBError") {
         console.log("DBError");
       }

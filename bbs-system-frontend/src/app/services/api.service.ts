@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Credentials } from './models/credentials';
+import { Credentials } from '../models/credentials';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Response } from './models/response';
+import { Response } from '../models/response';
 import { StorageService } from './storage.service';
 
 @Injectable({

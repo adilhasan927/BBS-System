@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Comment } from '../models/comment';
 import { Profile } from '../models/profile';
-import { ApiService } from '../api.service';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-comment',

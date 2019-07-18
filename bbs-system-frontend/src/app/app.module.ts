@@ -16,6 +16,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { CommentsComponent } from './comments/comments.component';
 import { PostComponent } from './post/post.component';
 import { CommentComponent } from './comment/comment.component';
+import { httpInterceptorProviders } from './http-interceptors';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,9 @@ import { CommentComponent } from './comment/comment.component';
     RecaptchaModule,
     RecaptchaFormsModule
   ],
-  providers: [],
+  providers: [
+    httpInterceptorProviders
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

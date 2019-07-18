@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from "@angular/router"
 import { Post } from '../models/post';
-import { ApiService } from '../api.service';
-import { StorageService } from '../storage.service';
+import { ApiService } from '../services/api.service';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-posts',
@@ -63,7 +63,6 @@ export class PostsComponent implements OnInit {
     var loginReturn = this.api.post(
       text
     ).subscribe(res => {
-      console.log(res);
       if (res.successful) {
         this.addPost(res.body, this.storage.retrieveUsername(), text);
         this.postForm.reset();

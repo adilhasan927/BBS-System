@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from "@angular/router"
 import { Comment } from '../models/comment';
-import { ApiService } from '../api.service';
-import { StorageService } from '../storage.service';
+import { ApiService } from '../services/api.service';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-comments',

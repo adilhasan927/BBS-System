@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationStart, NavigationEnd } from '@angular/router';
-import { StorageService } from '../storage.service';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-nav',

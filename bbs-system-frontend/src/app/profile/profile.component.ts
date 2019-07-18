@@ -55,7 +55,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.api.getProfile(this.routeUsername).subscribe(res => {
       if (res.successful) {
         this.profile = res.body.profile;
-        console.log(this.profile);
         this.verified = res.body.verified;
         this.profileForm.get('profileText').setValue(res.body.profile.profileText);
       } else if (res.err.message == "TokenError") {
@@ -68,7 +67,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   resendEmail() {
     this.api.resendEmail().subscribe(res => {
-      console.log(res);
       if (res.successful) {
         this.refreshContents();
         this.profileForm.reset();

@@ -1,5 +1,6 @@
 * ~~Implement profile pictures.~~
-* Implement client-side caching.
+* ~~Implement client-side caching.~~
     * ~~Scaffold caching HttpInterceptor.~~
-    * Implement caching HttpInterceptor.
-    * Implement caching for user profiles.
+    * ~~Implement caching HttpInterceptor.~~
+    * ~~Implement caching service.~~
+    * ~~Implement network-sensitive caching.~~

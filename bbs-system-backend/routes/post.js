@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
   const limit = JSON.parse(req.header('limit'));
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
-      sendError("TokenError");
+      sendError(res, "TokenError");
     } else {
       sendRes();
     }
@@ -33,7 +33,7 @@ router.get('/', function(req, res, next) {
       });
     }).catch(err => {
       console.log(err);
-      sendError("DBError");
+      sendError(res, "DBError");
     });
   }
 });
@@ -42,7 +42,7 @@ router.post('/', function(req, res, next) {
   const token = req.body.AuthToken;
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
-      sendError("TokenError");
+      sendError(res, "TokenError", 401);
     } else {
       username = val.username;
       sendRes();
@@ -63,7 +63,7 @@ router.post('/', function(req, res, next) {
         }));
       }).catch(err => {
         console.log(err);
-        sendError("DBError");
+        sendError(res, "DBError", 500);
       });
     });
   }

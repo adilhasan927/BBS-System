@@ -13,9 +13,9 @@ router.post('/', function(req, res, next) {
     (err, result, body) => {
       if (err) {
         console.log(err);
-        sendError(res, err);
+        sendError(res, err, 500);
       } else if (!JSON.parse(body).success) {
-        sendError(res, Error("CaptchaError"))
+        sendError(res, "CaptchaError", 401);
       } else procede(); 
     });
   function procede() {
@@ -26,6 +26,7 @@ router.post('/', function(req, res, next) {
     && validators.password(res, password)
     && validators.email(res, email);
     if (!valid) {
+      sendError(res, 'FieldError', 400);
       return null;
     }
     var payload = {
@@ -54,7 +55,7 @@ router.post('/', function(req, res, next) {
       });
     }).catch(err => {
       console.log(err);
-      sendError("DBError")
+      sendError(res, "DBError", 500)
     });
   }
 });

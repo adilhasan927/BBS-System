@@ -7,39 +7,51 @@ const sendError = require('../error');
 const validators = require('../validators');
 
 router.post('/', function(req, res, next) {
-  const username = req.body.username;
-  const password = req.body.password;
-  var valid = validators.username(res, username)
-  && validators.password(res, password)
-  if (!valid) {
-    return null;
-  }
-  connection.then(dbs => {
-    var payload = {
-      username: username,
-    }
-    var token = jwt.sign(payload, getSecret(), { expiresIn: "2 days" });
-    dbs.db("documents")
-    .collection("users")
-    .find({
-      username: username,
-      password: password,
-    })
-    .count()
-    .then(val => {
-      if (val == 1) {
-        res.send(JSON.stringify({
-          successful: true,
-          body: token,
-        }));
-      } else {
-        sendError(res, "CredentialsError" );
-      }
+  captcha(req.body.captchaResponse,
+    (err, result, body) => {
+      if (err) {
+        console.log(err);
+        sendError(res, err, 500);
+      } else if (!JSON.parse(body).success) {
+        sendError(res, "CaptchaError", 401);
+      } else procede(); 
     });
-  }).catch(err => {
-    console.log(err);
-    sendError(res, "DBError");
-  });
+  function procede() {
+    const username = req.body.username;
+    const password = req.body.password;
+    var valid = validators.username(res, username)
+    && validators.password(res, password)
+    if (!valid) {
+      sendError(res, 'FieldError', 400);
+      return null;
+    }
+    connection.then(dbs => {
+      var payload = {
+        username: username,
+      }
+      var token = jwt.sign(payload, getSecret(), { expiresIn: "2 days" });
+      dbs.db("documents")
+      .collection("users")
+      .find({
+        username: username,
+        password: password,
+      })
+      .count()
+      .then(val => {
+        if (val == 1) {
+          res.send(JSON.stringify({
+            successful: true,
+            body: token,
+          }));
+        } else {
+          sendError(res, "CredentialsError", 401 );
+        }
+      });
+    }).catch(err => {
+      console.log(err);
+      sendError(res, "DBError", 500);
+    });
+  }
 });
 
 module.exports = router;

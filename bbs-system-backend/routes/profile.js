@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
   var token =  req.header('AuthToken');
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
-      sendError("TokenError");
+      sendError(res, "TokenError", 401);
     } else {
       sendRes();
     }
@@ -32,7 +32,7 @@ router.get('/', function(req, res, next) {
       });
     }).catch(err => {
       console.log(err);
-      sendError("DBError");
+      sendError(res, "DBError", 500);
     });
   }
 });
@@ -42,7 +42,7 @@ router.post('/', function(req, res, next) {
   var username;
   jwt.verify(token, getSecret(), (err, val) => {
     if (err) {
-      sendError(res, "TokenError");
+      sendError(res, "TokenError", 401);
     } else {
       username = val.username;
       sendRes();
@@ -54,17 +54,16 @@ router.post('/', function(req, res, next) {
     try {
       var imageProps = sizeOf(new Buffer(profileImage.value, 'base64'));
     } catch(error) {
-      console.log(error)
-      sendError(res, "TypeError");
+      sendError(res, "TypeError", 400);
       return null;
     }
     console.log(imageProps)
     if (imageProps.width != 600 ||
     imageProps.height != 600) {
-      sendError(res, "SizeError");
+      sendError(res, "SizeError", 400);
       return null;
     } else if (imageProps.type != 'png') {
-      sendError(res, "TypeError");
+      sendError(res, "TypeError", 400);
       return null;
     }
     connection.then(dbs => {
@@ -82,7 +81,7 @@ router.post('/', function(req, res, next) {
           body: null,
         });
       }).catch(err => {
-        sendError("DBError");
+        sendError(res, "DBError", 500);
       });
     });
   }

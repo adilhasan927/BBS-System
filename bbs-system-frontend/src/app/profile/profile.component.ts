@@ -52,14 +52,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   refreshContents() {
-    this.api.getProfile(this.routeUsername).subscribe(res => {
-      if (res.successful) {
-        this.profile = res.body.profile;
-        this.verified = res.body.verified;
-        this.profileForm.get('profileText').setValue(res.body.profile.profileText);
-      } else if (res.err.message == "TokenError") {
+    this.api.getProfile(this.routeUsername).subscribe(next => {
+      this.profile = next.body.profile;
+      this.verified = next.body.verified;
+      this.profileForm.get('profileText').setValue(next.body.profile.profileText);
+    }, error => {
+      if (error.error == "TokenError") {
         this.router.navigate(['/login']);
-      } else if (res.err.message == "DBError") {
+      } else if (error.error == "DBError") {
         window.alert("DBError");
       }
     });
@@ -81,18 +81,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.storage.retrieveToken(),
       this.profileForm.get('profileText').value,
       this.image,
-    ).subscribe(res => {
-      console.log(res);
-      if (res.successful) {
-        this.refreshContents();
-        this.profileForm.reset();
-      } else if (res.err.message == "TokenError") {
+    ).subscribe(next => {
+      console.log(next);
+      this.refreshContents();
+      this.profileForm.reset();
+    }, error => {
+      if (error.error == "TokenError") {
         this.router.navigate(['/login']);
-      } else if (res.err.message == "SizeError") {
+      } else if (error.error == "SizeError") {
         window.alert("Image must be 600x600px");
-      } else if (res.err.message == "TypeError") {
+      } else if (error.error == "TypeError") {
         window.alert("Image must be .png file.");
-      } else if (res.err.message == "DBError") {
+      } else if (error.error == "DBError") {
         window.alert("DBError");
       }
     })

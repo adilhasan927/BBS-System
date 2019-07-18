@@ -10,4 +10,7 @@
         * ~~Change sendError() calls to provide status codes.~~
         * Change authorization to use authorization header.
     * Edit frontend to use RESTful API.
+        * ~~Change error-handling code to pass on response.~~
+        * Change components to work with refactoring.
+            * ~~Edited profile component.~~
         * Change authorization to use authorization header.

@@ -46,7 +46,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     })
     if (this.routeUsername == '') {
       this.router.navigate(['/profile', this.tokenUsername])
-    } else {
+  } else {
       this.refreshContents();
     }
   }

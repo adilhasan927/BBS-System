@@ -7,9 +7,9 @@ const verify = require('../verify');
 
 router.get('/', function(req, res, next) {
   const token = req.header('Authorization');
-  const postID = req.header('PostID');
-  const position = JSON.parse(req.header('position'));
-  const limit = JSON.parse(req.header('limit'));
+  const postID = req.query.PostID;
+  const position = JSON.parse(req.query.position);
+  const limit = JSON.parse(req.query.limit);
   verify(res, token, (err, val) => {
     if (err) {
       sendError(res, "TokenError", +err.message);

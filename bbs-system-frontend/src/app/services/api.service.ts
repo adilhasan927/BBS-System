@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Credentials } from '../models/credentials';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Response } from '../models/response';
-import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,23 +17,25 @@ export class ApiService {
 
   constructor(
     private http: HttpClient,
-    private storage: StorageService,
   ) { }
 
-  login(credentials: Credentials, captchaResponse: string): Observable<Response> {
+  login(credentials: Credentials, captchaResponse: string): Observable<any> {
     const url = this.queryURL + '/login';
-    return this.http.post<Response>(url, JSON.stringify({
-      credentials: credentials,
+    const httpOptions = {
+      headers: this.httpOptions.headers.append('Authorization', `Basic ${btoa(
+        credentials.username + ':' + credentials.password
+      )}`)}
+    return this.http.post<any>(url, JSON.stringify({
       captchaResponse: captchaResponse,
-    }), this.httpOptions)
+    }), httpOptions)
     .pipe(
       catchError(this.handleError)
     );
   }
 
-  signup(credentials: Credentials, captchaResponse: string): Observable<Response> {
+  signup(credentials: Credentials, captchaResponse: string): Observable<any> {
     const url = this.queryURL + '/signup';
-    return this.http.post<Response>(url, JSON.stringify({
+    return this.http.post<any>(url, JSON.stringify({
       credentials: credentials,
       captchaResponse: captchaResponse,
     }), this.httpOptions)
@@ -44,29 +44,29 @@ export class ApiService {
       );
   }
   
-  resendEmail(): Observable<Response> {
+  resendEmail(): Observable<any> {
     const url = this.queryURL + '/account/email';
-    return this.http.get<Response>(url, this.httpOptions)
+    return this.http.get<any>(url, this.httpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
-  verifyEmail(token: string): Observable<Response> {
+  verifyEmail(token: string): Observable<any> {
     const url = this.queryURL + '/account/email';
     // override AuthInterceptor.
     const httpOptions = {
       headers: this.httpOptions.headers.append('Authorization', `Bearer ${token}`)
     }
-    return this.http.post<Response>(url, '', this.httpOptions)
+    return this.http.post<any>(url, '', httpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
-  post(body:string): Observable<Response> {
+  post(body:string): Observable<any> {
     const url = this.queryURL + '/post';
-    return this.http.post<Response>(url, JSON.stringify({
+    return this.http.post<any>(url, JSON.stringify({
       body: body,
     }), this.httpOptions)
       .pipe(
@@ -74,24 +74,26 @@ export class ApiService {
       );
   }
 
-  getContent(limit: number, position: number=0): Observable<Response> {
+  getContent(limit: number, position: number=0): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
+      }),
+      params: {
         'position': position.toString(),
         'limit': limit.toString()
-      }),
+      }
     };
     const url = this.queryURL + '/post';
-    return this.http.get<Response>(url, httpOptions)
+    return this.http.get<any>(url, httpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
-  comment(postID: string, body:string): Observable<Response> {
+  comment(postID: string, body:string): Observable<any> {
     const url = this.queryURL + '/comment';
-    return this.http.post<Response>(url, JSON.stringify({
+    return this.http.post<any>(url, JSON.stringify({
       PostID: postID,
       body: body,
     }), this.httpOptions)
@@ -100,23 +102,25 @@ export class ApiService {
       );
   }
 
-  getComments(postID: string, limit: number, position: number = 0): Observable<Response> {
+  getComments(postID: string, limit: number, position: number = 0): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
+      }),
+      params: {
         'PostID': postID,
         'position': position.toString(),
-        'limit': limit.toString(),
-      }),
+        'limit': limit.toString()
+      }
     };
     const url = this.queryURL + '/comment';
-    return this.http.get<Response>(url, httpOptions)
+    return this.http.get<any>(url, httpOptions)
       .pipe(
         catchError(this.handleError)
       );
   }
 
-  getProfile(username: string): Observable<Response> {
+  getProfile(username: string): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
@@ -126,12 +130,12 @@ export class ApiService {
       },
     }
     const url = this.queryURL + '/account/profile';
-    return this.http.get<Response>(url, httpOptions);
+    return this.http.get<any>(url, httpOptions);
   }
 
-  editProfile(token: string, profileText: string, profileImage: Object): Observable<Response> {
+  editProfile(token: string, profileText: string, profileImage: Object): Observable<any> {
     const url = this.queryURL + '/account/profile';
-    return this.http.post<Response>(url, JSON.stringify({
+    return this.http.put<any>(url, JSON.stringify({
       profile: {
         profileText: profileText,
         profileImage: profileImage,

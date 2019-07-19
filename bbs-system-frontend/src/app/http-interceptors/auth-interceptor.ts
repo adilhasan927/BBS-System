@@ -29,9 +29,10 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   interceptable(req: HttpRequest<any>) {
-    const pathname = req.url.split('/')
+    const pathname = req.url.split('/').slice(2).join('/');
+    console.log(pathname);
     for (const i of this.interceptables) {
-      if (req.url == i[0] && req.method == i[1]) {
+      if (pathname == i[0] && req.method == i[1]) {
         return false;
       }
     }

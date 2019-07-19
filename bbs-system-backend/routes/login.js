@@ -19,8 +19,11 @@ router.post('/', function(req, res, next) {
       } else procede(); 
     });
   function procede() {
-    const username = req.body.credentials.username;
-    const password = req.body.credentials.password;
+    var credentials = req.header('Authorization').replace(/^Basic\s/, '');
+    credentials = Buffer.from(credentials, 'base64').toString('ascii');
+    credentials = credentials.split(':');
+    const username = credentials[0];
+    const password = credentials[1];
     var valid = validators.username(res, username)
     && validators.password(res, password)
     if (!valid) {

@@ -61,8 +61,8 @@ export class SignupPageComponent implements OnInit {
     }, this.recaptchaResponse,
     ).subscribe(res => {
       this.storage.storeToken(res.body);
-      this.signupForm.reset();
       this.recaptchaComponent.reset();
+      this.signupForm.reset();
       this.router.navigate(['/profile']);
     }, error => {
       if (error.error == "CaptchaError") {
@@ -78,6 +78,7 @@ export class SignupPageComponent implements OnInit {
         console.log(error);
         window.alert("An unknown error occurred.")
       }
+      this.recaptchaComponent.reset();
     });
   }
 

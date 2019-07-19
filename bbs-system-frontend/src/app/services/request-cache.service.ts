@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpResponse, HttpRequest } from '@angular/common/http';
-import { Response } from '../models/response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RequestCacheService {
-  private cache = new Map<string, HttpResponse<Response>>();
+  private cache = new Map<string, HttpResponse<any>>();
 
   constructor() { }
 
-  get(req: HttpRequest<Response>): HttpResponse<Response> {
+  get(req: HttpRequest<any>): HttpResponse<any> {
     if (req.urlWithParams in this.cache) {
       return this.cache[req.urlWithParams];
     } else{
@@ -18,7 +17,7 @@ export class RequestCacheService {
     }
   }
 
-  set(req: HttpRequest<Response>, response: HttpEvent<HttpResponse<Response>>): void {
+  set(req: HttpRequest<any>, response: HttpEvent<HttpResponse<any>>): void {
     this.cache[req.urlWithParams] = response;
   }
 

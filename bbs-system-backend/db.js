@@ -8,5 +8,5 @@ const MongoClient = require('mongodb').MongoClient;
 const url = 'mongodb://localhost:27017';
 
 // Use connect method to connect to the Server
-const connection = MongoClient.connect(url);
+const connection = MongoClient.connect(url, { useNewUrlParser: true });
 module.exports = connection;

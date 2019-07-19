@@ -43,6 +43,7 @@ router.put('/', function(req, res, next) {
     if (err) {
       sendError(res, "TokenError", +err.message);
     } else {
+      username = val.username;
       sendRes();
     }
   })
@@ -55,7 +56,6 @@ router.put('/', function(req, res, next) {
       sendError(res, "TypeError", 400);
       return null;
     }
-    console.log(imageProps)
     if (imageProps.width != 600 ||
     imageProps.height != 600) {
       sendError(res, "SizeError", 400);

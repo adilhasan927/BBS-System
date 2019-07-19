@@ -55,9 +55,9 @@ export class LoginPageComponent implements OnInit {
     }, this.recaptchaResponse).subscribe(next => {
       // If no errors.
         this.storage.storeToken(next.body);
-        this.router.navigate(['/posts']);
         this.recaptchaComponent.reset();
         this.loginForm.reset();
+        this.router.navigate(['/posts']);
       }, error => {
         // Check for errors returned by server.
         // error.error: string.
@@ -74,6 +74,7 @@ export class LoginPageComponent implements OnInit {
       } else if (error.error == "DBError") {
         window.alert("Database error.");
       }
+      this.recaptchaComponent.reset();
     })
   }
 

@@ -1,26 +1,21 @@
 var express = require('express');
 var router = express.Router();
 const connection = require('../db.js');
-const jwt = require('jsonwebtoken');
-const getSecret = require('../secrets.js');
 const verifyUser = require('../email');
 const sendError = require('../error');
+const verify = require('../verify');
 
-router.get('/', function(req, res, next) {
-  const token = req.query.token;
+router.post('/resend', function(req, res, next) {
+  const token = req.header('Authorization');
   console.log(token);
   var email;
-  jwt.verify(token, getSecret(), (err, val) => {
+  verify(res, token, (err, val) => {
     if (err) {
-      res.status(401);
-      res.render('verification', {
-        text: "Verification failed: invalid token.",
-        link: "http://127.0.0.1:4200/profile/",
-      });
+      sendError(res, "TokenError", +err.message);
     } else {
       email = val.email;
       proceed();
-  }
+    }
   })
   function proceed() {
     connection.then(dbs => {
@@ -40,16 +35,16 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-  const token = req.body.AuthToken;
+  const token = req.header('Authorization');
   var username;
-  jwt.verify(token, getSecret(), (err, val) => {
+  verify(res, token, (err, val) => {
     if (err) {
-      sendError(res, "TokenError", 401);
+      sendError(res, "TokenError", +err.message);
     } else {
       username = val.username;
-      sendRes();
+      proceed();
     }
-  });
+  })
   function sendRes() {
     connection.then(dbs => { 
       dbs.db('documents')

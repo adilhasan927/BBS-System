@@ -42,10 +42,8 @@ export class ApiService {
   }
   
   resendEmail(): Observable<Response> {
-    const url = this.queryURL + '/verify';
-    return this.http.post<Response>(url, JSON.stringify({
-      AuthToken: this.storage.retrieveToken(),
-    }), this.httpOptions)
+    const url = this.queryURL + '/verify/resend';
+    return this.http.post<Response>(url, '', this.httpOptions)
       .pipe(
         catchError(this.handleError)
       );
@@ -54,7 +52,6 @@ export class ApiService {
   post(body:string): Observable<Response> {
     const url = this.queryURL + '/post';
     return this.http.post<Response>(url, JSON.stringify({
-      AuthToken: this.storage.retrieveToken(),
       body: body,
     }), this.httpOptions)
       .pipe(
@@ -66,7 +63,6 @@ export class ApiService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        'AuthToken': this.storage.retrieveToken(),
         'position': position.toString(),
         'limit': limit.toString()
       }),
@@ -81,7 +77,6 @@ export class ApiService {
   comment(postID: string, body:string): Observable<Response> {
     const url = this.queryURL + '/comment';
     return this.http.post<Response>(url, JSON.stringify({
-      AuthToken: this.storage.retrieveToken(),
       PostID: postID,
       body: body,
     }), this.httpOptions)
@@ -94,7 +89,6 @@ export class ApiService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        'AuthToken': this.storage.retrieveToken(),
         'PostID': postID,
         'position': position.toString(),
         'limit': limit.toString(),
@@ -111,7 +105,6 @@ export class ApiService {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
-        'AuthToken': this.storage.retrieveToken(),
       }),
       params: {
         username: username,
@@ -124,7 +117,6 @@ export class ApiService {
   editProfile(token: string, profileText: string, profileImage: Object): Observable<Response> {
     const url = this.queryURL + '/profile';
     return this.http.post<Response>(url, JSON.stringify({
-      AuthToken: token,
       profile: {
         profileText: profileText,
         profileImage: profileImage,

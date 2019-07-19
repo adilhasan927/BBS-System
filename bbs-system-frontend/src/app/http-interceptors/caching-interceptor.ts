@@ -1,25 +1,27 @@
 import { Injectable } from '@angular/core';
 import {
-  HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpClient, HttpResponse
+  HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse
 } from '@angular/common/http';
 import { Observable, of} from 'rxjs';
 import { RequestCacheService  } from '../services/request-cache.service';
 import { tap } from 'rxjs/operators';
 
-/** Pass untouched request through to the next request handler. */
+/** Caches cacheable requests and returns cached responses if internet down. */
 @Injectable()
 export class CachingInterceptor implements HttpInterceptor {
 
   constructor(private cache: RequestCacheService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // continue if not cachable.
+    // pass request to next itnerceptor if not cachable.
     if (!this.isCachable(req)) { return next.handle(req); }
     const cachedResponse = this.cache.get(req);
+    // return cached response if internet down.
     return cachedResponse && !navigator.onLine ?
       of(cachedResponse) : this.sendRequest(req, next, this.cache);
   }
 
+  // cache only HTTP GET requests.
   isCachable(req: HttpRequest<any>): boolean {
     if (req.method == 'GET') {
       return true;
@@ -28,6 +30,7 @@ export class CachingInterceptor implements HttpInterceptor {
     }
   }
 
+  // send request and cache response.
   sendRequest(
     req: HttpRequest<any>,
     next: HttpHandler,
@@ -42,5 +45,5 @@ export class CachingInterceptor implements HttpInterceptor {
       })
     );
   }
-  }
+}
 

@@ -12,8 +12,11 @@ import { StorageService } from '../services/storage.service';
 })
 export class PostsComponent implements OnInit {
   posts: Post[] = [];
+  // position in posts list.
   position: number = 0;
+  // number of posts to attempt loading when load button pressed.
   limit: number = 20;
+  // has the end of the posts list been reached?
   endReached: boolean = false;
   postForm = new FormGroup({
     post: new FormControl('', [
@@ -38,17 +41,21 @@ export class PostsComponent implements OnInit {
   }
 
   loadPosts() {
+    // fetches limit posts after post #position.
     this.api.getContent(this.limit, this.position).subscribe(res => {
+      // in case more posts have been posted.
       this.endReached = false;
-      if (res.successful) {
-        this.posts.push(...res.body);
-        this.position += this.limit;
-        if (res.body.length < this.limit) {
-          this.endReached = true;
-        } 
-      } else if (res.err.message == "TokenError") {
+      this.posts.push(...res.body);
+      this.position += this.limit;
+      // tells user that no posts remain to be loaded.
+      if (res.body.length < this.limit) {
+        this.endReached = true;
+      }
+    }, error => {
+      if (error.error == "TokenError") {
         this.router.navigate(['/login']);
-      } else if (res.err.message == "DBError") {
+      // should not take place.
+      } else if (error.error == "DBError") {
         window.alert("DBError");
       }
     });
@@ -58,18 +65,24 @@ export class PostsComponent implements OnInit {
     this.posts.unshift(new Post(_id, username, body));
   }
 
+  // posts post to API.
   onSubmit() {
     var text = this.postForm.get('post').value;
     var loginReturn = this.api.post(
       text
+    // if not error takes place,
     ).subscribe(res => {
-      if (res.successful) {
-        this.addPost(res.body, this.storage.retrieveUsername(), text);
-        this.postForm.reset();
-      } else {
+      this.addPost(res.body, this.storage.retrieveUsername(), text);
+      this.postForm.reset();
+    // if error takes place.
+    }, error => {
+      if (error.error == "TokenError") { 
         this.router.navigate(['/login']);
+        // should not take place.
+      } else if (error.error == "DBError") {
+        console.error("DBError");
       }
-    })
+    });
   }
 
   get post() { return this.postForm.get('post'); }

@@ -8,7 +8,9 @@ import { StorageService } from '../services/storage.service';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
+  // used to conditionally display certain elements.
   isLoggedIn: boolean = false;
+  // locally stored, may be incorrect.
   username: string = "";
 
   constructor(
@@ -17,6 +19,7 @@ export class NavComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // checks fields for accuracy when NavigationEnd event emitted.
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.isLoggedIn = this.storage.retrieveToken() != null;
@@ -26,6 +29,8 @@ export class NavComponent implements OnInit {
   }
 
   logout() {
+    // delete stored JWT to log out user.
+    // stateless API, server does not store sessions.
     this.storage.deleteToken();
     this.isLoggedIn = false;  
     window.alert("Logged out.");

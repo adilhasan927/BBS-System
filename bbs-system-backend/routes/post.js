@@ -1,17 +1,16 @@
 const express = require('express');
 var router = express.Router();
 const connection = require('../db.js')
-const jwt = require('jsonwebtoken');
-const getSecret = require('../secrets.js');
 const sendError = require('../error');
+const verify = require('../verify');
 
 router.get('/', function(req, res, next) {
-  const token = req.header('AuthToken');
+  var token = req.header('Authorization');
   const position = JSON.parse(req.header('position'));
   const limit = JSON.parse(req.header('limit'));
-  jwt.verify(token, getSecret(), (err, val) => {
+  verify(res, token, (err, val) => {
     if (err) {
-      sendError(res, "TokenError");
+      sendError(res, "TokenError", +err.message);
     } else {
       sendRes();
     }
@@ -33,16 +32,17 @@ router.get('/', function(req, res, next) {
       });
     }).catch(err => {
       console.log(err);
-      sendError(res, "DBError");
+      sendError(res, "DBError", 500);
     });
   }
 });
 
 router.post('/', function(req, res, next) {
-  const token = req.body.AuthToken;
-  jwt.verify(token, getSecret(), (err, val) => {
+  const token = req.header('Authorization');
+  var username;
+  verify(res, token, (err, val) => {
     if (err) {
-      sendError(res, "TokenError", 401);
+      sendError(res, "TokenError", +err.message);
     } else {
       username = val.username;
       sendRes();

@@ -11,7 +11,9 @@ import { RecaptchaComponent } from 'ng-recaptcha';
   styleUrls: ['./login-page.component.css']
 })
 export class LoginPageComponent implements OnInit {
+  // token returned by Google when recaptcha submitted.
   recaptchaResponse: string;
+  // form displayed on page;
   loginForm = new FormGroup({
     username: new FormControl('', [
       Validators.required,
@@ -23,7 +25,7 @@ export class LoginPageComponent implements OnInit {
     ]),
     recaptchaReactive: new FormControl(null, Validators.required),
   });
-
+  // recaptcha implemented as child components.
   @ViewChild(RecaptchaComponent, {static: false} )
   recaptchaComponent: RecaptchaComponent;
 
@@ -36,35 +38,44 @@ export class LoginPageComponent implements OnInit {
   ngOnInit() {
   }
 
+  // action taken when user completes captcha.
   resolved(captchaResponse: string) {
     console.log(`Resolved captcha with response: ${captchaResponse}`);
     this.recaptchaResponse = captchaResponse;
   }
 
+  //action taken when user submits form.
   onSubmit() {
     this.api.login({
+      // email field not currently used. 
+      // implemented due to credentials class requirements.
       email: null,
       username: this.loginForm.get('username').value,
       password: this.loginForm.get('password').value,
-    }).subscribe(res => {
-      if (res.successful) {
-        this.storage.storeToken(res.body);
+    }).subscribe(next => {
+      // If no errors.
+        this.storage.storeToken(next.body);
         this.router.navigate(['/posts']);
         this.recaptchaComponent.reset();
         this.loginForm.reset();
-      } else if (res.err.message == "CaptchaError") {
+      }, error => {
+        // Check for errors returned by server.
+        // error.error: string.
+        if (error.error == "CaptchaError") {
         this.recaptchaComponent.reset();
         window.alert("Complete the reCaptcha again.")
-      } else if (res.err.message == "FieldError") {
+      } else if (error.error == "FieldError") {
         window.alert("Invalid form fields.");
-      } else if (res.err.message == "CredentialsError") {
+      } else if (error.error == "CredentialsError") {
         window.alert("Incorrect username or password.");
-      } else if (res.err.message == "DBError") {
+      // Should not take place.
+      } else if (error.error == "DBError") {
         window.alert("Database error.");
       }
     })
   }
 
+  // getters and setters to expose values to template.
   get username() { return this.loginForm.get('username'); }
 
   get password() { return this.loginForm.get('password'); }

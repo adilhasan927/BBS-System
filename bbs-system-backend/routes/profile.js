@@ -1,21 +1,20 @@
 var express = require('express');
 var router = express.Router();
 const connection = require('../db.js');
-const jwt = require('jsonwebtoken');
-const getSecret = require('../secrets.js');
 const sendError = require('../error');
 var sizeOf = require('image-size');
+const verify = require('../verify');
 
 router.get('/', function(req, res, next) {
   var username = req.query.username;
-  var token =  req.header('AuthToken');
-  jwt.verify(token, getSecret(), (err, val) => {
+  var token =  req.header('Authorization');
+  verify(res, token, (err, val) => {
     if (err) {
-      sendError(res, "TokenError", 401);
+      sendError(res, "TokenError", +err.message);
     } else {
       sendRes();
     }
-  });
+  })
   function sendRes() {
     connection.then(dbs => {
       dbs.db('documents')
@@ -38,16 +37,15 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-  var token = req.body.AuthToken;
+  var token = req.header('Authorization');
   var username;
-  jwt.verify(token, getSecret(), (err, val) => {
+  verify(res, token, (err, val) => {
     if (err) {
-      sendError(res, "TokenError", 401);
+      sendError(res, "TokenError", +err.message);
     } else {
-      username = val.username;
       sendRes();
     }
-  });
+  })
   function sendRes() {
     const profileText = req.body.profile.profileText;
     const profileImage = req.body.profile.profileImage;

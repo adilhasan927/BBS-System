@@ -36,7 +36,7 @@ router.get('/', function(req, res, next) {
   }
 });
 
-router.post('/', function(req, res, next) {
+router.put('/', function(req, res, next) {
   var token = req.header('Authorization');
   var username;
   verify(res, token, (err, val) => {

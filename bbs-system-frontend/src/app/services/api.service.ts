@@ -42,7 +42,15 @@ export class ApiService {
   }
   
   resendEmail(): Observable<Response> {
-    const url = this.queryURL + '/verify/resend';
+    const url = this.queryURL + '/account/email';
+    return this.http.get<Response>(url, this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  verifyEmail(): Observable<Response> {
+    const url = this.queryURL + '/account/email';
     return this.http.post<Response>(url, '', this.httpOptions)
       .pipe(
         catchError(this.handleError)
@@ -110,12 +118,12 @@ export class ApiService {
         username: username,
       },
     }
-    const url = this.queryURL + '/profile';
+    const url = this.queryURL + '/account/profile';
     return this.http.get<Response>(url, httpOptions);
   }
 
   editProfile(token: string, profileText: string, profileImage: Object): Observable<Response> {
-    const url = this.queryURL + '/profile';
+    const url = this.queryURL + '/account/profile';
     return this.http.post<Response>(url, JSON.stringify({
       profile: {
         profileText: profileText,

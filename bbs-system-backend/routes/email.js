@@ -5,7 +5,7 @@ const verifyUser = require('../email');
 const sendError = require('../error');
 const verify = require('../verify');
 
-router.post('/resend', function(req, res, next) {
+router.post('/', function(req, res, next) {
   const token = req.header('Authorization');
   console.log(token);
   var email;
@@ -25,16 +25,15 @@ router.post('/resend', function(req, res, next) {
           { "email": email },
           { $set: { "verified": true } }
         ).then( val => {
-          res.render('verification', {
-            text: "Verification succeeded.",
-            link: "http://127.0.0.1:4200/profile/",
-          });
+          res.send(JSON.stringify({
+            body: true,
+          }))
         });
     })
   }
 });
 
-router.post('/', function(req, res, next) {
+router.get('/', function(req, res, next) {
   const token = req.header('Authorization');
   var username;
   verify(res, token, (err, val) => {
@@ -42,7 +41,7 @@ router.post('/', function(req, res, next) {
       sendError(res, "TokenError", +err.message);
     } else {
       username = val.username;
-      proceed();
+      sendRes();
     }
   })
   function sendRes() {
@@ -52,6 +51,7 @@ router.post('/', function(req, res, next) {
       .findOne({ 'username': username })
       .then(val => {
         verifyUser(val.email, username);
+        res.send(JSON.stringify({ body: true }));
       });
     }).catch(err => {
       console.log(err);

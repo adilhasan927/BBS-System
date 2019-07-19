@@ -7,13 +7,13 @@ const verify = require('../verify');
 
 router.post('/', function(req, res, next) {
   const token = req.header('Authorization');
-  console.log(token);
-  var email;
+  var username;
   verify(res, token, (err, val) => {
     if (err) {
+      console.log(err);
       sendError(res, "TokenError", +err.message);
     } else {
-      email = val.email;
+      username = val.username;
       proceed();
     }
   })
@@ -22,12 +22,12 @@ router.post('/', function(req, res, next) {
       dbs.db('documents')
         .collection('users')
         .updateOne(
-          { "email": email },
+          { "username": username },
           { $set: { "verified": true } }
-        ).then( val => {
-          res.send(JSON.stringify({
-            body: true,
-          }))
+        ).then(val => {
+          res.send(JSON.stringify({ body: true }))
+        }).catch(err => {
+          sendError(res, "DBError", 500);
         });
     })
   }
@@ -52,10 +52,10 @@ router.get('/', function(req, res, next) {
       .then(val => {
         verifyUser(val.email, username);
         res.send(JSON.stringify({ body: true }));
+      }).catch(err => {
+        console.log(err);
+        sendError(res, "DBError", 500);
       });
-    }).catch(err => {
-      console.log(err);
-      sendError(res, "DBError", 500);
     });
   }
 });

@@ -1,0 +1,15 @@
+<div *ngIf="success">
+  Email successfully verified.
+</div>
+<div *ngIf="!success">
+  Email could not be successfully verified.
+  <div *ngIf="success==false">
+    Token provided was invalid.
+    <button type="submit" (click)="resendEmail()">Resend email.</button>
+  </div>
+  <div *ngIf="success==null">
+    An error of some sort occurred. Please try again later.
+    The error message has been provided below.
+    {{ errorMessage }}
+  </div>
+</div>

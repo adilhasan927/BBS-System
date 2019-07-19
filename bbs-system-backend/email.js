@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken');
 
 // Refactor to use real email address.
 module.exports = function verifyUser(address, username) {
-    const link = "http://localhost:3000"
-    + "/api/verify?token="
+    const link = "http://127.0.0.1:4200"
+    + "/verify-email/"
     + jwt.sign( {
         email: address,
         username: username,

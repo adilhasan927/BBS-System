@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const getSecret = require('../secrets.js');
 const sendError = require('../error');
 const validators = require('../validators');
+const captcha = require('../captcha');
 
 router.post('/', function(req, res, next) {
   captcha(req.body.captchaResponse,
@@ -13,12 +14,13 @@ router.post('/', function(req, res, next) {
         console.log(err);
         sendError(res, err, 500);
       } else if (!JSON.parse(body).success) {
+        console.log(body);
         sendError(res, "CaptchaError", 401);
       } else procede(); 
     });
   function procede() {
-    const username = req.body.username;
-    const password = req.body.password;
+    const username = req.body.credentials.username;
+    const password = req.body.credentials.password;
     var valid = validators.username(res, username)
     && validators.password(res, password)
     if (!valid) {
@@ -46,10 +48,12 @@ router.post('/', function(req, res, next) {
         } else {
           sendError(res, "CredentialsError", 401 );
         }
-      });
-    }).catch(err => {
-      console.log(err);
-      sendError(res, "DBError", 500);
+      }).catch(err => {
+        if (err.code == '11000)') {
+          sendError(res, "DuplicateError", 400)
+        } else {
+          sendError(res, "DBError", 500)
+        }});
     });
   }
 });

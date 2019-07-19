@@ -28,10 +28,10 @@ router.get('/', function(req, res, next) {
             verified: user.verified,
           }
         }));
+      }).catch(err => {
+        console.log(err);
+        sendError(res, "DBError", 500);
       });
-    }).catch(err => {
-      console.log(err);
-      sendError(res, "DBError", 500);
     });
   }
 });

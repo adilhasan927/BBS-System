@@ -22,9 +22,12 @@ export class ApiService {
     private storage: StorageService,
   ) { }
 
-  login(credentials: Credentials): Observable<Response> {
+  login(credentials: Credentials, captchaResponse: string): Observable<Response> {
     const url = this.queryURL + '/login';
-    return this.http.post<Response>(url, JSON.stringify(credentials), this.httpOptions)
+    return this.http.post<Response>(url, JSON.stringify({
+      credentials: credentials,
+      captchaResponse: captchaResponse,
+    }), this.httpOptions)
     .pipe(
       catchError(this.handleError)
     );
@@ -49,8 +52,12 @@ export class ApiService {
       );
   }
 
-  verifyEmail(): Observable<Response> {
+  verifyEmail(token: string): Observable<Response> {
     const url = this.queryURL + '/account/email';
+    // override AuthInterceptor.
+    const httpOptions = {
+      headers: this.httpOptions.headers.append('Authorization', `Bearer ${token}`)
+    }
     return this.http.post<Response>(url, '', this.httpOptions)
       .pipe(
         catchError(this.handleError)

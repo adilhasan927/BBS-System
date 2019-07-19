@@ -15,6 +15,7 @@ router.post('/', function(req, res, next) {
         console.log(err);
         sendError(res, err, 500);
       } else if (!JSON.parse(body).success) {
+        console.log(body);
         sendError(res, "CaptchaError", 401);
       } else procede(); 
     });
@@ -45,6 +46,7 @@ router.post('/', function(req, res, next) {
           profileImage: null,
         },
         email: email,
+
         verified: false,
       }).then(val => {
         res.send(JSON.stringify({
@@ -52,10 +54,12 @@ router.post('/', function(req, res, next) {
           body: token,
           captchaSuccess: true,
         }));
-      });
-    }).catch(err => {
-      console.log(err);
-      sendError(res, "DBError", 500)
+      }).catch(err => {
+        if (err.code == '11000)') {
+          sendError(res, "DuplicateError", 400)
+        } else {
+          sendError(res, "DBError", 500)
+        }});
     });
   }
 });

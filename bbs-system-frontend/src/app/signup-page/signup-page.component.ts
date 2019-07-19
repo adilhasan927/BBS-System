@@ -60,23 +60,25 @@ export class SignupPageComponent implements OnInit {
       password: this.signupForm.get('password.password').value,
     }, this.recaptchaResponse,
     ).subscribe(res => {
-      if (res.successful) {
-        this.storage.storeToken(res.body);
-        this.signupForm.reset();
-        this.recaptchaComponent.reset();
-        this.router.navigate(['/profile']);
-      } else if (res.err.message == "CaptchaError") {
-        this.recaptchaComponent.reset;
+      this.storage.storeToken(res.body);
+      this.signupForm.reset();
+      this.recaptchaComponent.reset();
+      this.router.navigate(['/profile']);
+    }, error => {
+      if (error.error == "CaptchaError") {
         window.alert("Complete the recaptcha again.");
-      } else if (res.err.message == "FieldError") {
+        this.recaptchaComponent.reset();
+      } else if (error.error == "FieldError") {
         window.alert("Invalid form fields.")
-      } else if (res.err.message == "DBError") {
+      } else if (error.error == "DuplicateError") {
+        window.alert("Username already exists.")
+      } else if (error.error == "DBError") {
         window.alert("Database error.")
       } else {
-        console.log(res);
+        console.log(error);
         window.alert("An unknown error occurred.")
       }
-    })
+    });
   }
 
   get email() { return this.signupForm.get('email'); }

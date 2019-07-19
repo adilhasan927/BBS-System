@@ -37,10 +37,10 @@ router.get('/', function(req, res, next) {
           successful: true,
           body: comments,
         }));
-      })
-    }).catch(err => {
-      console.log(err);
-      sendError(res, "DBError", 500);
+      }).catch(err => {
+        console.log(err);
+        sendError(res, "DBError", 500);
+      });
     });
   }
 });

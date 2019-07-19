@@ -66,12 +66,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   resendEmail() {
-    this.api.resendEmail().subscribe(res => {
-      if (res.successful) {
-        this.refreshContents();
-        this.profileForm.reset();
-      } else {
+    this.api.resendEmail().subscribe(next => {
+      window.alert("Email reset succesfully.")
+    }, error => {
+      if (error.error == "TokenError") {
         this.router.navigate(['/login']);
+      } else if (error.error == "DBError") {
+        window.alert("DBError");
       }
     });
   }

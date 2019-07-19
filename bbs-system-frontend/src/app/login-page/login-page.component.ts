@@ -52,7 +52,7 @@ export class LoginPageComponent implements OnInit {
       email: null,
       username: this.loginForm.get('username').value,
       password: this.loginForm.get('password').value,
-    }).subscribe(next => {
+    }, this.recaptchaResponse).subscribe(next => {
       // If no errors.
         this.storage.storeToken(next.body);
         this.router.navigate(['/posts']);
@@ -62,12 +62,14 @@ export class LoginPageComponent implements OnInit {
         // Check for errors returned by server.
         // error.error: string.
         if (error.error == "CaptchaError") {
-        this.recaptchaComponent.reset();
         window.alert("Complete the reCaptcha again.")
+        this.recaptchaComponent.reset();
       } else if (error.error == "FieldError") {
         window.alert("Invalid form fields.");
       } else if (error.error == "CredentialsError") {
         window.alert("Incorrect username or password.");
+      } else if (error.error == "DuplicateError") {
+        window.alert("Username already exists.")
       // Should not take place.
       } else if (error.error == "DBError") {
         window.alert("Database error.");

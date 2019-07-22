@@ -72,11 +72,6 @@ export class SignupPageComponent implements OnInit {
         window.alert("Invalid form fields.")
       } else if (error.error == "DuplicateError") {
         window.alert("Username already exists.")
-      } else if (error.error == "DBError") {
-        window.alert("Database error.")
-      } else {
-        console.log(error);
-        window.alert("An unknown error occurred.")
       }
       this.recaptchaComponent.reset();
     });

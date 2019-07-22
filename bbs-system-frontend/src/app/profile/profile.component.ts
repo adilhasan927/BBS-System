@@ -56,12 +56,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.profile = next.body.profile;
       this.verified = next.body.verified;
       this.profileForm.get('profileText').setValue(next.body.profile.profileText);
-    }, error => {
-      if (error.error == "TokenError") {
-        this.router.navigate(['/login']);
-      } else if (error.error == "DBError") {
-        window.alert("DBError");
-      }
     });
   }
 
@@ -87,14 +81,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.refreshContents();
       this.profileForm.reset();
     }, error => {
-      if (error.error == "TokenError") {
-        this.router.navigate(['/login']);
-      } else if (error.error == "SizeError") {
+      if (error.error == "SizeError") {
         window.alert("Image must be 600x600px");
       } else if (error.error == "TypeError") {
         window.alert("Image must be .png file.");
-      } else if (error.error == "DBError") {
-        window.alert("DBError");
       }
     })
   }

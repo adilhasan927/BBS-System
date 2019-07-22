@@ -23,12 +23,6 @@ export class CommentComponent implements OnInit {
   ngOnInit() {
     this.api.getProfile(this.comment.username).subscribe(next => {
       this.profile = next.body.profile;
-    }, error => {
-      if (error.error == "TokenError") {
-        this.router.navigate(['/login']);
-      } else if (error.error == "DBError") {
-        console.log("DBError");
-      }
     });
   }
 

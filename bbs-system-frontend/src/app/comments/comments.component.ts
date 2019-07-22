@@ -57,13 +57,6 @@ export class CommentsComponent implements OnInit {
       if (next.body.length < this.limit) {
         this.endReached = true;
       }
-    }, error => {
-      if (error.error = "TokenError") {
-        this.router.navigate(['/login']);
-      // should not take place.
-      } else if (error.error == "DBError") {
-        console.log("DBError");
-      }
     });
   }
 
@@ -83,14 +76,7 @@ export class CommentsComponent implements OnInit {
       this.addComment(this.storage.retrieveUsername(), text);
       this.commentForm.reset();
       // if error takes place.
-    }, error => {
-      if (error.error == "TokenError") {
-        this.router.navigate(['/login']);
-        // should not take place.
-      } else if (error.error == "DBError") {
-        console.error("DBError");
-      }
-    })
+    });
   }
 
   get comment() { return this.commentForm.get('comment'); }

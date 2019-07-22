@@ -63,7 +63,6 @@ export class LoginPageComponent implements OnInit {
         // error.error: string.
         if (error.error == "CaptchaError") {
         window.alert("Complete the reCaptcha again.")
-        this.recaptchaComponent.reset();
       } else if (error.error == "FieldError") {
         window.alert("Invalid form fields.");
       } else if (error.error == "CredentialsError") {
@@ -71,8 +70,6 @@ export class LoginPageComponent implements OnInit {
       } else if (error.error == "DuplicateError") {
         window.alert("Username already exists.")
       // Should not take place.
-      } else if (error.error == "DBError") {
-        window.alert("Database error.");
       }
       this.recaptchaComponent.reset();
     })

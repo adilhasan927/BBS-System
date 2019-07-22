@@ -28,13 +28,6 @@ export class PostComponent implements OnInit {
     this.api.getProfile(this.post.username).subscribe(next => {
       this.profile = next.body.profile;
       // if server returns an error status code.
-    }, error => {
-      if (error.error == "TokenError") {
-      this.router.navigate(['/login']);
-      // should not take place.
-      } else if (error.error == "DBError") {
-        console.log("DBError");
-      }
     });
   }
 

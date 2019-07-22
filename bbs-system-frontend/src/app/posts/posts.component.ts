@@ -51,13 +51,6 @@ export class PostsComponent implements OnInit {
       if (res.body.length < this.limit) {
         this.endReached = true;
       }
-    }, error => {
-      if (error.error == "TokenError") {
-        this.router.navigate(['/login']);
-      // should not take place.
-      } else if (error.error == "DBError") {
-        window.alert("DBError");
-      }
     });
   }
 
@@ -75,13 +68,6 @@ export class PostsComponent implements OnInit {
       this.addPost(res.body, this.storage.retrieveUsername(), text);
       this.postForm.reset();
     // if error takes place.
-    }, error => {
-      if (error.error == "TokenError") { 
-        this.router.navigate(['/login']);
-        // should not take place.
-      } else if (error.error == "DBError") {
-        console.error("DBError");
-      }
     });
   }
 

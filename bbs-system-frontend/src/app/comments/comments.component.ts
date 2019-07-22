@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from "@angular/router"
 import { Comment } from '../models/comment';
@@ -11,6 +11,8 @@ import { StorageService } from '../services/storage.service';
   styleUrls: ['./comments.component.css']
 })
 export class CommentsComponent implements OnInit {
+  // ID of listing comments are to be retrieved from.
+  listingID: string;
   comments: Comment[] = [];
   postID: string;
   // position in comments list.
@@ -28,12 +30,12 @@ export class CommentsComponent implements OnInit {
   constructor(
     private api: ApiService,
     private storage: StorageService,
-    private router: Router,
     private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe(paramMap => {
+      this.listingID = paramMap.get('listingID');
       this.postID = paramMap.get('id');
     })
     this.loadComments();
@@ -48,7 +50,12 @@ export class CommentsComponent implements OnInit {
 
   // fetches limit comments after comment #position.
   loadComments() {
-    this.api.getComments(this.postID, this.limit, this.position).subscribe(next => {
+    this.api.getComments(
+      this.postID,
+      this.limit,
+      this.position,
+      this.listingID
+    ).subscribe(next => {
       // in case more posts have been posted.
       this.endReached = false;
       this.comments.push(...next.body);
@@ -70,6 +77,7 @@ export class CommentsComponent implements OnInit {
     var loginReturn = this.api.comment(
       this.postID,
       text,
+      this.listingID
     ).subscribe(res => {
       // if no error takes place.
       console.log(res);

@@ -5,7 +5,7 @@
     alt="profile image">
     <a [routerLink]="['/profile', post.username]">Author: {{ post.username }}</a><br>
   </div>
-  <a [routerLink]="['/comments', post._id]">comments</a><br>
+  <a [routerLink]="['/comments', listingID, post._id]">comments</a><br>
   Body: {{ post.body }}<br>
   <hr>
   <span *ngIf="profile.profileText">Profile text: {{ profile.profileText }}</span><br>

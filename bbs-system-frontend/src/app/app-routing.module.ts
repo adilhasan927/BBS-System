@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { SignupPageComponent } from './signup-page/signup-page.component';
-import { PostsComponent } from './posts/posts.component';
+import { PostsPageComponent } from './posts-page/posts-page.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CommentsComponent } from './comments/comments.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
@@ -12,13 +12,13 @@ import { AuthGuard } from './auth.guard';
 const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
   { path: 'signup', component: SignupPageComponent },
-  { path: 'posts', component: PostsComponent, canActivate: [AuthGuard] },
+  { path: 'posts/:listingID', component: PostsPageComponent, canActivate: [AuthGuard] },
   { path: 'profile', redirectTo: 'profile/', canActivate: [AuthGuard] },
   { path: 'profile/:name', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'comments/:id', component: CommentsComponent, canActivate: [AuthGuard] },
+  { path: 'comments/:listingID/:id', component: CommentsComponent, canActivate: [AuthGuard] },
   { path: 'verify-email/:token', component: VerifyEmailComponent },
   { path: 'not-found', component: NotFoundComponent },
-  { path: '', redirectTo: 'login', pathMatch: 'full'},
+  { path: '', redirectTo: 'posts/main.main', pathMatch: 'full'},
   { path: '**', redirectTo: 'not-found', pathMatch: 'full'},
 ];
 

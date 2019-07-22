@@ -18,6 +18,7 @@ import { PostComponent } from './post/post.component';
 import { CommentComponent } from './comment/comment.component';
 import { httpInterceptorProviders } from './http-interceptors/';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { PostsPageComponent } from './posts-page/posts-page.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
     CommentsComponent,
     PostComponent,
     CommentComponent,
-    VerifyEmailComponent
+    VerifyEmailComponent,
+    PostsPageComponent
   ],
   imports: [
     BrowserModule,

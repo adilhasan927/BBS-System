@@ -1,13 +1,7 @@
 #border {
   border: dashed grey;
-  width: 65%;
   padding: 5px;
   margin: 5px;
-}
-@media (max-width: 600px) {
-  #border {
-    width: auto;
-  }
 }
 hr {
   border-top: 3px dashed grey;
@@ -15,7 +9,6 @@ hr {
   overflow: visible;
   text-align: center;
 }
-
 .userContainer>img {
   vertical-align: middle;
   display: inline-block;

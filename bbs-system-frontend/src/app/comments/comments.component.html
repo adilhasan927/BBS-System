@@ -9,7 +9,7 @@
 <p>Comments</p>
 <button (click)="resetComments()">Reset comments.</button>
 <div *ngFor="let comment of comments">
-    <app-comment [comment]=comment></app-comment>
+    <app-comment [listingID]='listingID' [comment]=comment></app-comment>
 </div>
 <button (click)="loadComments()">Load further comments.</button>
 <p *ngIf=endReached>There don't appear to be further comments.</p>

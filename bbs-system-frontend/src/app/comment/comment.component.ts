@@ -9,6 +9,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./comment.component.css']
 })
 export class CommentComponent implements OnInit {
+  // ID of listing comment was retrieved from.
+  @Input() listingID: string;
+
   @Input() comment: Comment;
   profile: Profile = {
     profileText: "",
@@ -17,7 +20,6 @@ export class CommentComponent implements OnInit {
 
   constructor(
     private api: ApiService,
-    private router: Router
   ) { }
 
   ngOnInit() {

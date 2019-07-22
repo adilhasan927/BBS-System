@@ -46,14 +46,21 @@ router.post('/', function(req, res, next) {
           profileImage: null,
         },
         email: email,
-
         verified: false,
       }).then(val => {
-        res.send(JSON.stringify({
-          successful: true,
-          body: token,
-          captchaSuccess: true,
-        }));
+        dbs.db("documents")
+        .collection("subforums")
+        .insertOne({
+          name: "user." + username,
+          posts: [],
+        })
+        .then( val => {
+          res.send(JSON.stringify({
+            successful: true,
+            body: token,
+            captchaSuccess: true,
+          }));
+        });
       }).catch(err => {
         if (err.code == '11000)') {
           sendError(res, "DuplicateError", 400)

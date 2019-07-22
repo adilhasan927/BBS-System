@@ -64,11 +64,11 @@ export class ApiService {
       );
   }
 
-  post(body: string, listingId: string): Observable<any> {
+  post(body: string, listingID: string): Observable<any> {
     const httpOptions = {
       headers: this.httpOptions.headers,
       params: {
-        'listingId': listingId,
+        'listingID': listingID,
       }
     };
     const url = this.queryURL + '/post';
@@ -80,7 +80,7 @@ export class ApiService {
       );
   }
 
-  getContent(limit: number, position: number=0, listingId: string): Observable<any> {
+  getContent(limit: number, position: number=0, listingID: string): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json',
@@ -88,7 +88,7 @@ export class ApiService {
       params: {
         'position': position.toString(),
         'limit': limit.toString(),
-        'listingId': listingId,
+        'listingID': listingID,
       }
     };
     const url = this.queryURL + '/post';
@@ -98,11 +98,12 @@ export class ApiService {
       );
   }
 
-  comment(postID: string, body: string, listingId: string): Observable<any> {
+  comment(postID: string, body: string, listingID: string): Observable<any> {
+    console.log(postID);
     const httpOptions = {
       headers: this.httpOptions.headers,
       params: {
-        'listingId': listingId,
+        'listingID': listingID,
       }
     };
     const url = this.queryURL + '/comment';
@@ -115,14 +116,14 @@ export class ApiService {
       );
   }
 
-  getComments(postID: string, limit: number, position: number = 0, listingId: string): Observable<any> {
+  getComments(postID: string, limit: number, position: number = 0, listingID: string): Observable<any> {
     const httpOptions = {
       headers: this.httpOptions.headers,
       params: {
         'PostID': postID,
         'position': position.toString(),
         'limit': limit.toString(),
-        'listingId': listingId,
+        'listingID': listingID,
       }
     };
     const url = this.queryURL + '/comment';

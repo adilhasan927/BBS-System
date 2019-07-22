@@ -10,6 +10,7 @@ router.get('/', function(req, res, next) {
   const postID = req.query.PostID;
   const position = JSON.parse(req.query.position);
   const limit = JSON.parse(req.query.limit);
+  const listingID = req.query.listingID;
   verify(res, token, (err, val) => {
     if (err) {
       sendError(res, "TokenError", +err.message);
@@ -20,19 +21,21 @@ router.get('/', function(req, res, next) {
   function sendRes() {
     connection.then(dbs => {
       dbs.db('documents')
-      .collection('posts')
+      .collection('subforums')
       .aggregate([
-        { $match: { _id: new ObjectID(postID) } },
-        { $unwind: '$comments' },
+        { $unwind: "$posts" },
+        { $unwind: "$posts.comments" },
+        { $match: {
+          name: listingID,
+          "posts._id": ObjectID(postID)
+        } },
         { $skip: position },
         { $limit: limit },
-        { $project: {
-          username: '$comments.username',
-          body: '$comments.body',
-        } },
+        { $replaceRoot: { newRoot: "$posts.comments" } }
       ])
       .toArray()
       .then(comments => {
+        console.log(comments);
         res.send(JSON.stringify({
           successful: true,
           body: comments,
@@ -48,6 +51,8 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
   const token = req.header('Authorization');
   const postID = req.body.PostID;
+  const listingID = req.query.listingID;
+  const body = req.body.body;
   var username;
   verify(res, token, (err, val) => {
     if (err) {
@@ -60,13 +65,16 @@ router.post('/', function(req, res, next) {
   function sendRes() {
     connection.then(dbs => {
       dbs.db("documents")
-      .collection("posts")
+      .collection("subforums")
       .updateOne(
-        { "_id": new ObjectID(postID)},
-        { "$push": { "comments": {
-          "username": username,
-          "body": req.body.body,
-        } } },
+        {
+          name: listingID,
+          "posts._id": new ObjectID(postID)
+        }, { $push : {
+          "posts.$.comments": { 
+            username: username,
+            body: body,
+        } } }
       ).then(val => {
         res.send(JSON.stringify({
           successful: true,

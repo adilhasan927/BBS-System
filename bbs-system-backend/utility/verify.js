@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
-const getSecret = require('./secrets.js');
-const sendError = require('./error');
+const getSecret = require('./secrets');
 
 module.exports = function verifyToken(res, token, callback) {
   if (!/^Bearer\s/.test(token)){

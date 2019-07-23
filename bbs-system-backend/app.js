@@ -11,6 +11,7 @@ var postRouter = require('./routes/post');
 var commentRouter = require('./routes/comment');
 var profileRouter = require('./routes/profile');
 var emailRouter = require('./routes/email');
+var forumsRouter = require('./routes/forums');
 
 var app = express();
 
@@ -34,6 +35,7 @@ app.use('/api/post', postRouter);
 app.use('/api/comment', commentRouter);
 app.use('/api/account/profile', profileRouter);
 app.use('/api/account/email', emailRouter);
+app.use('/api/forums', forumsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

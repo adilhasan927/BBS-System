@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-const connection = require('../db.js');
-const sendError = require('../error');
+const connection = require('../utility/db');
+const sendError = require('../utility/error');
 var sizeOf = require('image-size');
-const verify = require('../verify');
+const verify = require('../utility/verify');
 
 router.get('/', function(req, res, next) {
   var username = req.query.username;

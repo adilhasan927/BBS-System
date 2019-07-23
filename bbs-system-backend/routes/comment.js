@@ -1,9 +1,9 @@
 const express = require('express');
 var router = express.Router();
-const connection = require('../db.js')
+const connection = require('../utility/db')
 const ObjectID = require('mongodb').ObjectID;
-const sendError = require('../error');
-const verify = require('../verify');
+const sendError = require('../utility/error');
+const verify = require('../utility/verify');
 
 router.get('/', function(req, res, next) {
   const token = req.header('Authorization');

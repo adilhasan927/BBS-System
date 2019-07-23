@@ -1,12 +1,12 @@
 var express = require('express');
 var router = express.Router();
-const connection = require('../db.js');
+const connection = require('../utility/db');
 const jwt = require('jsonwebtoken');
-const getSecret = require('../secrets.js');
-const captcha = require('../captcha');
-const verifyUser = require('../email');
-const sendError = require('../error');
-const validators = require('../validators');
+const getSecret = require('../utility/secrets');
+const captcha = require('../utility/captcha');
+const verifyUser = require('../utility/email');
+const sendError = require('../utility/error');
+const validators = require('../utility/validators');
 
 router.post('/', function(req, res, next) {
   captcha(req.body.captchaResponse,
@@ -47,6 +47,7 @@ router.post('/', function(req, res, next) {
         },
         email: email,
         verified: false,
+        admin: false
       }).then(val => {
         dbs.db("documents")
         .collection("subforums")

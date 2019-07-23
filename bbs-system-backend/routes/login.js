@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
-const connection = require('../db.js');
+const connection = require('../utility/db');
 const jwt = require('jsonwebtoken');
-const getSecret = require('../secrets.js');
-const sendError = require('../error');
-const validators = require('../validators');
-const captcha = require('../captcha');
+const getSecret = require('../utility/secrets');
+const sendError = require('../utility/error');
+const validators = require('../utility/validators');
+const captcha = require('../utility/captcha');
 
 router.post('/', function(req, res, next) {
   captcha(req.body.captchaResponse,

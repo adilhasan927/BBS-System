@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-const connection = require('../db.js');
-const verifyUser = require('../email');
-const sendError = require('../error');
-const verify = require('../verify');
+const connection = require('../utility/db');
+const verifyUser = require('../utility/email');
+const sendError = require('../utility/error');
+const verify = require('../utility/verify');
 
 router.post('/', function(req, res, next) {
   const token = req.header('Authorization');

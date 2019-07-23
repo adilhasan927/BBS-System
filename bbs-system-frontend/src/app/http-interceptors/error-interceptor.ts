@@ -19,7 +19,6 @@ export class ErrorInterceptor implements HttpInterceptor{
     return next.handle(req).pipe(
       tap({
         next: val => {
-          console.log(val);
         },
         error: error => {
           console.log(error);

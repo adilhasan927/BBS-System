@@ -1,3 +1,17 @@
-<div class="posts">
-  <app-posts [listingID]="listingID"></app-posts>
+<div class="container">
+  Forum selection.
+  <form [formGroup]="forumForm" (ngSubmit)="onSubmit()">
+    <label>
+      Forum name:
+      <input type="text" formControlName="forumField" required>
+    </label>
+    <button type="submit" [disabled]="!forumForm.valid">Go to forum</button>
+  </form>
+  <label>
+    Want to create your own forum?
+    <a [routerLink]="['/create-forum']">Click here.</a>
+  </label>
+  <div class="posts">
+    <app-posts [listingID]="listingID"></app-posts>
+  </div>
 </div>

@@ -36,7 +36,7 @@ export class PostsComponent implements OnInit {
     this.loadPosts();
   }
 
-  resetPosts() {
+  public resetPosts() {
     this.posts = [];
     this.position = 0;
     this.loadPosts();

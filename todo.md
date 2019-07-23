@@ -12,3 +12,6 @@
   * ~~Implement subforums.~~
   * ~~Implement user-creatable subforums on backend.~~
   * Implement user-creatable subforums on frontend.
+    * ~~Implement visiting and posting to different forums.~~
+    * Implement persistent forum selection choice.
+    * Implement tabbing.

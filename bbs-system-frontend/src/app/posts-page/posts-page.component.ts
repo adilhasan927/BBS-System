@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { PostsComponent } from '../posts/posts.component';
 
 @Component({
   selector: 'app-posts-page',
@@ -9,13 +11,33 @@ import { ActivatedRoute } from '@angular/router';
 export class PostsPageComponent implements OnInit {
 
   listingID: string;
+  forumForm = new FormGroup({
+    forumField: new FormControl('', Validators.required),
+  })
+  @ViewChild(PostsComponent, { static: false })
+  posts: PostsComponent;
 
-  constructor(private route: ActivatedRoute) { }
-
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
+  
   ngOnInit() {
     this.route.paramMap.subscribe(paramMap => {
       this.listingID = paramMap.get('listingID');
     })
+  }
+
+  onSubmit() {
+    this.router.navigate(['/posts', this.forumForm.get('forumField').value])
+    .then(val => {
+      this.forumForm.reset();
+      if (val) {
+        setTimeout(() => {
+          const posts = this.posts;
+          posts.resetPosts();
+        }, 0);
+    }});
   }
 
 }

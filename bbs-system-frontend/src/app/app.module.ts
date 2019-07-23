@@ -19,6 +19,7 @@ import { CommentComponent } from './comment/comment.component';
 import { httpInterceptorProviders } from './http-interceptors/';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { PostsPageComponent } from './posts-page/posts-page.component';
+import { CreateForumComponent } from './create-forum/create-forum.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { PostsPageComponent } from './posts-page/posts-page.component';
     PostComponent,
     CommentComponent,
     VerifyEmailComponent,
-    PostsPageComponent
+    PostsPageComponent,
+    CreateForumComponent
   ],
   imports: [
     BrowserModule,

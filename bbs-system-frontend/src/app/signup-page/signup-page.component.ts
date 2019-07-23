@@ -53,8 +53,7 @@ export class SignupPageComponent implements OnInit {
   }
 
   onSubmit() {
-    // TODO: Add validation, routing.
-    var signupReturn = this.api.signup({
+    this.api.signup({
       email: this.signupForm.get('email').value,
       username: this.signupForm.get('username').value,
       password: this.signupForm.get('password.password').value,
@@ -67,7 +66,6 @@ export class SignupPageComponent implements OnInit {
     }, error => {
       if (error.error == "CaptchaError") {
         window.alert("Complete the recaptcha again.");
-        this.recaptchaComponent.reset();
       } else if (error.error == "FieldError") {
         window.alert("Invalid form fields.")
       } else if (error.error == "DuplicateError") {

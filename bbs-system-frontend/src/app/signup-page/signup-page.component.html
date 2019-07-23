@@ -31,9 +31,7 @@
             password:<br>
             <input type="password" formControlName="password" required>
         </label><br>
-        <div *ngIf="password.controls['password'].invalid
-        && (password.controls['password'].dirty
-        || password.controls['password'].touched)"
+        <div *ngIf="password.controls['password'].invalid && (password.controls['password'].dirty || password.controls['password'].touched)"
         class="alert alert-danger">
             <div *ngIf="password.controls['password'].errors.required">
                 password is required.
@@ -46,9 +44,7 @@
             confirm password:<br>
             <input type="password" formControlName="confirmPassword" required>
         </label><br>
-        <div *ngIf="password.controls['confirmPassword'].invalid
-        && (password.controls['confirmPassword'].dirty
-        || password.controls['confirmPassword'].touched)"
+        <div *ngIf="password.controls['confirmPassword'].invalid && (password.controls['confirmPassword'].dirty || password.controls['confirmPassword'].touched)"
         class="alert alert-danger">
             <div *ngIf="password.controls['confirmPassword'].errors.required">
                 password confirmation is required.

@@ -43,6 +43,18 @@ export class ApiService {
         catchError(this.handleError)
       );
   }
+
+  createForum(listingID: string, description: string, captchaResponse: string): Observable<any> {
+    const url = this.queryURL + '/forums';
+    return this.http.post<any>(url, JSON.stringify({
+      listingID: listingID,
+      description: description,
+      captchaResponse: captchaResponse
+    }), this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
   
   resendEmail(): Observable<any> {
     const url = this.queryURL + '/account/email';

@@ -1,0 +1,35 @@
+Create forum.
+<form [formGroup]="createForumForm" (ngSubmit)="onSubmit()">
+  <form formGroupName="settings">
+    <label>
+      name:<br>
+      <input type="text" formControlName="name" required>
+    </label><br>
+    <div *ngIf="name.invalid && name.dirty || name.touched"
+    class="alert alert-danger">
+        <div *ngIf="name.errors?.required">
+            name is required.
+        </div>
+        <div *ngIf="name.errors?.minlength">
+            name must be at least 6 characters long.
+        </div>
+    </div>
+    <label>
+      description:<br>
+      <input type="description" formControlName="description" required>
+    </label><br>
+    <div *ngIf="description.invalid && description.dirty || description.touched"
+    class="alert alert-danger">
+        <div *ngIf="description.errors?.required">
+            description is required.
+        </div>
+        <div *ngIf="description.errors?.minlength">
+            description must be at least 6 characters long.
+        </div>
+    </div>
+  </form>
+  <re-captcha formControlName="recaptchaReactive"
+  (resolved)="resolved($event)"
+  siteKey="6Ld4qa0UAAAAAH0UmLH4Zt6eCESPaQGgmiLrhOTr"></re-captcha>
+  <button type="submit" [disabled]="!createForumForm.valid">Submit</button>
+</form>

@@ -1,5 +1,5 @@
 <p>Write post</p>
-<form [formGroup]="postForm" (ngSubmit)='onSubmit()'>
+<form [formGroup]="postForm" (ngSubmit)="onSubmit()">
     <label>
         post:<br>
         <input type="text" formControlName="post" required>

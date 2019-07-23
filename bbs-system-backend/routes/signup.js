@@ -7,6 +7,7 @@ const captcha = require('../utility/captcha');
 const verifyUser = require('../utility/email');
 const sendError = require('../utility/error');
 const validators = require('../utility/validators');
+const createSubforum = require('../utility/forums');
 
 router.post('/', function(req, res, next) {
   captcha(req.body.captchaResponse,
@@ -17,7 +18,7 @@ router.post('/', function(req, res, next) {
       } else if (!JSON.parse(body).success) {
         console.log(body);
         sendError(res, "CaptchaError", 401);
-      } else procede(); 
+      } else procede();
     });
   function procede() {
     const username = req.body.credentials.username;
@@ -49,25 +50,20 @@ router.post('/', function(req, res, next) {
         verified: false,
         admin: false
       }).then(val => {
-        dbs.db("documents")
-        .collection("subforums")
-        .insertOne({
-          name: "user." + username,
-          posts: [],
-        })
-        .then( val => {
+          createSubforum(dbs, 'user.'+username, username)
+        }).then( val => {
           res.send(JSON.stringify({
             successful: true,
             body: token,
             captchaSuccess: true,
           }));
         });
-      }).catch(err => {
-        if (err.code == '11000)') {
-          sendError(res, "DuplicateError", 400)
-        } else {
-          sendError(res, "DBError", 500)
-        }});
+    }).catch(err => {
+      if (err.code == '11000)') {
+        sendError(res, "DuplicateError", 400)
+      } else {
+        sendError(res, "DBError", 500)
+      }
     });
   }
 });

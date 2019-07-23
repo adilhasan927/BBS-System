@@ -10,5 +10,5 @@
   * Add loading animations.
 * Implement user-creatable subforums.
   * ~~Implement subforums.~~
-  * Implement user-creatable subforums on backend.
+  * ~~Implement user-creatable subforums on backend.~~
   * Implement user-creatable subforums on frontend.

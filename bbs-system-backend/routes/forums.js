@@ -3,6 +3,7 @@ var router = express.Router();
 const connection = require('../utility/db');
 const sendError = require('../utility/error');
 const verify = require('../utility/verify');
+const createSubforum = require('../utility/forums');
 
 router.post('/', function(req, res, next) {
   const token = req.header('Authorization');
@@ -22,22 +23,12 @@ router.post('/', function(req, res, next) {
       return null;
     }
     connection.then(dbs => {
-      const id = new ObjectId();
-      dbs.db("documents")
-      .collection("subforums")
-      .insertOne({
-        name: listingID,
-        posts: [],
-        admin: username
-      }).then(val => {
-        res.send(JSON.stringify({
-          successful: true,
-          body: id,
-        }));
+      createSubforum(res, dbs, listingID, username)
+      .then(val => {
+        res.send();
       }).catch(err => {
-        console.log(err);
         sendError(res, "DBError", 500);
-      });
+      })
     });
   }
 });

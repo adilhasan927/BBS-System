@@ -37,17 +37,20 @@ export class PostsComponent implements OnInit {
   }
 
   public resetPosts() {
-    this.posts = [];
     this.position = 0;
-    this.loadPosts();
+    this.loadPosts(true);
   }
 
-  loadPosts() {
+  loadPosts(reset=false) {
     // fetches limit posts after post #position.
     this.api.getContent(this.limit, this.position, this.listingID).subscribe(res => {
       // in case more posts have been posted.
       this.endReached = false;
-      this.posts.push(...res.body);
+      if (reset) {
+        this.posts = res.body
+      } else {
+        this.posts.push(...res.body);
+      }
       this.position += this.limit;
       // tells user that no posts remain to be loaded.
       if (res.body.length < this.limit) {

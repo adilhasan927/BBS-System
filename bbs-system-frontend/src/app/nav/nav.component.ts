@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { StorageService } from '../services/storage.service';
+import { Tab } from '../models/tab';
 
 @Component({
   selector: 'app-nav',
@@ -8,8 +9,8 @@ import { StorageService } from '../services/storage.service';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
-  // used to conditionally display certain elements.
   isLoggedIn: boolean = false;
+  tabs: Array<Tab> = [];
   // locally stored, may be incorrect.
   username: string = "";
 
@@ -24,6 +25,7 @@ export class NavComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         this.isLoggedIn = this.storage.retrieveToken() != null;
         this.username = this.storage.retrieveUsername();
+        this.tabs = this.storage.getTabs();
       }
     })
   }
@@ -35,4 +37,11 @@ export class NavComponent implements OnInit {
     this.isLoggedIn = false;  
     window.alert("Logged out.");
   }
+
+  deleteTab(tab: Tab) {
+    this.router.navigate(['/posts', 'main.main']);
+    this.storage.deleteTab(tab);
+    this.tabs = this.storage.getTabs();
+  }
+
 }

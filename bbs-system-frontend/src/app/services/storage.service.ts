@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'jwt-decode'
+import { Tab } from '../models/tab';
 
 @Injectable({
   providedIn: 'root'
@@ -8,23 +9,49 @@ export class StorageService {
 
   constructor() { }
 
-  storeToken(token: string) {
+  storeToken(token: string): void {
     localStorage.setItem('bbs-token', token);
     localStorage.setItem('username', _(token).username);
   }
 
-  deleteToken() {
+  deleteToken(): void {
     localStorage.removeItem('bbs-token');
     localStorage.removeItem('username');
-
+    localStorage.removeItem('tabs');
   }
 
-  retrieveToken() {
-    return localStorage.getItem('bbs-token');
-  }
+  retrieveToken(): string { return localStorage.getItem('bbs-token'); }
   
-  retrieveUsername() {
-    return localStorage.getItem('username');
+  retrieveUsername(): string { return localStorage.getItem('username'); }
+
+  storeTabs(tabs: Array<Tab>): void { sessionStorage.setItem('tabs', JSON.stringify(tabs)) }
+
+  storeTab(tab: Tab): void {
+    var tabs: Array<Tab> = JSON.parse(sessionStorage.getItem('tabs'));
+    if (!tabs) {
+      tabs=[]
+    }
+    const index = tabs.findIndex(val => val.listingID == tab.listingID);
+    if (index != -1) {
+      tabs[index] = tab;
+    } else {
+      tabs.push(tab);
+    }
+    sessionStorage.setItem('tabs', JSON.stringify(tabs));
   }
+
+  getTabs(): Array<Tab> { return JSON.parse(sessionStorage.getItem('tabs')); }
+
+  getTab(listingID: string): Tab {
+    const tabs = this.getTabs();
+    const tab = tabs.find(val => val.listingID == listingID);
+    return tab;
+  }
+
+  deleteTab(tab: Tab): void {
+    var tabs = this.getTabs();
+    tabs = tabs.filter(val => val.listingID != tab.listingID);
+    this.storeTabs(tabs);
+  } 
 
 }

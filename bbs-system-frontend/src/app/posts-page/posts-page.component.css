@@ -1,11 +1,36 @@
+.content-container {
+  width: 90%;
+  margin: 10px 5px;
+  display: flex;
+  flex-direction: row-reverse;
+}
+.sidebar {
+  width: 35%;
+  position: sticky;
+  top: 50px;
+  align-self: flex-start;
+  background-color: lightgreen;
+  border: dashed grey;
+  padding: 5px;
+  margin: 5px;
+}
 .posts {
-  width: 70%;
+  width: 65%;
 }
 @media (max-width: 600px) {
-  .posts {
+  .content-container {
+    width: auto;
+    display: block;
+  }
+  .sidebar {
+    float: none;
+    width: auto;
+    top: auto;
+    bottom: 0px;
+    align-self: end;
+  }
+  .posts{
+    float: none;
     width: auto;
   }
-}
-.container {
-  margin: 10px 5px;
 }

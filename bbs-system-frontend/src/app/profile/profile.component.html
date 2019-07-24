@@ -1,44 +1,41 @@
 <div class='content-container'>
-    <div class = "profile-settings">
-        <p>Profile page</p>
-        <img *ngIf="profile.profileImage" width="100px" height="100px"
-        [src]="'data:image/jpg;base64,'+profile.profileImage.value"
-        alt="profile image">
-        <p *ngIf="profile.profileImage">Profile text: {{ profile.profileText }}</p>
-        <div *ngIf="routeUsername == tokenUsername">
-            <div *ngIf="verified" class="alert alert-danger">
-                    You have verified your email address.
-                </div>        
-                <div *ngIf="!verified" class="alert alert-danger">
-                    You have not verified your email address.<br>
-                    <button type="submit" (click)="resendEmail()">Send verification email.</button>
-                </div>    
-            <form *ngIf="routeUsername == tokenUsername" [formGroup]="profileForm" (ngSubmit)='onSubmit()'>
-                <label>
-                    Profile text:<br>
-                    <input type="text" formControlName="profileText" required>
-                </label><br>
-                <div *ngIf="profileText.invalid && (profileText.dirty || profileText.touched)"
-                class="alert alert-danger">
-                    <div *ngIf="profileText.errors.required">
-                        Profile text is required.
-                    </div>
-                </div>
-                <label>
-                    Profile image:<br>
-                    <input type="file" accept=".png" (change)="onFileChange($event)" formControlName="profileImage" required>
-                </label><br>
-                <div *ngIf="profileImage.invalid && (profileImage.dirty || profileImage.touched)"
-                class="alert alert-danger">
-                    <div *ngIf="profileImage.errors.required">
-                        Profile image is required.
-                    </div>
-                </div>
-                <button type="submit" [disabled]="!profileForm.valid">Submit</button>
-            </form>
+  <div class="profile-settings">
+    <p>Profile page</p>
+    <img *ngIf="profile.profileImage" width="100px" height="100px" [src]="'data:image/jpg;base64,'+profile.profileImage.value"
+      alt="profile image">
+    <p *ngIf="profile.profileImage">Profile text: {{ profile.profileText }}</p>
+    <div *ngIf="routeUsername == tokenUsername">
+      <div *ngIf="verified" class="alert alert-danger">
+        You have verified your email address.
+      </div>
+      <div *ngIf="!verified" class="alert alert-danger">
+        You have not verified your email address.<br>
+        <button type="submit" (click)="resendEmail()">Send verification email.</button>
+      </div>
+      <form *ngIf="routeUsername == tokenUsername" [formGroup]="profileForm" (ngSubmit)='onSubmit()'>
+        <label>
+          Profile text:<br>
+          <input type="text" formControlName="profileText" required>
+        </label><br>
+        <div *ngIf="profileText.invalid && (profileText.dirty || profileText.touched)" class="alert alert-danger">
+          <div *ngIf="profileText.errors.required">
+            Profile text is required.
+          </div>
         </div>
+        <label>
+          Profile image:<br>
+          <input type="file" accept=".png" (change)="onFileChange($event)" formControlName="profileImage" required>
+        </label><br>
+        <div *ngIf="profileImage.invalid && (profileImage.dirty || profileImage.touched)" class="alert alert-danger">
+          <div *ngIf="profileImage.errors.required">
+            Profile image is required.
+          </div>
+        </div>
+        <button type="submit" [disabled]="!profileForm.valid">Submit</button>
+      </form>
     </div>
-    <div class="posts">
-        <app-posts [listingID]="'user.' + tokenUsername"></app-posts>
-    </div>
+  </div>
+  <div class="posts">
+    <app-posts [listingID]="'user.' + tokenUsername"></app-posts>
+  </div>
 </div>

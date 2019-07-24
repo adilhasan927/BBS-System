@@ -1,16 +1,18 @@
-<div class="container">
-  Forum selection.
-  <form [formGroup]="forumForm" (ngSubmit)="onSubmit()">
+<div class="content-container">
+  <div class="sidebar">
+    Forum selection.
+    <form [formGroup]="forumForm" (ngSubmit)="onSubmit()">
+      <label>
+        Forum name:
+        <input type="text" formControlName="forumField" required>
+      </label>
+      <button type="submit" [disabled]="!forumForm.valid">Go to forum</button>
+    </form>
     <label>
-      Forum name:
-      <input type="text" formControlName="forumField" required>
+      Want to create your own forum?
+      <a [routerLink]="['/create-forum']">Click here.</a>
     </label>
-    <button type="submit" [disabled]="!forumForm.valid">Go to forum</button>
-  </form>
-  <label>
-    Want to create your own forum?
-    <a [routerLink]="['/create-forum']">Click here.</a>
-  </label>
+  </div>
   <div class="posts">
     <app-posts [listingID]="listingID"></app-posts>
   </div>

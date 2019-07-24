@@ -57,7 +57,7 @@ export class LoginPageComponent implements OnInit {
         this.storage.storeToken(next.body);
         this.recaptchaComponent.reset();
         this.loginForm.reset();
-        this.router.navigate(['/posts']);
+        this.router.navigate(['/posts', 'main.main']);
       }, error => {
         // Check for errors returned by server.
         // error.error: string.

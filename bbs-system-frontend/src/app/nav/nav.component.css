@@ -1,3 +1,11 @@
+nav {
+  position: sticky;
+  top: 0px;
+}
+span {
+  display: flex;
+  flex-direction: row;
+}
 ul {
   list-style-type: none;
   margin: 0;
@@ -5,23 +13,21 @@ ul {
   overflow: hidden;
   background-color: darkslategray;
 }
-  
 li {
   float: left;
 }
   
 li a {
+  height: 15px;
   display: block;
   color: white;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
 }
-
 li a.active {
   background-color: darkgoldenrod;
 }
-
 li a:hover:not(.active) {
   background-color: darkcyan;
 }

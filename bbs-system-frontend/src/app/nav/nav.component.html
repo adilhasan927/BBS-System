@@ -1,9 +1,15 @@
 <nav>
-    <ul>
+  <ul>
     <li><a *ngIf="!isLoggedIn" routerLink="/login" routerLinkActive="active">Login</a></li>
     <li><a *ngIf="!isLoggedIn" routerLink="/signup" routerLinkActive="active">Signup</a></li>
     <li><a *ngIf="isLoggedIn" routerLink="/login" routerLinkActive="active" (click)="logout()">Logout</a></li>
-    <li><a [routerLink]="['/posts', 'main.main']" routerLinkActive="active">Posts</a></li>
     <li><a *ngIf="isLoggedIn" [routerLink]="['/profile', username]" routerLinkActive="active">Profile</a></li>
-    </ul>
+    <li><a [routerLink]="['/posts', 'main.main']" routerLinkActive="active">Posts</a></li>
+    <li *ngFor="let tab of tabs">
+      <span>
+        <a [routerLink]="['/posts', tab.listingID]" routerLinkActive="active">{{tab.listingID}}</a>
+        <a (click)="deleteTab(tab)">⌫</a>
+      </span>
+    </li>
+  </ul>
 </nav>

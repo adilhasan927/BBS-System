@@ -6,9 +6,13 @@
 }
 .profile-settings {
   width: 35%;
+  position: sticky;
+  top: 50px;
+  align-self: flex-start;
 }
 .posts {
   width: 65%;
+  margin-right: 10px;
 }
 @media (max-width: 600px) {
   .content-container {
@@ -16,11 +20,11 @@
     display: block;
   }
   .profile-settings {
-    float: none;
     width: auto;
+    position: static;
+    top: auto;
   }
   .posts{
-    float: none;
     width: auto;
   }
 }

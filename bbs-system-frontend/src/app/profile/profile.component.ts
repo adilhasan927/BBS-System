@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from "@angular/router"
 import { ApiService } from '../services/api.service';
 import { StorageService } from '../services/storage.service';
 import { Profile } from '../models/profile';
+import { PostsComponent } from '../posts/posts.component';
 
 @Component({
   selector: 'app-profile',
@@ -31,6 +32,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     filetype: string;
     value: string;
   };
+  @ViewChild(PostsComponent, { static: false })
+  posts: PostsComponent;
 
   constructor(
     private api: ApiService,
@@ -57,6 +60,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.verified = next.body.verified;
       this.profileForm.get('profileText').setValue(next.body.profile.profileText);
     });
+    this.posts.resetPosts();
   }
 
   resendEmail() {

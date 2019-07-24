@@ -26,8 +26,8 @@ export class StorageService {
 
   storeTabs(tabs: Array<Tab>): void { sessionStorage.setItem('tabs', JSON.stringify(tabs)) }
 
-  storeTab(tab: Tab): void {
-    var tabs: Array<Tab> = JSON.parse(sessionStorage.getItem('tabs'));
+  storeTab(tab: Tab, insert: boolean = true): void {
+    var tabs: Array<Tab> = this.getTabs();
     if (!tabs) {
       tabs=[]
     }
@@ -35,9 +35,11 @@ export class StorageService {
     if (index != -1) {
       tabs[index] = tab;
     } else {
-      tabs.push(tab);
+      if (insert) {
+        tabs.push(tab);
+      }
     }
-    sessionStorage.setItem('tabs', JSON.stringify(tabs));
+    this.storeTabs(tabs);
   }
 
   getTabs(): Array<Tab> { return JSON.parse(sessionStorage.getItem('tabs')); }

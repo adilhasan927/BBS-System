@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { PostsComponent } from '../posts/posts.component';
@@ -35,14 +35,16 @@ export class PostsPageComponent implements OnInit {
           this.storage.storeTab(new Tab(
             this.listingID,
             document.documentElement.scrollTop
-          ))
+          ), false)
         }
       }
     })
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         if (this.posts) {
-          this.posts.resetPosts();
+          setTimeout(() => {
+            this.posts.resetPosts();
+          }, 0);
           const tab = this.storage.getTab(this.listingID);
           window.scrollTo(0, tab.scrollY);
         }

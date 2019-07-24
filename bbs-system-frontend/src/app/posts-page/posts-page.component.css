@@ -23,14 +23,12 @@
     display: block;
   }
   .sidebar {
-    float: none;
     width: auto;
     top: auto;
     bottom: 0px;
     align-self: end;
   }
   .posts{
-    float: none;
     width: auto;
   }
 }

@@ -17,7 +17,7 @@ export class CachingInterceptor implements HttpInterceptor {
     if (!this.isCachable(req)) { return next.handle(req); }
     const cachedResponse = this.cache.get(req);
     // return cached response if internet down.
-    return (cachedResponse) ?
+    return (cachedResponse) && !navigator.onLine?
       of(cachedResponse) : this.sendRequest(req, next, this.cache);
   }
 

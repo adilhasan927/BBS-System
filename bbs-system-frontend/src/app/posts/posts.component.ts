@@ -29,7 +29,6 @@ export class PostsComponent implements OnInit {
   constructor(
     private api: ApiService,
     private storage: StorageService,
-    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {

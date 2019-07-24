@@ -7,7 +7,7 @@ const sendError = require('../utility/error');
 const validators = require('../utility/validators');
 const captcha = require('../utility/captcha');
 
-router.post('/', function(req, res, next) {
+router.use('/', function(req, res, next) {
   captcha(req.body.captchaResponse,
     (err, result, body) => {
       if (err) {
@@ -16,49 +16,50 @@ router.post('/', function(req, res, next) {
       } else if (!JSON.parse(body).success) {
         console.log(body);
         sendError(res, "CaptchaError", 401);
-      } else procede(); 
+      } else next();
     });
-  function procede() {
-    var credentials = req.header('Authorization').replace(/^Basic\s/, '');
-    credentials = Buffer.from(credentials, 'base64').toString('ascii');
-    credentials = credentials.split(':');
-    const username = credentials[0];
-    const password = credentials[1];
-    var valid = validators.username(res, username)
-    && validators.password(res, password)
-    if (!valid) {
-      sendError(res, 'FieldError', 400);
-      return null;
-    }
-    connection.then(dbs => {
-      var payload = {
-        username: username,
-      }
-      var token = jwt.sign(payload, getSecret(), { expiresIn: "2 days" });
-      dbs.db("documents")
-      .collection("users")
-      .find({
-        username: username,
-        password: password,
-      })
-      .count()
-      .then(val => {
-        if (val == 1) {
-          res.send(JSON.stringify({
-            successful: true,
-            body: token,
-          }));
-        } else {
-          sendError(res, "CredentialsError", 401 );
-        }
-      }).catch(err => {
-        if (err.code == '11000)') {
-          sendError(res, "DuplicateError", 400)
-        } else {
-          sendError(res, "DBError", 500)
-        }});
-    });
+})
+
+router.post('/', function(req, res, next) {
+  var credentials = req.header('Authorization').replace(/^Basic\s/, '');
+  credentials = Buffer.from(credentials, 'base64').toString('ascii');
+  credentials = credentials.split(':');
+  const username = credentials[0];
+  const password = credentials[1];
+  var valid = validators.username(res, username)
+  && validators.password(res, password)
+  if (!valid) {
+    sendError(res, 'FieldError', 400);
+    return null;
   }
+  connection.then(dbs => {
+    var payload = {
+      username: username,
+    }
+    var token = jwt.sign(payload, getSecret(), { expiresIn: "2 days" });
+    dbs.db("documents")
+    .collection("users")
+    .find({
+      username: username,
+      password: password,
+    })
+    .count()
+    .then(val => {
+      if (val == 1) {
+        res.send(JSON.stringify({
+          successful: true,
+          body: token,
+        }));
+      } else {
+        sendError(res, "CredentialsError", 401 );
+      }
+    }).catch(err => {
+      if (err.code == '11000)') {
+        sendError(res, "DuplicateError", 400)
+      } else {
+        sendError(res, "DBError", 500)
+      }});
+  });
 });
 
 module.exports = router;

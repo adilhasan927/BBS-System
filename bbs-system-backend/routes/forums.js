@@ -6,12 +6,7 @@ const verify = require('../utility/verify');
 const captcha = require('../utility/captcha');
 const createSubforum = require('../utility/forums');
 
-router.post('/', function(req, res, next) {
-  const token = req.header('Authorization');
-  const listingID = req.body.listingID;
-  const description = req.body.description;
-  var username;
-
+router.use('/', function(req, res, next) {
   captcha(req.body.captchaResponse,
     (err, result, body) => {
       if (err) {
@@ -20,39 +15,43 @@ router.post('/', function(req, res, next) {
       } else if (!JSON.parse(body).success) {
         console.log(body);
         sendError(res, "CaptchaError", 401);
-      } else procede();
+      } else next();
     });
+})
 
-  function procede() {
-    verify(res, token, (err, val) => {
-      if (err) {
-        sendError(res, "TokenError", +err.message);
+router.use('/', function(req, res, next) {
+  const token = req.header('Authorization');
+  verify(res, token, (err, val) => {
+    if (err) {
+      sendError(res, "TokenError", +err.message);
+    } else {
+      req.query.username = val.username;
+      next();
+    }
+  })
+})
+
+router.post('/', function(req, res, next) {
+  const listingID = req.body.listingID;
+  const description = req.body.description;
+  const username = req.query.username;
+  console.log(listingID);
+  if (listingID.slice(0, 5) != 'main.') {
+    sendError(res, "PermissionsError", 403);
+    return null;
+  }
+  connection.then(dbs => {
+    createSubforum(dbs, listingID, username, description)
+    .then(val => {
+      res.send();
+    }).catch(err => {
+      if (err.code == '11000)') {
+        sendError(res, "DuplicateError", 400)
       } else {
-        username = val.username;
-        sendRes();
+        sendError(res, "DBError", 500)
       }
     });
-  }
-
-  function sendRes() {
-    console.log(listingID);
-    if (listingID.slice(0, 5) != 'main.') {
-      sendError(res, "PermissionsError", 403);
-      return null;
-    }
-    connection.then(dbs => {
-      createSubforum(dbs, listingID, username, description)
-      .then(val => {
-        res.send();
-      }).catch(err => {
-        if (err.code == '11000)') {
-          sendError(res, "DuplicateError", 400)
-        } else {
-          sendError(res, "DBError", 500)
-        }
-      });
-    });
-  }
+  });
 });
 
 module.exports = router

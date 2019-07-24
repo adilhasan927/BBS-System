@@ -9,7 +9,7 @@ const sendError = require('../utility/error');
 const validators = require('../utility/validators');
 const createSubforum = require('../utility/forums');
 
-router.post('/', function(req, res, next) {
+router.use('/', function(req, res, next) {
   captcha(req.body.captchaResponse,
     (err, result, body) => {
       if (err) {
@@ -18,54 +18,55 @@ router.post('/', function(req, res, next) {
       } else if (!JSON.parse(body).success) {
         console.log(body);
         sendError(res, "CaptchaError", 401);
-      } else procede();
+      } else next();
     });
-  function procede() {
-    const username = req.body.credentials.username;
-    const password = req.body.credentials.password;
-    const email = req.body.credentials.email;
-    var valid = validators.username(res, username)
-    && validators.password(res, password)
-    && validators.email(res, email);
-    if (!valid) {
-      sendError(res, 'FieldError', 400);
-      return null;
-    }
-    var payload = {
-      username: username,
-    }
-    var token = jwt.sign(payload, getSecret(), { expiresIn: "2 days" } );
-    verifyUser(email, username);
-    connection.then(dbs => {
-      dbs.db("documents")
-      .collection("users")
-      .insertOne({
-        username: username,
-        password: password,
-        profile: {
-          profileText: null,
-          profileImage: null,
-        },
-        email: email,
-        verified: false,
-        admin: false
-      }).then(val => {
-          createSubforum(dbs, 'user.'+username, username)
-        }).then( val => {
-          res.send(JSON.stringify({
-            successful: true,
-            body: token,
-            captchaSuccess: true,
-          }));
-        });
-    }).catch(err => {
-      if (err.code == '11000)') {
-        sendError(res, "DuplicateError", 400)
-      } else {
-        sendError(res, "DBError", 500)
-      }
-    });
+})
+
+router.post('/', function(req, res, next) {
+  const username = req.body.credentials.username;
+  const password = req.body.credentials.password;
+  const email = req.body.credentials.email;
+  var valid = validators.username(res, username)
+  && validators.password(res, password)
+  && validators.email(res, email);
+  if (!valid) {
+    sendError(res, 'FieldError', 400);
+    return null;
   }
+  var payload = {
+    username: username,
+  }
+  var token = jwt.sign(payload, getSecret(), { expiresIn: "2 days" } );
+  verifyUser(email, username);
+  connection.then(dbs => {
+    dbs.db("documents")
+    .collection("users")
+    .insertOne({
+      username: username,
+      password: password,
+      profile: {
+        profileText: null,
+        profileImage: null,
+      },
+      email: email,
+      verified: false,
+      admin: false
+    }).then(val => {
+        createSubforum(dbs, 'user.'+username, username)
+      }).then( val => {
+        res.send(JSON.stringify({
+          successful: true,
+          body: token,
+          captchaSuccess: true,
+        }));
+      });
+  }).catch(err => {
+    if (err.code == '11000)') {
+      sendError(res, "DuplicateError", 400)
+    } else {
+      sendError(res, "DBError", 500)
+    }
+  });
 });
 
 module.exports = router;

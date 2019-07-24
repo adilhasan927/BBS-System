@@ -6,6 +6,6 @@
 * ~~Change error handling to use interceptors.~~
 * ~~Implement profile page posts.~~
 * ~~Implement user-creatable subforums.~~
-* Add animations to frontend.
-  * Add navigation animations.
-  * Add loading animations.
+* Implement private messages.
+  * Implements private messages on frontend.
+  * implement private messages on backend.

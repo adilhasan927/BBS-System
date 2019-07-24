@@ -20,6 +20,7 @@ import { httpInterceptorProviders } from './http-interceptors/';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { PostsPageComponent } from './posts-page/posts-page.component';
 import { CreateForumComponent } from './create-forum/create-forum.component';
+import { MessengerComponent } from './messenger/messenger.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { CreateForumComponent } from './create-forum/create-forum.component';
     CommentComponent,
     VerifyEmailComponent,
     PostsPageComponent,
-    CreateForumComponent
+    CreateForumComponent,
+    MessengerComponent
   ],
   imports: [
     BrowserModule,

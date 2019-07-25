@@ -1,1 +1,6 @@
-<p>Placeholder</p>
+<p>Messenger</p>
+<div *ngFor="let message of messages">
+  To: {{ message.to }}<br>
+  From: {{ message.from }}<br>
+  Body: {{ message.body }}<br>
+</div>

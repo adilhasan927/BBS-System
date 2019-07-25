@@ -21,7 +21,7 @@ router.use('/', function(req, res, next) {
 
 router.use('/', function(req, res, next) {
   const token = req.header('Authorization');
-  verify(res, token, (err, val) => {
+  verify(token, (err, val) => {
     if (err) {
       sendError(res, "TokenError", +err.message);
     } else {

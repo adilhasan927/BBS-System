@@ -60,7 +60,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.verified = next.body.verified;
       this.profileForm.get('profileText').setValue(next.body.profile.profileText);
     });
-    this.posts.resetPosts();
   }
 
   resendEmail() {
@@ -83,6 +82,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     ).subscribe(next => {
       console.log(next);
       this.refreshContents();
+      this.posts.resetPosts();
       this.profileForm.reset();
     }, error => {
       if (error.error == "SizeError") {

@@ -6,7 +6,7 @@ const sendError = require('../utility/error');
 const verify = require('../utility/verify');
 
 router.use('/', function(req, res, next) {
-  verify(res, token, (err, val) => {
+  verify(token, (err, val) => {
     if (err) {
       console.log(err);
       sendError(res, "TokenError", +err.message);

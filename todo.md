@@ -6,6 +6,4 @@
 * ~~Change error handling to use interceptors.~~
 * ~~Implement profile page posts.~~
 * ~~Implement user-creatable subforums.~~
-* Implement private messages.
-  * ~~Implement private messages on backend.~~
-  * Implements private messages on frontend.
+* ~~Implement private messages.~~

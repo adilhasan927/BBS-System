@@ -1,0 +1,39 @@
+.content-container {
+  width: 90%;
+  margin: 10px 5px;
+  display: flex;
+  flex-direction: row;
+}
+.forms {
+  width: 35%;
+  position: sticky;
+  top: 50px;
+  align-self: flex-start;
+  background-color: lightgreen;
+  border: dashed grey;
+  padding: 5px;
+  margin: 5px;
+}
+.messages {
+  width: 65%;
+}
+.message {
+  border: dashed grey;
+  padding: 5px;
+  margin: 5px;
+}
+@media (max-width: 600px) {
+  .content-container {
+    width: auto;
+    display: block;
+  }
+  .forms {
+    width: auto;
+    top: auto;
+    bottom: 0px;
+    align-self: end;
+  }
+  .messages {
+    width: auto;
+  }
+}

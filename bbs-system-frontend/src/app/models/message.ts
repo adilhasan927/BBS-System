@@ -1,11 +1,11 @@
 export class Message {
-  constructor(to: string, from: string, body: string) {
-    this.to = to;
+  constructor(timestamp: number, from: string, body: string) {
+    this.timestamp = timestamp;
     this.from = from;
     this.body = body;
   }
 
-  to: string;
+  timestamp: number;
   from: string;
   body: string;
 }

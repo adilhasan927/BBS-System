@@ -19,6 +19,8 @@
     "@angular/platform-browser": "~8.0.1",
     "@angular/platform-browser-dynamic": "~8.0.1",
     "@angular/router": "~8.0.1",
+    "@types/double-ended-queue": "^2.1.1",
+    "double-ended-queue": "^2.1.0-0",
     "jwt-decode": "^2.2.0",
     "ng-recaptcha": "^4.3.0",
     "ngx-socket-io": "^2.1.1",

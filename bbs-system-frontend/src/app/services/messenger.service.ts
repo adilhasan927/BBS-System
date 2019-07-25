@@ -18,8 +18,16 @@ export class MessengerService {
     this.socket.emit('listen', this.storage.retrieveToken());
   }
 
-  sendMessage(to: string, body: string) {
-    this.socket.emit('sendMessage', new Message(to, this.storage.retrieveUsername(), body));
+  joinConversation(username: string) {
+    this.socket.emit('joinConversation', username);
+  }
+
+  getMessages() {
+    this.socket.emit('getMessages');
+  }
+
+  sendMessage(body: string) {
+    this.socket.emit('sendMessage', new Message(undefined, this.storage.retrieveUsername(), body));
   }
 
 }

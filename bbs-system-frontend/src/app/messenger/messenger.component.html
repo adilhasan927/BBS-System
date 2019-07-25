@@ -1,6 +1,30 @@
-<p>Messenger</p>
-<div *ngFor="let message of messages">
-  To: {{ message.to }}<br>
-  From: {{ message.from }}<br>
-  Body: {{ message.body }}<br>
+<div class="content-container">
+  <div class="messages">
+    <p>Messages</p>
+    <div class="message" *ngFor="let message of messages">
+      From: {{ message.from }}<br>
+      Body: {{ message.body }}<br>
+    </div>
+    <p *ngIf="!messages.isEmpty">There don't seem to be any messages here.</p>
+    <button (click)="load()">Load older messages.</button>
+  </div>
+  <div class="forms">
+    <p>Messenger</p>
+    <p>Go to user</p>
+    <form [formGroup]="navForm" (ngSubmit)="navigate()">
+      <label>
+        username:<br>
+        <input type="text" formControlName="username" required>
+      </label><br>
+      <button type="submit" [disabled]="!navForm.valid">Navigate</button>
+    </form>
+    <p>Write message</p>
+    <form [formGroup]="messageForm" (ngSubmit)="send()">
+      <label>
+        body:<br>
+        <input type="text" formControlName="body" required>
+      </label><br>
+      <button type="submit" [disabled]="!messageForm.valid">Submit</button>
+    </form>
+  </div>
 </div>

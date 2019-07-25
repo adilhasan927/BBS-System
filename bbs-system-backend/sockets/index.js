@@ -5,68 +5,108 @@ const connection = require('../utility/db');
 /**
  * @type {Map<string, string>}
  */
-const users = new Map();
 
 /**
  * @param {SocketIO.Server} io 
  */
 function init(io) {
   io.on("connection", socket => {
-    console.log("a user connected");
-
     var username;
     var loggedIn = false;
-    /**
-     * @param {string} token
-     */
+    var currentRoom;
+    var position = 0;
+    var limit = 20;
+
+    console.log("a user connected");
+
     socket.on('listen', token => {
       verify(token, (err, val) => {
         if (err) {
           io.to(socket.id).emit("error", err);
-          socket.disconnect();
+          loggedIn = false;
         } else {
+          loggedIn = true;
           username = val.username;
-          users.set(username, socket.id);
-
-          connection.then(dbs => {
-            dbs.db('documents')
-            .collection('users')
-            .findOne({ username: username })
-            .then(val => {
-              io.to(users.get(username)).emit('messages', val.inbox);
-              console.log("messages fetched from db.");
-            }).catch(err => {
-              io.to(users.get(username)).emit('error', err.message);
-            })
-          })
         }
       }, false)
     })
 
-    /**
-     * @param {Message} message
-     */
-    socket.on('sendMessage', message => {
-      if (!loggedIn) return;
+    socket.on('joinConversation', otherUsername => {
+      if (!loggedIn || !currentRoom);
 
-      io.to(users.get(message.to)).emit('messages', message);
-      io.to(users.get(username)).emit('messages', message);
+      socket.leave(currentRoom);
+      currentRoom = ([username, otherUsername].sort()).toString();
+      socket.join(currentRoom);
+      console.log(`Joined ${currentRoom}`);
+      position = 0;
+      getMessages();
+    })
+
+    socket.on('getMessages', username => {
+      if (!loggedIn) return;
+      getMessages();
+    })
+
+    /**
+     * 
+     * @param {SocketIO.Socket} io 
+     */
+    function getMessages() {
+      if (!loggedIn || !currentRoom) return;
 
       connection.then(dbs => {
         dbs.db('documents')
-        .collection('users')
+        .collection('conversations')
+        .aggregate([
+          { $match: { room: currentRoom } },
+          { $unwind: '$messages' },
+          { $replaceRoot: { newRoot: '$messages' }},
+          { $sort: { timestamp: -1 } },
+          { $skip: position },
+          { $limit: limit }
+        ])
+        .toArray()
+        .then(arr => {
+          if (arr) {
+            io.to(socket.id).emit('messages', arr);
+          } else {
+            io.to(socket.it).emit('messages', []);
+          }
+          position = position + limit;
+          console.log("Messages fetched from db.");
+        }).catch(err => {
+          console.log(err);
+          io.to(currentRoom).emit('error', err.message);
+        })
+      })
+    }
+
+    socket.on('sendMessage', message => {
+      if (!loggedIn || !currentRoom) return;
+
+      message.timestamp = Date.now();
+      io.to(currentRoom).emit('messages', [message]);
+
+      connection.then(dbs => {
+        dbs.db('documents')
+        .collection('conversations')
         .updateOne({
-          username: message.to
+          room: currentRoom
         }, {
-          $push: { inbox: message }
-        }).then(_ => {
+          $push: { messages: message }
+        }, { upsert: true }).then(_ => {
           console.log("message added to db.")
         }).catch(err => {
-          io.to(users.get(username)).emit('error', err.message);
+          io.to(socket.id).emit('error', err.message);
         })
       })
     })
   })
 }
+
+/**
+ * @param {string} a
+ * @param {string} b
+ */ 
 
 module.exports = init;

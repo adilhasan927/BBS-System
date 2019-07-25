@@ -1,11 +1,11 @@
 class Message {
   /**
-   * @param {string} to 
-   * @param {string} from 
-   * @param {string} body 
+   * @param {number} timestamp
+   * @param {string} from
+   * @param {string} body
    */
-  constructor(to, from , body) {
-    this.to = to;
+  constructor(timestamp, from, body) {
+    this.timestamp = timestamp;
     this.from = from;
     this.body = body;
   }

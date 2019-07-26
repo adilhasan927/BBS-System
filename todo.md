@@ -7,3 +7,6 @@
 * ~~Implement profile page posts.~~
 * ~~Implement user-creatable subforums.~~
 * ~~Implement private messages.~~
+* Implement friends list.
+  * Implement friends list backend.
+  * implement friends list frontend.

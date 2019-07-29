@@ -26,7 +26,7 @@ router.post('/', function(req, res, next) {
         { "username": username },
         { $set: { "verified": true } }
       ).then(val => {
-        res.send(JSON.stringify({ body: true }))
+        res.send()
       }).catch(err => {
         sendError(res, "DBError", 500);
       });
@@ -41,7 +41,7 @@ router.get('/', function(req, res, next) {
     .findOne({ 'username': username })
     .then(val => {
       verifyUser(val.email, username);
-      res.send(JSON.stringify({ body: true }));
+      res.send();
     }).catch(err => {
       console.log(err);
       sendError(res, "DBError", 500);

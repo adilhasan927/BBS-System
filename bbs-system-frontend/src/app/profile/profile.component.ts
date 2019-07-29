@@ -76,7 +76,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.api.editProfile(
-      this.storage.retrieveToken(),
       this.profileForm.get('profileText').value,
       this.image,
     ).subscribe(next => {

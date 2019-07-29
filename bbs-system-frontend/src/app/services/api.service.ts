@@ -147,9 +147,7 @@ export class ApiService {
 
   getProfile(username: string): Observable<any> {
     const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-      }),
+      headers: this.httpOptions.headers,
       params: {
         username: username,
       },
@@ -158,7 +156,7 @@ export class ApiService {
     return this.http.get<any>(url, httpOptions);
   }
 
-  editProfile(token: string, profileText: string, profileImage: Object): Observable<any> {
+  editProfile(profileText: string, profileImage: Object): Observable<any> {
     const url = this.queryURL + '/account/profile';
     return this.http.put<any>(url, JSON.stringify({
       profile: {
@@ -166,6 +164,78 @@ export class ApiService {
         profileImage: profileImage,
       },
     }), this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  getFriendsList(): Observable<any> {
+    const url = this.queryURL + '/friends/accepted';
+    return this.http.get<any>(url, this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  removeFriend(username: string): Observable<any> {
+    const url = this.queryURL + '/friends/accepted';
+    const httpOptions = {
+      headers: this.httpOptions.headers,
+      params: {
+        username: username,
+      },
+    }
+    return this.http.delete<any>(url, httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  getFriendRequests(): Observable<any> {
+    const url = this.queryURL + '/friends/received';
+    return this.http.get<any>(url, this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  acceptFriendRequest(username: string): Observable<any> {
+    const url = this.queryURL + '/friends/received';
+    const httpOptions = {
+      headers: this.httpOptions.headers,
+      params: {
+        username: username,
+      },
+    }
+    return this.http.patch<any>(url, httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  deleteFriendRequest(username: string): Observable<any> {
+    const url = this.queryURL + '/friends/received';
+    const httpOptions = {
+      headers: this.httpOptions.headers,
+      params: {
+        username: username,
+      },
+    }
+    return this.http.delete<any>(url, httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  sendFriendRequest(username: string): Observable<any> {
+    const url = this.queryURL + '/friends/sent';
+    const httpOptions = {
+      headers: this.httpOptions.headers,
+      params: {
+        username: username,
+      },
+    }
+    return this.http.post<any>(url, httpOptions)
       .pipe(
         catchError(this.handleError)
       );

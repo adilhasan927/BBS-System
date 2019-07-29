@@ -9,4 +9,6 @@
 * ~~Implement private messages.~~
 * Implement friends list.
   * ~~Implement friends list backend.~~
-  * implement friends list frontend.
+  * Implement friends list frontend.
+    * ~~Implement friends list API.~~
+    * Implement friends list UI.

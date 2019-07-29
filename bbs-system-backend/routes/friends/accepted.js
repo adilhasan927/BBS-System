@@ -43,7 +43,9 @@ router.delete('/', function(req, res, next) {
     .updateMany(
       { username: { $in: [tokenUsername, username] } },
       { $pull: { friends: { username: { $in: [tokenUsername, username] } } } }
-    ).catch(err => {
+    ).then(val =>{
+      res.send();
+    }).catch(err => {
       sendError(res, "DBError", 500);
     })
   })

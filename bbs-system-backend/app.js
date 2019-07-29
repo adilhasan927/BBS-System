@@ -9,9 +9,9 @@ var loginRouter = require('./routes/login');
 var signupRouter = require('./routes/signup');
 var postRouter = require('./routes/post');
 var commentRouter = require('./routes/comment');
-var profileRouter = require('./routes/profile');
-var emailRouter = require('./routes/email');
+var accountRouter = require('./routes/account');
 var forumsRouter = require('./routes/forums');
+var friendsRouter = require('./routes/friends');
 
 var app = express();
 
@@ -33,9 +33,9 @@ app.use('/api/login', loginRouter);
 app.use('/api/signup', signupRouter);
 app.use('/api/post', postRouter);
 app.use('/api/comment', commentRouter);
-app.use('/api/account/profile', profileRouter);
-app.use('/api/account/email', emailRouter);
+app.use('/api/account', accountRouter);
 app.use('/api/forums', forumsRouter);
+app.use('api/friends', friendsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

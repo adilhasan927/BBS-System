@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-const connection = require('../utility/db');
-const sendError = require('../utility/error');
+const connection = require('../../utility/db');
+const sendError = require('../../utility/error');
 var sizeOf = require('image-size');
-const verify = require('../utility/verify');
+const verify = require('../../utility/verify');
 
 router.use('/', function(req, res, next) {
   const token = req.header('Authorization');
@@ -25,7 +25,6 @@ router.get('/', function(req, res, next) {
     .findOne({ "username": username })
     .then(user => {
       res.send(JSON.stringify({
-        successful: true,
         body: {
           profile: user.profile,
           verified: user.verified,

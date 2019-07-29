@@ -6,6 +6,7 @@ import { Message } from '../models/message';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import * as Deque from 'double-ended-queue';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-messenger',
@@ -28,7 +29,10 @@ export class MessengerComponent implements OnInit, OnDestroy {
     ])
   });
 
-  constructor(private messenger: MessengerService) {
+  constructor(
+    private messenger: MessengerService,
+    private storage: StorageService
+  ) {
     this.messages[Symbol.iterator] = function*() {
       const length = this.length;
       var i = 0;
@@ -36,21 +40,24 @@ export class MessengerComponent implements OnInit, OnDestroy {
         yield this.get(i++);
       }
     }
+    this.currentUsername = storage.getMsgUsername();
   }
 
   ngOnInit() {
-    this.messenger.listen();
     this.$messages = this.messenger.$messages;
     this._messagesSub = this.$messages.subscribe(messages => {
       console.log(this.messages, messages)
-      if (!this.messages.isEmpty && messages[0]) {
+      if (!this.messages.isEmpty() && messages.length != 0) {
         if (messages[0].timestamp < this.messages.get(0).timestamp) {
           this.messages.push(...messages);
+          console.log('push1');
         } else {
           this.messages.unshift(...messages);
+          console.log('unshift');
         }
       } else {
         this.messages.push(...messages);
+        console.log('push2');
       }
     });
   }
@@ -62,7 +69,7 @@ export class MessengerComponent implements OnInit, OnDestroy {
   navigate() {
     this.messages.clear();
     this.currentUsername = this.username;
-    this.messenger.joinConversation(this.currentUsername);
+    this.messenger.joinConversation(this.currentUsername, true);
   }
 
   send() {

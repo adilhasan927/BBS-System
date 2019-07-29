@@ -54,6 +54,10 @@ export class StorageService {
     var tabs = this.getTabs();
     tabs = tabs.filter(val => val.listingID != tab.listingID);
     this.storeTabs(tabs);
-  } 
+  }
+  
+  getMsgUsername() { return localStorage.getItem('msg-username'); }
+
+  setMsgUsername(username: string) { localStorage.setItem('msg-username', username); }
 
 }

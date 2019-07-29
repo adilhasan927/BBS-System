@@ -17,7 +17,7 @@ li {
   float: left;
 }
   
-li a {
+li a, .username {
   height: 15px;
   display: block;
   color: white;

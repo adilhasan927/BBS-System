@@ -2,6 +2,7 @@
   <ul>
     <li><a *ngIf="!isLoggedIn" routerLink="/login" routerLinkActive="active">Login</a></li>
     <li><a *ngIf="!isLoggedIn" routerLink="/signup" routerLinkActive="active">Signup</a></li>
+    <li><span class="username" *ngIf="isLoggedIn">{{username}}</span></li>
     <li><a *ngIf="isLoggedIn" routerLink="/login" routerLinkActive="active" (click)="logout()">Logout</a></li>
     <li><a *ngIf="isLoggedIn" [routerLink]="['/profile', username]" routerLinkActive="active">Profile</a></li>
     <li><a *ngIf="isLoggedIn" [routerLink]="['/messenger']" routerLinkActive="active">Messenger</a></li>

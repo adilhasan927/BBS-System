@@ -40,7 +40,7 @@ export class MessengerComponent implements OnInit, OnDestroy {
         yield this.get(i++);
       }
     }
-    this.currentUsername = storage.getMsgUsername();
+    this.currentUsername = this.storage.getMsgUsername();
   }
 
   ngOnInit() {
@@ -60,6 +60,7 @@ export class MessengerComponent implements OnInit, OnDestroy {
         console.log('push2');
       }
     });
+    this.messenger.getMessages(true);
   }
 
   ngOnDestroy() {
@@ -69,7 +70,7 @@ export class MessengerComponent implements OnInit, OnDestroy {
   navigate() {
     this.messages.clear();
     this.currentUsername = this.username;
-    this.messenger.joinConversation(this.currentUsername, true);
+    this.messenger.joinConversation(this.currentUsername);
   }
 
   send() {

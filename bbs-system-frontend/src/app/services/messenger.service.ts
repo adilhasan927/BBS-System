@@ -18,30 +18,32 @@ export class MessengerService {
     private socket: Socket,
     private storage: StorageService
   ) {
-    this.socket.on('connect', _ => this.listen());
+    this.socket.on('connect', _ => {
+      this.listen();
+      this.joinConversation();
+    });
     this.socket.on('disconnect', _ => console.log('disconnect'));
+    this.joinUsername = this.storage.getMsgUsername();
   }
 
   listen() {
     this.socket.emit('listen', this.storage.retrieveToken());
-    if (!this.joinUsername){
-      this.joinUsername = this.storage.getMsgUsername();
-    }
-    this.joinConversation(this.joinUsername, false);
   }
 
-  joinConversation(username: string, refresh: boolean) {
-    if (refresh) {
-      this.loc.position = 0;
-    }
+  joinConversation(username = this.joinUsername) {
     this.socket.emit('joinConversation', username);
     this.storage.setMsgUsername(username);
-    this.getMessages();
   }
 
-  getMessages() {
+  getMessages(reset = false) {
+    if (reset) {
+      this.loc.position = 0;
+    }
+    console.log(this.loc)
     this.socket.emit('getMessages', this.loc);
-    this.loc.position += 20;
+    setTimeout(() => {
+      this.loc.position += 20;
+    }, 0);
   }
 
   sendMessage(body: string) {

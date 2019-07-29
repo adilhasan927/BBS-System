@@ -12,3 +12,4 @@
   * Implement friends list frontend.
     * ~~Implement friends list API.~~
     * Implement friends list UI.
+    * Integrate friends list UI with backend.

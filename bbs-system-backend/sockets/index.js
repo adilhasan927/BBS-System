@@ -33,7 +33,6 @@ function init(io) {
       currentRoom = ([username, otherUsername].sort()).toString();
       socket.join(currentRoom);
       console.log(`Joined ${currentRoom}`);
-      position = 0;
       
       connection.then(dbs => {
         dbs.db('documents')
@@ -43,7 +42,6 @@ function init(io) {
         .then(val => {
           if (val != 2) {
             io.to(socket.id).emit('error', 'UserNotFoundError');
-            return;
           }
         })
       })
@@ -51,6 +49,7 @@ function init(io) {
 
     socket.on('getMessages', loc => {
       if (!loggedIn) return;
+      console.log(currentRoom, loc)
       getMessages(io, socket, currentRoom, loc);
     })
 

@@ -4,6 +4,10 @@
     <img *ngIf="profile.profileImage" width="100px" height="100px" [src]="'data:image/jpg;base64,'+profile.profileImage.value"
       alt="profile image">
     <p *ngIf="profile.profileImage">Profile text: {{ profile.profileText }}</p>
+    <div *ngIf="routeUsername != tokenUsername">
+      <button type="button" [disabled]="friendRequestSent" (click)="friendRequest()">Send friend request.</button>
+      <p *ngIf="friendRequestSent">Friend request already sent.</p>
+    </div>
     <div *ngIf="routeUsername == tokenUsername">
       <div *ngIf="verified" class="alert alert-danger">
         You have verified your email address.

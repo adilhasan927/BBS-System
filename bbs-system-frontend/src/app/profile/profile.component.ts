@@ -19,6 +19,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   verified: boolean = false;
   routeUsername: string = "";
   tokenUsername: string = "";
+  friendRequestSent: boolean;
   profileForm = new FormGroup({
     profileText: new FormControl('', [
       Validators.required,
@@ -60,6 +61,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.verified = next.body.verified;
       this.profileForm.get('profileText').setValue(next.body.profile.profileText);
     });
+    this.api.getSentFR(this.routeUsername).subscribe(next => {
+      this.friendRequestSent = next;
+    })
   }
 
   resendEmail() {
@@ -105,6 +109,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
       };
     }
+  }
+
+  friendRequest() {
+    this.api.sendFriendRequest(this.routeUsername).subscribe(next => {
+      this.friendRequestSent = true;
+    });
   }
 
   ngOnDestroy() {

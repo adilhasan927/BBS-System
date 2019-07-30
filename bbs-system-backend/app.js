@@ -35,7 +35,7 @@ app.use('/api/post', postRouter);
 app.use('/api/comment', commentRouter);
 app.use('/api/account', accountRouter);
 app.use('/api/forums', forumsRouter);
-app.use('api/friends', friendsRouter);
+app.use('/api/friends', friendsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

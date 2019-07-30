@@ -11,5 +11,8 @@
   * ~~Implement friends list backend.~~
   * Implement friends list frontend.
     * ~~Implement friends list API.~~
-    * Implement friends list UI.
-    * Integrate friends list UI with backend.
+    * ~~Implement friends list UI.~~
+    * Integrate friends list UI with API, backend.
+* Fix scroll position persistence handling.
+  * ~~Refactor post tabs, navigating handling.~~
+  * Keep track of profile requests status.

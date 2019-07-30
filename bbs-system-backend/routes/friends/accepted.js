@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var connection = require('../../utility/db');
 const sendError = require('../../utility/error');
+const verify = require('../../utility/verify');
 
 router.use('/', function(req, res, next) {
   const token = req.header('Authorization');
@@ -16,19 +17,22 @@ router.use('/', function(req, res, next) {
 })
 
 router.get('/', function(req, res, next) {
-  const username = req.query.tokenUsername;
+  const tokenUsername = req.query.tokenUsername;
   connection.then(dbs => {
     dbs.db('documents')
     .collection('users')
     .aggregate([
       { $match: { username: tokenUsername } },
-      { $unwind: "friends" },
-      { $replaceRoot: { newRoot: "friends" } },
-      { $filter: { accepted: true } }
+      { $unwind: "$friends" },
+      { $replaceRoot: { newRoot: "$friends" } },
+      { $match: { accepted: true } },
+      { $project: { username: 1 } }
     ]).toArray()
     .then(friends => {
+      console.log(friends);
       res.send(JSON.stringify(friends));
     }).catch(err => {
+      console.log(err);
       sendError(res, "DBError", 500);
     })
   })

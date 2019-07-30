@@ -23,6 +23,8 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { PostsPageComponent } from './posts-page/posts-page.component';
 import { CreateForumComponent } from './create-forum/create-forum.component';
 import { MessengerComponent } from './messenger/messenger.component';
+import { FriendsComponent } from './friends/friends.component';
+import { FriendComponent } from './friend/friend.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,9 @@ import { MessengerComponent } from './messenger/messenger.component';
     VerifyEmailComponent,
     PostsPageComponent,
     CreateForumComponent,
-    MessengerComponent
+    MessengerComponent,
+    FriendsComponent,
+    FriendComponent
   ],
   imports: [
     BrowserModule,

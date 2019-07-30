@@ -39,17 +39,6 @@ export class PostsPageComponent implements OnInit {
         }
       }
     })
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        if (this.posts) {
-          setTimeout(() => {
-            this.posts.resetPosts();
-          }, 0);
-          const tab = this.storage.getTab(this.listingID);
-          window.scrollTo(0, tab.scrollY);
-        }
-      }
-    })
   }
 
   onSubmit() {
@@ -59,6 +48,11 @@ export class PostsPageComponent implements OnInit {
     .then(val => {
       this.forumForm.reset();
     });
+  }
+
+  postsReset() {
+    const tab = this.storage.getTab(this.listingID);
+    window.scrollTo(0, tab.scrollY);
   }
 
 }

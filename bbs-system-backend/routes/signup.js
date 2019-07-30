@@ -48,6 +48,7 @@ router.post('/', function(req, res, next) {
         profileText: null,
         profileImage: null,
       },
+      friends: [],
       email: email,
       verified: false,
       admin: false

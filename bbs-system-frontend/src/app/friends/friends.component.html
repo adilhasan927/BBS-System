@@ -1,0 +1,15 @@
+<div class="content-container">
+  <div class="friends">
+    <p>Friends</p>
+    <div *ngFor="let friend of friends">
+      <app-friend (deleteFriend)="deleteFriend()" [username]="friend.username"></app-friend>
+    </div>
+  </div>
+  <div class="received">
+    <p>Received requests</p>
+    <div *ngFor="let request of received">
+      <app-friend (acceptRequest)="acceptRequest()" (rejectRequest)="rejectRequest()"
+      [request]="true" [username]="request.username"></app-friend>
+    </div>
+  </div>
+</div>

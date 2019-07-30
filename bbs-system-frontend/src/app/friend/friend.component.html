@@ -1,0 +1,13 @@
+<div id='border'>
+  <div class='userContainer'>
+    <img *ngIf="profile.profileImage" width="40px" height="40px"
+    [src]="'data:image/jpg;base64,'+profile.profileImage.value"
+    alt="profile image">
+    <a [routerLink]="['/profile', username]">Author: {{ username }}</a><br>
+  </div>
+  <hr>
+  <span *ngIf="profile.profileText">Profile text: {{ profile.profileText }}</span><br>
+  <button *ngIf="!request" type="button" (click)="deleteFriend.emit(username)">Delete</button>
+  <button *ngIf="request" type="button" (click)="acceptRequest.emit(username)">Accept</button>
+  <button *ngIf="request" type="button" (click)="rejectRequest.emit(username)">Reject</button>
+</div>

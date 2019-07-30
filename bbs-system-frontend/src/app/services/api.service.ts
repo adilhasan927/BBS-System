@@ -227,15 +227,23 @@ export class ApiService {
       );
   }
 
-  sendFriendRequest(username: string): Observable<any> {
+  getSentFR(username: string): Observable<any> {
     const url = this.queryURL + '/friends/sent';
     const httpOptions = {
       headers: this.httpOptions.headers,
       params: {
-        username: username,
-      },
+        username: username
+      }
     }
-    return this.http.post<any>(url, httpOptions)
+    return this.http.get<boolean>(url, httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  sendFriendRequest(username: string): Observable<any> {
+    const url = this.queryURL + '/friends/sent';
+    return this.http.post<any>(url, {username: username}, this.httpOptions)
       .pipe(
         catchError(this.handleError)
       );

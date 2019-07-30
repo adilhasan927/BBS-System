@@ -1,18 +1,19 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from "@angular/router"
 import { Post } from '../models/post';
 import { ApiService } from '../services/api.service';
 import { StorageService } from '../services/storage.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-posts',
   templateUrl: './posts.component.html',
   styleUrls: ['./posts.component.css']
 })
-export class PostsComponent implements OnInit {
+export class PostsComponent implements OnInit, OnDestroy {
   // ID of listing posts are to be retrieved from.
-  @Input() listingID: string;
+  private _listingID: string;
+  @Output() reset = new EventEmitter();
   posts: Post[] = [];
   // position in posts list.
   position: number = 0;
@@ -25,6 +26,14 @@ export class PostsComponent implements OnInit {
       Validators.required,
     ]),
   });
+  posts$: Subscription;
+
+  @Input() set listingID(listingID: string) {
+    this._listingID = listingID;
+    this.resetPosts();
+  }
+
+  get listingID(): string { return this._listingID }
 
   constructor(
     private api: ApiService,
@@ -42,11 +51,12 @@ export class PostsComponent implements OnInit {
 
   loadPosts(reset=false) {
     // fetches limit posts after post #position.
-    this.api.getContent(this.limit, this.position, this.listingID).subscribe(res => {
+    this.posts$ = this.api.getContent(this.limit, this.position, this.listingID).subscribe(res => {
       // in case more posts have been posted.
       this.endReached = false;
       if (reset) {
-        this.posts = res.body
+        this.posts = res.body;
+        this.reset.emit();
       } else {
         this.posts.push(...res.body);
       }
@@ -76,6 +86,10 @@ export class PostsComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    this.posts$.unsubscribe();
+  }
+  
   get post() { return this.postForm.get('post'); }
 
 }

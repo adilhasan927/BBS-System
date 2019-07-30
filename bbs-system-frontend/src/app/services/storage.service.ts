@@ -7,7 +7,12 @@ import { Tab } from '../models/tab';
 })
 export class StorageService {
 
-  constructor() { }
+  constructor() {
+    const tabs: Array<Tab> = this.getTabs();
+    if (!tabs || tabs.length == 0) {
+      this.storeTabs([new Tab("main.main", 0)])
+    }
+  }
 
   storeToken(token: string): void {
     localStorage.setItem('bbs-token', token);

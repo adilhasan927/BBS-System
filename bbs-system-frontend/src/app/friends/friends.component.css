@@ -1,0 +1,25 @@
+.content-container {
+  width: 90%;
+  margin: 10px 5px;
+  display: flex;
+  flex-direction: row;
+}
+.friends {
+  width: 50%;
+}
+.received {
+  width: 50%;
+  margin-right: 10px;
+}
+@media (max-width: 600px) {
+  .content-container {
+    width: auto;
+    display: block;
+  }
+  .friends {
+    width: auto;
+  }
+  .received{
+    width: auto;
+  }
+}

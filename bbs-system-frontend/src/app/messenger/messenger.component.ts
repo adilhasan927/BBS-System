@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
 import { MessengerService } from 'src/app/services/messenger.service';
@@ -18,7 +18,12 @@ export class MessengerComponent implements OnInit, OnDestroy {
   $messages: Observable<Message[]>;
   messages: Deque<Message> = new Deque();
   private _messagesSub: Subscription;
+
+  $error: Observable<string>;
+  private _errorSub: Subscription;
+
   currentUsername: string;
+
   messageForm = new FormGroup({
     body: new FormControl('', [
       Validators.required,
@@ -33,7 +38,8 @@ export class MessengerComponent implements OnInit, OnDestroy {
   constructor(
     private messenger: MessengerService,
     private storage: StorageService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.messages[Symbol.iterator] = function*() {
       const length = this.length;
@@ -53,31 +59,41 @@ export class MessengerComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.$messages = this.messenger.$messages;
     this._messagesSub = this.$messages.subscribe(messages => {
-      console.log(this.messages, messages)
       if (!this.messages.isEmpty() && messages.length != 0) {
         if (messages[0].timestamp < this.messages.get(0).timestamp) {
           this.messages.push(...messages);
-          console.log('push1');
         } else {
           this.messages.unshift(...messages);
-          console.log('unshift');
         }
       } else {
         this.messages.push(...messages);
-        console.log('push2');
       }
     });
-    this.messenger.getMessages(true);
+
+    this.$error = this.messenger.$error;
+    this._errorSub = this.$error.subscribe(error => {
+      if (error == "TokenError") {
+        console.error("TokenError");
+        this.router.navigate(["/login"]);
+      } else if (error == "UserNotFoundError") {
+        window.alert("No such user in friends list.");
+      } else if (error == "DBError") {
+        console.error("DBError");
+      }
+    })
   }
 
   ngOnDestroy() {
     this._messagesSub.unsubscribe();
+    this._errorSub.unsubscribe();
   }
 
   navigate() {
     this.messages.clear();
     this.currentUsername = this.username;
+    this.messenger.position = 0;
     this.messenger.joinConversation(this.currentUsername);
+    this.router.navigate(["/messenger", this.currentUsername]);
   }
 
   send() {

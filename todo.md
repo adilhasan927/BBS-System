@@ -9,3 +9,4 @@
 * ~~Implement private messages.~~
 * ~~Implement friends list.~~
 * ~~Fix scroll position persistence handling.~~
+* ~~Implement error handling in messenger.~~

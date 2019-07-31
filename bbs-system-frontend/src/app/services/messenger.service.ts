@@ -8,10 +8,16 @@ import { StorageService } from './storage.service';
 })
 export class MessengerService {
   $messages = this.socket.fromEvent<Message[]>('messages');
+  $error = this.socket.fromEvent<string>('error');
   joinUsername: string;
+  
   loc = {
     position: 0,
     limit: 20
+  }
+
+  set position(pos) {
+    this.loc.position = pos;
   }
 
   constructor(
@@ -31,14 +37,13 @@ export class MessengerService {
   }
 
   joinConversation(username = this.joinUsername) {
-    this.socket.emit('joinConversation', username);
+    this.socket.emit('joinConversation', username, _ => {
+      this.getMessages();
+    });
     this.storage.setMsgUsername(username);
   }
 
-  getMessages(reset = false) {
-    if (reset) {
-      this.loc.position = 0;
-    }
+  getMessages() {
     console.log(this.loc)
     this.socket.emit('getMessages', this.loc);
     setTimeout(() => {

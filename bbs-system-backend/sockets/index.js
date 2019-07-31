@@ -17,7 +17,7 @@ function init(io) {
     socket.on('listen', token => {
       verify(token, (err, val) => {
         if (err) {
-          io.to(socket.id).emit("error", err);
+          io.to(socket.id).emit("error", "TokenError");
           loggedIn = false;
         } else {
           loggedIn = true;
@@ -26,24 +26,32 @@ function init(io) {
       }, false)
     })
 
-    socket.on('joinConversation', otherUsername => {
-      if (!loggedIn || !currentRoom);
+    socket.on('joinConversation', (otherUsername, fn) => {
+      if (!loggedIn) return;
 
       socket.leave(currentRoom);
-      currentRoom = ([username, otherUsername].sort()).toString();
-      socket.join(currentRoom);
-      console.log(`Joined ${currentRoom}`);
-      
+      currentRoom = undefined;
+
       connection.then(dbs => {
         dbs.db('documents')
         .collection('users')
-        .find({ username: { $in: [username, otherUsername] } })
+        .find({
+          username: username,
+          friends: { username: otherUsername }
+        })
         .count()
         .then(val => {
-          if (val != 2) {
-            io.to(socket.id).emit('error', 'UserNotFoundError');
-          }
+          if (val != 1) { throw Error("UserNotFoundError"); }
+        }).catch(err => {
+          throw Error("DBError");
         })
+      }).then(_ => {
+        currentRoom = ([username, otherUsername].sort()).toString();
+        socket.join(currentRoom);
+        console.log(`Joined ${currentRoom}`);
+        fn();
+      }).catch(err => {
+        io.to(socket.id).emit('error', err.message);
       })
     })
 
@@ -87,7 +95,7 @@ function getMessages(io, socket, currentRoom, loc) {
       console.log("Messages fetched from db.");
     }).catch(err => {
       console.log(err);
-      io.to(currentRoom).emit('error', err.message);
+      io.to(currentRoom).emit('error', "DBError");
     })
   })
 }

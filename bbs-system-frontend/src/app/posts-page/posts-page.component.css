@@ -24,6 +24,7 @@
   }
   .sidebar {
     width: auto;
+    position: static;
     top: auto;
     bottom: 0px;
     align-self: end;

@@ -14,6 +14,6 @@
     </label>
   </div>
   <div class="posts">
-    <app-posts (reset)="postsReset()" [listingID]="listingID"></app-posts>
+    <app-posts (loaded)="postsLoaded()" [listingID]="listingID"></app-posts>
   </div>
 </div>

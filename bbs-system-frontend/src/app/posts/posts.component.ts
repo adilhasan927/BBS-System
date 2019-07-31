@@ -13,14 +13,13 @@ import { Subscription } from 'rxjs';
 export class PostsComponent implements OnInit, OnDestroy {
   // ID of listing posts are to be retrieved from.
   private _listingID: string;
-  @Output() reset = new EventEmitter();
   posts: Post[] = [];
   // position in posts list.
   position: number = 0;
   // number of posts to attempt loading when load button pressed.
   limit: number = 20;
   // has the end of the posts list been reached?
-  endReached: boolean = false;
+  endReached: boolean = true;
   postForm = new FormGroup({
     post: new FormControl('', [
       Validators.required,
@@ -32,8 +31,11 @@ export class PostsComponent implements OnInit, OnDestroy {
     this._listingID = listingID;
     this.resetPosts();
   }
-
   get listingID(): string { return this._listingID }
+
+  postsReceived: number = 0;
+  postsLoaded: number = 0;
+  @Output() loaded = new EventEmitter();
 
   constructor(
     private api: ApiService,
@@ -41,7 +43,6 @@ export class PostsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.loadPosts();
   }
 
   public resetPosts() {
@@ -52,20 +53,31 @@ export class PostsComponent implements OnInit, OnDestroy {
   loadPosts(reset=false) {
     // fetches limit posts after post #position.
     this.posts$ = this.api.getContent(this.limit, this.position, this.listingID).subscribe(res => {
-      // in case more posts have been posted.
-      this.endReached = false;
+      // records how many posts were received.
+      this.postsReceived = res.body.length;
       if (reset) {
         this.posts = res.body;
-        this.reset.emit();
       } else {
         this.posts.push(...res.body);
       }
       this.position += this.limit;
-      // tells user that no posts remain to be loaded.
-      if (res.body.length < this.limit) {
+      // tells user if posts remain to be received.
+      if (this.postsReceived != this.limit) {
         this.endReached = true;
+      } else {
+        this.endReached = false;
       }
     });
+  }
+
+  postLoaded() {
+    this.postsLoaded += 1;
+    if (this.postsLoaded == this.postsReceived) {
+      this.postsLoaded = 0;
+      this.postsReceived = 0;
+      console.log("posts component loaded");
+      this.loaded.emit();
+    }
   }
 
   addPost(_id, username, body) {
@@ -75,14 +87,10 @@ export class PostsComponent implements OnInit, OnDestroy {
   // posts post to API.
   onSubmit() {
     var text = this.postForm.get('post').value;
-    var loginReturn = this.api.post(
-      text,
-      this.listingID
-    // if not error takes place,
+    this.api.post(text, this.listingID
     ).subscribe(res => {
       this.addPost(res.body, this.storage.retrieveUsername(), text);
       this.postForm.reset();
-    // if error takes place.
     });
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Post } from '../models/post';
 import { Profile } from '../models/profile';
 import { ApiService } from '../services/api.service';
@@ -18,6 +18,7 @@ export class PostComponent implements OnInit {
     profileText: "",
     profileImage: "",
   };
+  @Output() loaded = new EventEmitter;
 
   constructor(
     private api: ApiService,
@@ -27,6 +28,8 @@ export class PostComponent implements OnInit {
     // retrieve profile of user from API.
     this.api.getProfile(this.post.username).subscribe(next => {
       this.profile = next.body.profile;
+      console.log("post component loaded.");
+      this.loaded.emit();
     });
   }
 

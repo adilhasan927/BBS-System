@@ -9,7 +9,7 @@
 <p>Posts</p>
 <button (click)="resetPosts()">Reset posts.</button>
 <div class='posts' *ngFor="let post of posts">
-  <app-post [listingID]='listingID' [post]=post></app-post>
+  <app-post (loaded)="postLoaded()" [listingID]='listingID' [post]=post></app-post>
 </div>
 <button (click)="loadPosts()">Load further posts.</button>
 <p *ngIf=endReached>There don't appear to be further posts.</p>

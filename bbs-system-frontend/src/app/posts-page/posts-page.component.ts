@@ -50,9 +50,10 @@ export class PostsPageComponent implements OnInit {
     });
   }
 
-  postsReset() {
+  postsLoaded() {
     const tab = this.storage.getTab(this.listingID);
     window.scrollTo(0, tab.scrollY);
+    console.log("posts page component loaded.")
   }
 
 }

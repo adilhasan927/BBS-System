@@ -8,6 +8,4 @@
 * ~~Implement user-creatable subforums.~~
 * ~~Implement private messages.~~
 * ~~Implement friends list.~~
-* Fix scroll position persistence handling.
-  * ~~Refactor post tabs, navigating handling.~~
-  * Keep track of profile requests status.
+* ~~Fix scroll position persistence handling.~~

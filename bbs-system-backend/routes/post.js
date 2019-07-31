@@ -18,17 +18,10 @@ router.use('/', function(req, res, next) {
 })
 
 router.get('/', function(req, res, next) {
-  var token = req.header('Authorization');
   const position = JSON.parse(req.query.position);
   const limit = JSON.parse(req.query.limit);
   const listingID = req.query.listingID;
   const username = req.query.username;
-  if (listingID.slice(0, 5) == 'user.') {
-    if (listingID.slice(5) != username) {
-      sendError(res, "PermissionsError", 403);
-      return null;
-    }
-  }
   connection.then(dbs => {
     dbs.db('documents')
     .collection('subforums')
@@ -41,10 +34,10 @@ router.get('/', function(req, res, next) {
     ])
     .toArray()
     .then(arr => {
-      res.send(JSON.stringify({
+      res.send({
         successful: true,
         body: arr,
-      }));
+      });
     }).catch(err => {
       console.log(err);
       sendError(res, "DBError", 500);
@@ -53,7 +46,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-  const token = req.header('Authorization');
   const listingID = req.query.listingID;
   const body = req.body.body;
   const username = req.query.username;

@@ -19,12 +19,16 @@ router.use('/', function(req, res, next) {
 router.get('/', function(req, res, next) {
   const tokenUsername = req.query.tokenUsername;
   const username = req.query.username;
+  // send true if friend or friend request sent, otherwise false.
   connection.then(dbs => {
     dbs.db('documents')
     .collection('users')
     .find({
       username: username,
-      friends: { $elemMatch: { username: tokenUsername } }
+      $or: [
+        { friends: { $elemMatch: { username: tokenUsername } } },
+        { friendRequests: { $elemMatch: { username: tokenUsername } } },
+      ]
     })
     .count()
     .then(num => {
@@ -40,24 +44,27 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
   const tokenUsername = req.query.tokenUsername;
   const username = req.body.username;
+  // add to friend requests array if not already present.
   connection.then(dbs => {
+    // see if any such request already in array.
     dbs.db('documents')
     .collection('users')
     .find({
       username: username,
-      friends: { $elemMatch: { username: tokenUsername } }
+      friendRequests: { $elemMatch: { username: tokenUsername } }
     })
     .count()
     .then(num => {
       console.log(num);
+      // if matching request not in array.
       if (!num) {
+        // add request to friend requests array.
         dbs.db('documents')
         .collection('users')
         .updateOne(
           { username: username },
-          { $push: { friends: {
-            username: tokenUsername,
-            accepted: false
+          { $push: { friendRequests: {
+            username: tokenUsername
           } } }
         ).then(val => res.send())
         .catch(err => { throw err; })

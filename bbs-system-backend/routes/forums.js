@@ -6,7 +6,7 @@ const verify = require('../utility/verify');
 const captcha = require('../utility/captcha');
 const createSubforum = require('../utility/forums');
 
-router.use('/', function(req, res, next) {
+router.use('/post', function(req, res, next) {
   captcha(req.body.captchaResponse,
     (err, result, body) => {
       if (err) {

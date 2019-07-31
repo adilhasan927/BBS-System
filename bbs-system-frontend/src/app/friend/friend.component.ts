@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Profile } from '../models/profile';
 import { ApiService } from '../services/api.service';
 
@@ -18,9 +18,9 @@ export class FriendComponent implements OnInit {
     profileImage: "",
   };
 
-  deleteFriend = new EventEmitter();
-  acceptRequest = new EventEmitter();
-  rejectRequest = new EventEmitter();
+  @Output() deleteFriend = new EventEmitter();
+  @Output() acceptRequest = new EventEmitter();
+  @Output() rejectRequest = new EventEmitter();
 
   constructor(
     private api: ApiService,

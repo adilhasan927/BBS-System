@@ -21,9 +21,10 @@ const routes: Routes = [
   { path: 'comments/:listingID/:id', component: CommentsComponent, canActivate: [AuthGuard] },
   { path: 'verify-email/:token', component: VerifyEmailComponent },
   { path: 'not-found', component: NotFoundComponent },
-  { path: 'create-forum', component: CreateForumComponent },
-  { path: 'messenger', component: MessengerComponent },
-  { path: 'friends', component: FriendsComponent },
+  { path: 'create-forum', component: CreateForumComponent, canActivate: [AuthGuard] },
+  { path: 'messenger', redirectTo: 'messenger/', canActivate: [AuthGuard] },
+  { path: 'messenger/:name', component: MessengerComponent, canActivate: [AuthGuard] },
+  { path: 'friends', component: FriendsComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: 'posts/main.main', pathMatch: 'full'},
   { path: '**', redirectTo: 'not-found', pathMatch: 'full'},
 ];

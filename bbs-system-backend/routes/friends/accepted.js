@@ -4,6 +4,7 @@ var connection = require('../../utility/db');
 const sendError = require('../../utility/error');
 const verify = require('../../utility/verify');
 
+// authorisation.
 router.use('/', function(req, res, next) {
   const token = req.header('Authorization');
   verify(token, (err, val) => {
@@ -18,29 +19,45 @@ router.use('/', function(req, res, next) {
 
 router.get('/', function(req, res, next) {
   const tokenUsername = req.query.tokenUsername;
+  const username = req.query.username;
   connection.then(dbs => {
-    dbs.db('documents')
-    .collection('users')
-    .aggregate([
-      { $match: { username: tokenUsername } },
-      { $unwind: "$friends" },
-      { $replaceRoot: { newRoot: "$friends" } },
-      { $match: { accepted: true } },
-      { $project: { username: 1 } }
-    ]).toArray()
-    .then(friends => {
-      console.log(friends);
-      res.send(JSON.stringify(friends));
-    }).catch(err => {
-      console.log(err);
-      sendError(res, "DBError", 500);
-    })
+    // if no username query param return list of friends.
+    if (!username) {
+      dbs.db('documents')
+      .collection('users')
+      .aggregate([
+        { $match: { username: tokenUsername } },
+        { $unwind: "$friends" },
+        { $replaceRoot: { newRoot: "$friends" } },
+        { $project: { username: 1 } }
+      ]).toArray()
+      .then(friends => {
+        res.send(friends);
+      }).catch(err => {
+        sendError(res, "DBError", 500);
+      })
+    // else return if queried user is friend.
+    } else {
+      dbs.db('documents')
+      .collection('users')
+      .findOne({
+        username: tokenUsername,
+        friends: { username: username}
+      })
+      .then(user => {
+        // send true if matching user exists, else false.
+        res.send(user ? true : false);
+      }).catch(err => {
+        sendError(res, "DBError", 500);
+      })
+    }
   })
 })
 
 router.delete('/', function(req, res, next) {
   const tokenUsername = req.query.tokenUsername;
   const username = req.query.username;
+  // remove friend from friends array.
   connection.then(dbs => {
     dbs.db('documents')
     .collection('users')

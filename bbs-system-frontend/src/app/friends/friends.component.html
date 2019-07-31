@@ -2,13 +2,13 @@
   <div class="friends">
     <p>Friends</p>
     <div *ngFor="let friend of friends">
-      <app-friend (deleteFriend)="deleteFriend()" [username]="friend.username"></app-friend>
+      <app-friend (deleteFriend)="deleteFriend($event)" [username]="friend.username"></app-friend>
     </div>
   </div>
   <div class="received">
     <p>Received requests</p>
     <div *ngFor="let request of received">
-      <app-friend (acceptRequest)="acceptRequest()" (rejectRequest)="rejectRequest()"
+      <app-friend (acceptRequest)="acceptRequest($event)" (rejectRequest)="rejectRequest($event)"
       [request]="true" [username]="request.username"></app-friend>
     </div>
   </div>

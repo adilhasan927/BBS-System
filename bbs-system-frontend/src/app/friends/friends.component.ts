@@ -1,37 +1,45 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { ApiService } from '../services/api.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-friends',
   templateUrl: './friends.component.html',
   styleUrls: ['./friends.component.css']
 })
-export class FriendsComponent implements OnInit, OnDestroy {
-  friends: string[] = []
-  received: string[] = []
-
-  friends$: Subscription;
-  received$: Subscription;
+export class FriendsComponent implements OnInit {
+  friends: any[] = []
+  received: any[] = []
 
   constructor(
     private api: ApiService,
   ) { }
 
   ngOnInit() {
-    this.friends$ = this.api.getFriendsList().subscribe(next => { this.friends = next; })
-    this.received$ = this.api.getFriendRequests().subscribe(next => { this.received = next; })
+    this.loadData();
   }
 
-  deleteFriend(username: string) { }
+  loadData() {
+    this.api.getFriendsList().subscribe(next => { this.friends = next; })
+    this.api.getFriendRequests().subscribe(next => { this.received = next; })
+  }
 
-  acceptRequest(username: string) { }
+  deleteFriend(username: string) {
+    this.api.removeFriend(username).subscribe(next => {
+      this.friends = this.friends.filter(friend => friend.username != username);
+    })
+  }
 
-  rejectRequest(username: string) { }
+  acceptRequest(username: string) {
+    this.api.acceptFriendRequest(username).subscribe(next => {
+      this.received = this.received.filter(friend => friend.username != username);
+      this.friends.push({ username: username });
+    })
+  }
 
-  ngOnDestroy() {
-    this.friends$.unsubscribe();
-    this.received$.unsubscribe();
+  rejectRequest(username: string) {
+    this.api.deleteFriendRequest(username).subscribe(next => {
+      this.received = this.received.filter(friend => friend.username != username);
+    })
   }
 
 }

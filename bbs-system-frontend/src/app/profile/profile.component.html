@@ -6,7 +6,7 @@
     <p *ngIf="profile.profileImage">Profile text: {{ profile.profileText }}</p>
     <div *ngIf="routeUsername != tokenUsername">
       <button type="button" [disabled]="friendRequestSent" (click)="friendRequest()">Send friend request.</button>
-      <p *ngIf="friendRequestSent">Friend request already sent.</p>
+      <p *ngIf="friendRequestSent">Friend request sent.</p>
     </div>
     <div *ngIf="routeUsername == tokenUsername">
       <div *ngIf="verified" class="alert alert-danger">

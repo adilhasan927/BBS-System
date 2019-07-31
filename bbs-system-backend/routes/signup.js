@@ -49,6 +49,7 @@ router.post('/', function(req, res, next) {
         profileImage: null,
       },
       friends: [],
+      friendRequests: [],
       email: email,
       verified: false,
       admin: false

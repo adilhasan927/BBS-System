@@ -39,10 +39,10 @@ router.get('/', function(req, res, next) {
     .toArray()
     .then(comments => {
       console.log(comments);
-      res.send(JSON.stringify({
+      res.send({
         successful: true,
         body: comments,
-      }));
+      });
     }).catch(err => {
       console.log(err);
       sendError(res, "DBError", 500);

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Credentials } from '../models/credentials';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -177,6 +177,20 @@ export class ApiService {
       );
   }
 
+  isFriend(username: string): Observable<any> {
+    const url = this.queryURL + '/friends/accepted';
+    const httpOptions = {
+      headers: this.httpOptions.headers,
+      params: {
+        username: username,
+      },
+    }
+    return this.http.get<any>(url, httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   removeFriend(username: string): Observable<any> {
     const url = this.queryURL + '/friends/accepted';
     const httpOptions = {
@@ -205,9 +219,10 @@ export class ApiService {
       headers: this.httpOptions.headers,
       params: {
         username: username,
+        accept: JSON.stringify(true)
       },
     }
-    return this.http.patch<any>(url, httpOptions)
+    return this.http.delete<any>(url, httpOptions)
       .pipe(
         catchError(this.handleError)
       );
@@ -219,6 +234,7 @@ export class ApiService {
       headers: this.httpOptions.headers,
       params: {
         username: username,
+        accept: JSON.stringify(false)
       },
     }
     return this.http.delete<any>(url, httpOptions)

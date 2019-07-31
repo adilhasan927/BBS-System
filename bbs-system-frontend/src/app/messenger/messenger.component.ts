@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
 import { MessengerService } from 'src/app/services/messenger.service';
@@ -31,7 +32,8 @@ export class MessengerComponent implements OnInit, OnDestroy {
 
   constructor(
     private messenger: MessengerService,
-    private storage: StorageService
+    private storage: StorageService,
+    private route: ActivatedRoute
   ) {
     this.messages[Symbol.iterator] = function*() {
       const length = this.length;
@@ -40,7 +42,12 @@ export class MessengerComponent implements OnInit, OnDestroy {
         yield this.get(i++);
       }
     }
-    this.currentUsername = this.storage.getMsgUsername();
+    this.route.paramMap.subscribe(paramMap => {
+      this.currentUsername = paramMap.get('name');
+    })
+    if (!this.currentUsername) {
+      this.currentUsername = this.storage.getMsgUsername();
+    }
   }
 
   ngOnInit() {
@@ -75,6 +82,7 @@ export class MessengerComponent implements OnInit, OnDestroy {
 
   send() {
     this.messenger.sendMessage(this.body);
+    this.messageForm.reset();
   }
 
   load() {

@@ -24,12 +24,12 @@ router.get('/', function(req, res, next) {
     .collection('users')
     .findOne({ "username": username })
     .then(user => {
-      res.send(JSON.stringify({
+      res.send({
         body: {
           profile: user.profile,
           verified: user.verified,
         }
-      }));
+      });
     }).catch(err => {
       console.log(err);
       sendError(res, "DBError", 500);

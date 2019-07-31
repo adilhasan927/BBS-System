@@ -5,10 +5,10 @@
     <li><span class="username" *ngIf="isLoggedIn">{{username}}</span></li>
     <li><a *ngIf="isLoggedIn" routerLink="/login" routerLinkActive="active" (click)="logout()">Logout</a></li>
     <li><a *ngIf="isLoggedIn" [routerLink]="['/profile', username]" routerLinkActive="active">Profile</a></li>
-    <li><a *ngIf="isLoggedIn" [routerLink]="['/messenger']" routerLinkActive="active">Messenger</a></li>
+    <li><a *ngIf="isLoggedIn" [routerLink]="['/messenger/']" routerLinkActive="active">Messenger</a></li>
     <li><a *ngIf="isLoggedIn" [routerLink]="['/friends']" routerLinkActive="active">Friends</a></li>
     <li><a [routerLink]="['/posts', 'main.main']" routerLinkActive="active">Posts</a></li>
-    <li *ngFor="let tab of tabs">
+    <li *ngFor="let tab of tabs | slice:1">
       <span>
         <a [routerLink]="['/posts', tab.listingID]" routerLinkActive="active">{{tab.listingID}}</a>
         <a (click)="deleteTab(tab)">⌫</a>

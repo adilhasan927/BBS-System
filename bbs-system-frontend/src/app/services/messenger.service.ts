@@ -5,6 +5,8 @@ import { Message } from '../models/message';
 import { StorageService } from './storage.service';
 
 import * as Deque from 'double-ended-queue';
+import { Subject } from 'rxjs';
+import { throttleTime } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +16,8 @@ export class MessengerService {
   messages: Deque<Message> = new Deque();
 
   $error = this.socket.fromEvent<string>('error');
+  $otherTyping = this.socket.fromEvent<any>('typing');
+  $thisTyping = new Subject()
 
   private _joinUsername: string;
   set joinUsername(username) {
@@ -63,6 +67,12 @@ export class MessengerService {
       } else {
         this.messages.push(...messages);
       }
+    });
+
+    this.$thisTyping.pipe(
+      throttleTime(1000)
+    ).subscribe(_ => {
+      this.socket.emit('typing');
     });
   }
 

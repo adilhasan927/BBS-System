@@ -17,7 +17,7 @@ router.use('/', function(req, res, next) {
   })
 })
 
-router.get('/', function(req, res, next) {
+router.get('/', async function(req, res, next) {
   const position = JSON.parse(req.query.position);
   const limit = JSON.parse(req.query.limit);
   const listingID = req.query.listingID;

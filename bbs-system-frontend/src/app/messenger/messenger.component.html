@@ -1,6 +1,7 @@
 <div class="content-container">
   <div class="messages">
     <p>Messages with {{messenger.joinUsername}}.</p>
+    <p *ngIf="otherTyping">{{messenger.joinUsername}} is typing.</p>
     <div class="message" *ngFor="let message of messenger.messages">
       From: {{ message.from }}<br>
       Body: {{ message.body }}<br>

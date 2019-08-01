@@ -49,6 +49,7 @@ router.delete('/', async function(req, res, next) {
     { username: tokenUsername },
     { $pull: { friendRequests: { username: username } } }
   ).catch(err => { throw err; })
+  .then(_ => {
   // add to friends array of both users if accepted.
   if (accepted) {
     // add query param friend to token user.
@@ -65,10 +66,9 @@ router.delete('/', async function(req, res, next) {
       { username: { $in: [tokenUsername] } },
       { $push: { friends: { username: username } } 
     }).catch(err => { throw err; });
-  }}
-).then(responses => res.send())
-.catch(errs => {
-  sendError(res, "DBError", 500);
+  }})
+  .then(responses => res.send())
+  .catch(err => { sendError(res, "DBError", 500); });
 })
 
 module.exports = router;

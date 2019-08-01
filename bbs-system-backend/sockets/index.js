@@ -2,7 +2,7 @@ const connection = require('../utility/db');
 const verify = require('../utility/verify');
 const Message = require('../models/message');
 const SocketIOStatic = require('socket.io');
-
+const debounce = require('lodash/debounce');
 /**
  * @param {SocketIO.Server} io 
  */
@@ -57,14 +57,19 @@ function init(io) {
 
     socket.on('getMessages', loc => {
       if (!loggedIn) return;
-      console.log(currentRoom, loc)
+      console.log(currentRoom, loc);
       getMessages(io, socket, currentRoom, loc);
     })
 
     socket.on('sendMessage', message => {
-      if (!loggedIn || !currentRoom) return;
+      if (!loggedIn) return;
       sendMessage(io, socket, currentRoom, message);
     })
+
+    socket.on('typing', debounce(_ => {
+      if (!loggedIn) return;
+      socket.broadcast.to(currentRoom).emit('typing');
+    }, 1000, { leading: true }))
   })
 }
 

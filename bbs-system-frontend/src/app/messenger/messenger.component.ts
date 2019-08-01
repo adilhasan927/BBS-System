@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { MessengerService } from 'src/app/services/messenger.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { StorageService } from '../services/storage.service';
+import { debounceTime, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-messenger',
@@ -13,14 +14,18 @@ import { StorageService } from '../services/storage.service';
   styleUrls: ['./messenger.component.css']
 })
 export class MessengerComponent implements OnInit, OnDestroy {
-  $error: Observable<string>;
   private _errorSub: Subscription;
+
+  private _otherTypingSub: Subscription;
+  otherTyping: boolean = false;
 
   messageForm = new FormGroup({
     body: new FormControl('', [
       Validators.required,
     ])
   });
+  private _messageFormSub: Subscription;
+
   navForm = new FormGroup({
     username: new FormControl('', [
       Validators.required,
@@ -43,8 +48,7 @@ export class MessengerComponent implements OnInit, OnDestroy {
       }
     })
 
-    this.$error = this.messenger.$error;
-    this._errorSub = this.$error.subscribe(error => {
+    this._errorSub = this.messenger.$error.subscribe(error => {
       if (error == "TokenError") {
         console.error("TokenError");
         this.router.navigate(["/login"]);
@@ -54,11 +58,23 @@ export class MessengerComponent implements OnInit, OnDestroy {
         console.error("DBError");
       }
     })
+
+    this._otherTypingSub = this.messenger.$otherTyping.pipe(
+      tap(_ => this.otherTyping = true),
+      debounceTime(2000),
+    ).subscribe(_ => {
+      this.otherTyping = false;
+    })
+
+    this._messageFormSub = this.messageForm.get('body')
+    .valueChanges.subscribe(_ => this.onTyping());
   }
 
   ngOnDestroy() {
     console.log("destroy");
     this._errorSub.unsubscribe();
+    this._otherTypingSub.unsubscribe();
+    this._messageFormSub.unsubscribe();
   }
 
   navigate() {
@@ -72,6 +88,10 @@ export class MessengerComponent implements OnInit, OnDestroy {
 
   load() {
     this.messenger.getMessages();
+  }
+
+  onTyping() {
+    this.messenger.$thisTyping.next();
   }
 
   get body() { return this.messageForm.get('body').value; }

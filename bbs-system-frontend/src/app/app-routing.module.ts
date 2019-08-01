@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, RouteReuseStrategy } from '@angular/router';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { SignupPageComponent } from './signup-page/signup-page.component';
 import { PostsPageComponent } from './posts-page/posts-page.component';
@@ -15,7 +15,7 @@ import { AuthGuard } from './auth.guard';
 const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
   { path: 'signup', component: SignupPageComponent },
-  { path: 'posts/:listingID', component: PostsPageComponent, canActivate: [AuthGuard] },
+  { path: 'posts/:listingID', component: PostsPageComponent, data: { shouldReuse: true }, canActivate: [AuthGuard] },
   { path: 'profile', redirectTo: 'profile/', canActivate: [AuthGuard] },
   { path: 'profile/:name', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'comments/:listingID/:id', component: CommentsComponent, canActivate: [AuthGuard] },

@@ -3,10 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
 import { MessengerService } from 'src/app/services/messenger.service';
-import { Message } from '../models/message';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import * as Deque from 'double-ended-queue';
 import { StorageService } from '../services/storage.service';
 
 @Component({
@@ -15,14 +13,8 @@ import { StorageService } from '../services/storage.service';
   styleUrls: ['./messenger.component.css']
 })
 export class MessengerComponent implements OnInit, OnDestroy {
-  $messages: Observable<Message[]>;
-  messages: Deque<Message> = new Deque();
-  private _messagesSub: Subscription;
-
   $error: Observable<string>;
   private _errorSub: Subscription;
-
-  currentUsername: string;
 
   messageForm = new FormGroup({
     body: new FormControl('', [
@@ -40,35 +32,16 @@ export class MessengerComponent implements OnInit, OnDestroy {
     private storage: StorageService,
     private route: ActivatedRoute,
     private router: Router
-  ) {
-    this.messages[Symbol.iterator] = function*() {
-      const length = this.length;
-      var i = 0;
-      while (i<length) {
-        yield this.get(i++);
-      }
-    }
-    this.route.paramMap.subscribe(paramMap => {
-      this.currentUsername = paramMap.get('name');
-    })
-    if (!this.currentUsername) {
-      this.currentUsername = this.storage.getMsgUsername();
-    }
-  }
+  ) { }
 
   ngOnInit() {
-    this.$messages = this.messenger.$messages;
-    this._messagesSub = this.$messages.subscribe(messages => {
-      if (!this.messages.isEmpty() && messages.length != 0) {
-        if (messages[0].timestamp < this.messages.get(0).timestamp) {
-          this.messages.push(...messages);
-        } else {
-          this.messages.unshift(...messages);
-        }
+    this.route.params.subscribe(params => {
+      if (!params.name) {
+        this.messenger.joinUsername = this.storage.getMsgUsername();
       } else {
-        this.messages.push(...messages);
+        this.messenger.joinUsername = params.name;
       }
-    });
+    })
 
     this.$error = this.messenger.$error;
     this._errorSub = this.$error.subscribe(error => {
@@ -84,16 +57,12 @@ export class MessengerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._messagesSub.unsubscribe();
+    console.log("destroy");
     this._errorSub.unsubscribe();
   }
 
   navigate() {
-    this.messages.clear();
-    this.currentUsername = this.username;
-    this.messenger.position = 0;
-    this.messenger.joinConversation(this.currentUsername);
-    this.router.navigate(["/messenger", this.currentUsername]);
+    this.router.navigate(["/messenger", this.formUsername]);
   }
 
   send() {
@@ -107,6 +76,6 @@ export class MessengerComponent implements OnInit, OnDestroy {
 
   get body() { return this.messageForm.get('body').value; }
 
-  get username() { return this.navForm.get('username').value; }
+  get formUsername() { return this.navForm.get('username').value; }
 
 }

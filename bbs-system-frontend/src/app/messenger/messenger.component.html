@@ -1,11 +1,11 @@
 <div class="content-container">
   <div class="messages">
-    <p>Messages with {{currentUsername}}.</p>
-    <div class="message" *ngFor="let message of messages">
+    <p>Messages with {{messenger.joinUsername}}.</p>
+    <div class="message" *ngFor="let message of messenger.messages">
       From: {{ message.from }}<br>
       Body: {{ message.body }}<br>
     </div>
-    <p *ngIf="!messages.isEmpty">There don't seem to be any messages here.</p>
+    <p *ngIf="!messenger.messages.isEmpty">There don't seem to be any messages here.</p>
     <button (click)="load()">Load older messages.</button>
   </div>
   <div class="forms">

@@ -10,3 +10,9 @@
 * ~~Implement friends list.~~
 * ~~Fix scroll position persistence handling.~~
 * ~~Implement error handling in messenger.~~
+* Implement typing indicator in messenger.
+  * Implement typing indicator on backend.
+  * Implement typing indicator on frontend.
+* Implement file uploads in messenger.
+  * Implement file uploads on backend.
+  * Implement file uploads on frontend.

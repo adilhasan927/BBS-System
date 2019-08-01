@@ -22,7 +22,7 @@ router.use('/', function(req, res, next) {
     });
 })
 
-router.post('/', function(req, res, next) {
+router.post('/', async function(req, res, next) {
   const username = req.body.credentials.username;
   const password = req.body.credentials.password;
   const email = req.body.credentials.email;
@@ -38,37 +38,36 @@ router.post('/', function(req, res, next) {
   }
   var token = jwt.sign(payload, getSecret(), { expiresIn: "2 days" } );
   verifyUser(email, username);
-  connection.then(dbs => {
-    dbs.db("documents")
-    .collection("users")
-    .insertOne({
-      username: username,
-      password: password,
-      profile: {
-        profileText: null,
-        profileImage: null,
-      },
-      friends: [],
-      friendRequests: [],
-      email: email,
-      verified: false,
-      admin: false
-    }).then(val => {
-        createSubforum(dbs, 'user.'+username, username)
-      }).then( val => {
-        res.send(JSON.stringify({
-          successful: true,
-          body: token,
-          captchaSuccess: true,
-        }));
-      });
+  const dbs = await connection;
+  dbs.db("documents")
+  .collection("users")
+  .insertOne({
+    username: username,
+    password: password,
+    profile: {
+      profileText: null,
+      profileImage: null,
+    },
+    friends: [],
+    friendRequests: [],
+    email: email,
+    verified: false,
+    admin: false
+  }).then(val => {
+      createSubforum(dbs, 'user.'+username, username)
+  }).then(val => {
+    res.send(JSON.stringify({
+      successful: true,
+      body: token,
+      captchaSuccess: true,
+    }));
   }).catch(err => {
     if (err.code == '11000)') {
       sendError(res, "DuplicateError", 400)
     } else {
       sendError(res, "DBError", 500)
     }
-  });
+  })
 });
 
 module.exports = router;

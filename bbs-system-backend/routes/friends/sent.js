@@ -16,64 +16,62 @@ router.use('/', function(req, res, next) {
   })
 })
 
-router.get('/', function(req, res, next) {
+router.get('/', async function(req, res, next) {
   const tokenUsername = req.query.tokenUsername;
   const username = req.query.username;
+  const dbs = await connection;
   // send true if friend or friend request sent, otherwise false.
-  connection.then(dbs => {
-    dbs.db('documents')
-    .collection('users')
-    .find({
-      username: username,
-      $or: [
-        { friends: { $elemMatch: { username: tokenUsername } } },
-        { friendRequests: { $elemMatch: { username: tokenUsername } } },
-      ]
-    })
-    .count()
-    .then(num => {
-      if (num) {
-        res.send(true);
-      } else {
-        res.send(false);
-      }
-    })
+  dbs.db('documents')
+  .collection('users')
+  .find({
+    username: username,
+    $or: [
+      { friends: { $elemMatch: { username: tokenUsername } } },
+      { friendRequests: { $elemMatch: { username: tokenUsername } } },
+    ]
+  })
+  .count()
+  .then(num => {
+    if (num) {
+      res.send(true);
+    } else {
+      res.send(false);
+    }
   })
 })
 
-router.post('/', function(req, res, next) {
+router.post('/', async function(req, res, next) {
   const tokenUsername = req.query.tokenUsername;
   const username = req.body.username;
   // add to friend requests array if not already present.
-  connection.then(dbs => {
-    // see if any such request already in array.
-    dbs.db('documents')
-    .collection('users')
-    .find({
-      username: username,
-      friendRequests: { $elemMatch: { username: tokenUsername } }
-    })
-    .count()
-    .then(num => {
-      console.log(num);
-      // if matching request not in array.
-      if (!num) {
-        // add request to friend requests array.
-        dbs.db('documents')
-        .collection('users')
-        .updateOne(
-          { username: username },
-          { $push: { friendRequests: {
-            username: tokenUsername
-          } } }
-        ).then(val => res.send())
-        .catch(err => { throw err; })
-      } else {
-        res.send()
-      }
-    }).catch(err => {
-      sendError(res, "DBError", 500);
-    })
+  const dbs = await connection;
+  // see if any such request already in array.
+  dbs.db('documents')
+  .collection('users')
+  .find({
+    username: username,
+    friendRequests: { $elemMatch: { username: tokenUsername } }
+  })
+  .count()
+  .then(num => {
+    console.log(num);
+    // if matching request not in array.
+    if (!num) {
+      // add request to friend requests array.
+      dbs.db('documents')
+      .collection('users')
+      .updateOne(
+        { username: username },
+        { $push: { friendRequests: {
+          username: tokenUsername
+        } } }
+      ).then(val => res.send())
+      .catch(err => { throw err; })
+    } else {
+      res.send()
+    }
+  }).catch(err => {
+    sendError(res, "DBError", 500);
   })
 })
 

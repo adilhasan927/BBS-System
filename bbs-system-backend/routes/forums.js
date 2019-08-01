@@ -31,7 +31,7 @@ router.use('/', function(req, res, next) {
   })
 })
 
-router.post('/', function(req, res, next) {
+router.post('/', async function(req, res, next) {
   const listingID = req.body.listingID;
   const description = req.body.description;
   const username = req.query.username;
@@ -40,17 +40,16 @@ router.post('/', function(req, res, next) {
     sendError(res, "PermissionsError", 403);
     return null;
   }
-  connection.then(dbs => {
-    createSubforum(dbs, listingID, username, description)
-    .then(val => {
-      res.send();
-    }).catch(err => {
-      if (err.code == '11000)') {
-        sendError(res, "DuplicateError", 400)
-      } else {
-        sendError(res, "DBError", 500)
-      }
-    });
+  const dbs = await connection;
+  createSubforum(dbs, listingID, username, description)
+  .then(val => {
+    res.send();
+  }).catch(err => {
+    if (err.code == '11000)') {
+      sendError(res, "DuplicateError", 400)
+    } else {
+      sendError(res, "DBError", 500)
+    }
   });
 });
 

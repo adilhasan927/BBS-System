@@ -21,31 +21,29 @@ router.get('/', function(req, res, next) {
   const position = JSON.parse(req.query.position);
   const limit = JSON.parse(req.query.limit);
   const listingID = req.query.listingID;
-  const username = req.query.username;
-  connection.then(dbs => {
-    dbs.db('documents')
-    .collection('subforums')
-    .aggregate([
-      { $match: { name: listingID }},
-      { $unwind: '$posts' },
-      { $skip: position },
-      { $limit: limit },
-      { $replaceRoot: { newRoot: '$posts' } }
-    ])
-    .toArray()
-    .then(arr => {
-      res.send({
-        successful: true,
-        body: arr,
-      });
-    }).catch(err => {
-      console.log(err);
-      sendError(res, "DBError", 500);
+  const dbs = await connection;
+  dbs.db('documents')
+  .collection('subforums')
+  .aggregate([
+    { $match: { name: listingID }},
+    { $unwind: '$posts' },
+    { $skip: position },
+    { $limit: limit },
+    { $replaceRoot: { newRoot: '$posts' } }
+  ])
+  .toArray()
+  .then(arr => {
+    res.send({
+      successful: true,
+      body: arr,
     });
+  }).catch(err => {
+    console.log(err);
+    sendError(res, "DBError", 500);
   });
 });
 
-router.post('/', function(req, res, next) {
+router.post('/', async function(req, res, next) {
   const listingID = req.query.listingID;
   const body = req.body.body;
   const username = req.query.username;
@@ -55,28 +53,27 @@ router.post('/', function(req, res, next) {
       return null;
     }
   }
-  connection.then(dbs => {
-    const id = new ObjectId();
-    dbs.db("documents")
-    .collection("subforums")
-    .updateOne({
-      name: listingID,
-    }, {
-      $push: { posts: {
-        _id: id,
-        username: username,
-        body: body,
-        comments: [],
-      } }
-    }).then(val => {
-      res.send(JSON.stringify({
-        successful: true,
-        body: id,
-      }));
-    }).catch(err => {
-      console.log(err);
-      sendError(res, "DBError", 500);
-    });
+  const dbs = await connection;
+  const id = new ObjectId();
+  dbs.db("documents")
+  .collection("subforums")
+  .updateOne({
+    name: listingID,
+  }, {
+    $push: { posts: {
+      _id: id,
+      username: username,
+      body: body,
+      comments: [],
+    } }
+  }).then(val => {
+    res.send(JSON.stringify({
+      successful: true,
+      body: id,
+    }));
+  }).catch(err => {
+    console.log(err);
+    sendError(res, "DBError", 500);
   });
 });
 

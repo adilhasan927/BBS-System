@@ -20,7 +20,7 @@ router.use('/', function(req, res, next) {
     });
 })
 
-router.post('/', function(req, res, next) {
+router.post('/', async function(req, res, next) {
   var credentials = req.header('Authorization').replace(/^Basic\s/, '');
   credentials = Buffer.from(credentials, 'base64').toString('ascii');
   credentials = credentials.split(':');
@@ -32,34 +32,33 @@ router.post('/', function(req, res, next) {
     sendError(res, 'FieldError', 400);
     return null;
   }
-  connection.then(dbs => {
-    var payload = {
-      username: username,
+  const dbs = await connection;
+  var payload = {
+    username: username,
+  }
+  var token = jwt.sign(payload, getSecret(), { expiresIn: "2 days" });
+  dbs.db("documents")
+  .collection("users")
+  .find({
+    username: username,
+    password: password,
+  })
+  .count()
+  .then(val => {
+    if (val == 1) {
+      res.send(JSON.stringify({
+        successful: true,
+        body: token,
+      }));
+    } else {
+      sendError(res, "CredentialsError", 401 );
     }
-    var token = jwt.sign(payload, getSecret(), { expiresIn: "2 days" });
-    dbs.db("documents")
-    .collection("users")
-    .find({
-      username: username,
-      password: password,
-    })
-    .count()
-    .then(val => {
-      if (val == 1) {
-        res.send(JSON.stringify({
-          successful: true,
-          body: token,
-        }));
-      } else {
-        sendError(res, "CredentialsError", 401 );
-      }
-    }).catch(err => {
-      if (err.code == '11000)') {
-        sendError(res, "DuplicateError", 400)
-      } else {
-        sendError(res, "DBError", 500)
-      }});
-  });
+  }).catch(err => {
+    if (err.code == '11000)') {
+      sendError(res, "DuplicateError", 400)
+    } else {
+      sendError(res, "DBError", 500)
+    }});
 });
 
 module.exports = router;

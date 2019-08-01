@@ -17,58 +17,56 @@ router.use('/', function(req, res, next) {
   })
 })
 
-router.get('/', function(req, res, next) {
+router.get('/', async function(req, res, next) {
   const tokenUsername = req.query.tokenUsername;
   const username = req.query.username;
-  connection.then(dbs => {
-    // if no username query param return list of friends.
-    if (!username) {
-      dbs.db('documents')
-      .collection('users')
-      .aggregate([
-        { $match: { username: tokenUsername } },
-        { $unwind: "$friends" },
-        { $replaceRoot: { newRoot: "$friends" } },
-        { $project: { username: 1 } }
-      ]).toArray()
-      .then(friends => {
-        res.send(friends);
-      }).catch(err => {
-        sendError(res, "DBError", 500);
-      })
-    // else return if queried user is friend.
-    } else {
-      dbs.db('documents')
-      .collection('users')
-      .findOne({
-        username: tokenUsername,
-        friends: { username: username}
-      })
-      .then(user => {
-        // send true if matching user exists, else false.
-        res.send(user ? true : false);
-      }).catch(err => {
-        sendError(res, "DBError", 500);
-      })
-    }
-  })
-})
-
-router.delete('/', function(req, res, next) {
-  const tokenUsername = req.query.tokenUsername;
-  const username = req.query.username;
-  // remove friend from friends array.
-  connection.then(dbs => {
+  const dbs = await connection;
+  // if no username query param return list of friends.
+  if (!username) {
     dbs.db('documents')
     .collection('users')
-    .updateMany(
-      { username: { $in: [tokenUsername, username] } },
-      { $pull: { friends: { username: { $in: [tokenUsername, username] } } } }
-    ).then(val =>{
-      res.send();
+    .aggregate([
+      { $match: { username: tokenUsername } },
+      { $unwind: "$friends" },
+      { $replaceRoot: { newRoot: "$friends" } },
+      { $project: { username: 1 } }
+    ]).toArray()
+    .then(friends => {
+      res.send(friends);
     }).catch(err => {
       sendError(res, "DBError", 500);
     })
+  // else return if queried user is friend.
+  } else {
+    dbs.db('documents')
+    .collection('users')
+    .findOne({
+      username: tokenUsername,
+      friends: { username: username}
+    })
+    .then(user => {
+      // send true if matching user exists, else false.
+      res.send(user ? true : false);
+    }).catch(err => {
+      sendError(res, "DBError", 500);
+    })
+  }
+})
+
+router.delete('/', async function(req, res, next) {
+  const tokenUsername = req.query.tokenUsername;
+  const username = req.query.username;
+  const dbs = await connection;
+  // remove friend from friends array.
+  dbs.db('documents')
+  .collection('users')
+  .updateMany(
+    { username: { $in: [tokenUsername, username] } },
+    { $pull: { friends: { username: { $in: [tokenUsername, username] } } } }
+  ).then(val =>{
+    res.send();
+  }).catch(err => {
+    sendError(res, "DBError", 500);
   })
 })
 

@@ -26,32 +26,32 @@ function init(io) {
       }, false)
     })
 
-    socket.on('joinConversation', (otherUsername, fn) => {
+    socket.on('joinConversation', async (otherUsername, fn) => {
       if (!loggedIn) return;
 
       socket.leave(currentRoom);
       currentRoom = undefined;
 
-      connection.then(dbs => {
-        dbs.db('documents')
-        .collection('users')
-        .find({
-          username: username,
-          friends: { username: otherUsername }
-        })
-        .count()
-        .then(val => {
-          if (val != 1) { throw Error("UserNotFoundError"); }
-        }).catch(err => {
-          throw Error("DBError");
-        })
-      }).then(_ => {
+      const dbs = await connection;
+      dbs.db('documents')
+      .collection('users')
+      .find({
+        username: username,
+        friends: { username: otherUsername }
+      })
+      .count()
+      .then(val => {
+        if (val != 1) { throw Error("UserNotFoundError"); }
         currentRoom = ([username, otherUsername].sort()).toString();
         socket.join(currentRoom);
         console.log(`Joined ${currentRoom}`);
-        fn();
+        fn();  
       }).catch(err => {
-        io.to(socket.id).emit('error', err.message);
+        if (err.message == "UserNotFoundError") {
+          io.to(socket.id).emit('error', "UserNotFoundError");
+        } else {
+          io.to(socket.id).emit('error', "DBError")
+        }
       })
     })
 

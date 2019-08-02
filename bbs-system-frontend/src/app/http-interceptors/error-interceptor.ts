@@ -25,7 +25,7 @@ export class ErrorInterceptor implements HttpInterceptor{
           if (error.error == "TokenError") {
             this.router.navigate(['/login']);
             this.storage.deleteToken();
-          } else if (error.error="PermissionsError") {
+          } else if (error.error == "PermissionsError") {
             console.log("PermissionsError");
           } else if (error.error == "DBError") {
             console.log("DBError");

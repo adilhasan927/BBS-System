@@ -1,6 +1,7 @@
 <div class="content-container">
   <div class="messages">
-    <p>Messages with {{messenger.joinUsername}}.</p>
+    <p *ngIf="messenger.joinUsername">Messages with {{messenger.joinUsername}}.</p>
+    <p *ngIf="!messenger.joinUsername">No chat is opened yet.</p>
     <p *ngIf="otherTyping">{{messenger.joinUsername}} is typing.</p>
     <div class="message" *ngFor="let message of messenger.messages">
       From: {{ message.from }}<br>
@@ -20,11 +21,18 @@
       <button type="submit" [disabled]="!navForm.valid">Navigate</button>
     </form>
     <p>Write message</p>
-    <form [formGroup]="messageForm" (ngSubmit)="send()">
+    <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
       <label>
         body:<br>
-        <input type="text" formControlName="body" required>
+        <input type="text" formControlName="body">
       </label><br>
+      <p>Select image</p>
+      <img *ngIf="this.image" width="100px" height="100px" [src]="imageUrl"
+      alt="message image"><br>
+      <label>
+          image:<br>
+          <input type="file" accept=".png" (change)="onFileChange($event)" formControlName="image">
+        </label>
       <button type="submit" [disabled]="!messageForm.valid">Submit</button>
     </form>
   </div>

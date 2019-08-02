@@ -41,7 +41,7 @@ router.put('/', async function(req, res, next) {
   const profileText = req.body.profile.profileText;
   const profileImage = req.body.profile.profileImage;
   try {
-    var imageProps = sizeOf(new Buffer(profileImage.value, 'base64'));
+    var imageProps = sizeOf(Buffer.from(profileImage.value, 'base64'));
   } catch(error) {
     sendError(res, "TypeError", 400);
     return null;

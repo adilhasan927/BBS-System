@@ -1,7 +1,7 @@
 <div id='border'>
   <div class='userContainer'>
     <img *ngIf="profile.profileImage" width="40px" height="40px"
-    [src]="'data:image/jpg;base64,'+profile.profileImage.value"
+    [src]="'data:image/png;base64,'+profile.profileImage.value"
     alt="profile image">
     <a [routerLink]="['/profile', username]">Author: {{ username }}</a><br>
     <a [routerLink]="['/messenger', username]">Message</a><br>

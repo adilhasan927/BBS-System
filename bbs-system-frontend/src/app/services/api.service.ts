@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular
 import { Credentials } from '../models/credentials';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { StorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class ApiService {
 
   constructor(
     private http: HttpClient,
+    private storage: StorageService
   ) { }
 
   login(credentials: Credentials, captchaResponse: string): Observable<any> {
@@ -260,6 +262,42 @@ export class ApiService {
   sendFriendRequest(username: string): Observable<any> {
     const url = this.queryURL + '/friends/sent';
     return this.http.post<any>(url, {username: username}, this.httpOptions)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+  
+  uploadFile(file: File): Promise<any> {
+    const url = this.queryURL + '/files';
+    return new Promise((resolve, reject) => {
+      var formData: any = new FormData();
+      var xhr = new XMLHttpRequest();
+      formData.append("upload", file, file.name);
+      xhr.onreadystatechange = function () {
+          if (xhr.readyState == 4) {
+              if (xhr.status == 200) {
+                  resolve(JSON.parse(xhr.response));
+              } else {
+                  reject(xhr.response);
+              }
+          }
+      }
+      xhr.open("POST", url, true);
+      xhr.setRequestHeader('Authorization', `Bearer ${this.storage.retrieveToken()}`)
+      xhr.send(formData);
+  });
+}
+
+  downloadFile(filename: string): Observable<Blob> {
+    const url = this.queryURL + '/files';
+    const httpOptions = {
+      headers: this.httpOptions.headers,
+      params: {
+        filename: filename
+      },
+      responseType: 'blob' as 'blob'
+    }
+    return this.http.get(url, httpOptions)
       .pipe(
         catchError(this.handleError)
       );

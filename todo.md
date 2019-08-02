@@ -13,4 +13,8 @@
 * ~~Implement typing indicator in messenger.~~
 * Implement file uploads in messenger.
   * Implement messenger file uploads on backend.
+    * ~~Receive and store files.~~
+    * Add .png extension to filenames.
   * Implement messenger file uploads on frontend.
+    * ~~Send and receive files in messages.~~
+    * Display images in messages.

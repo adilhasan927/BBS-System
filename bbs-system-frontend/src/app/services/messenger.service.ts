@@ -3,6 +3,7 @@ import { Socket } from 'ngx-socket-io';
 
 import { Message } from '../models/message';
 import { StorageService } from './storage.service';
+import { ApiService } from './api.service';
 
 import * as Deque from 'double-ended-queue';
 import { Subject } from 'rxjs';
@@ -42,7 +43,8 @@ export class MessengerService {
 
   constructor(
     private socket: Socket,
-    private storage: StorageService
+    private storage: StorageService,
+    private api: ApiService
   ) {
     this.messages[Symbol.iterator] = function*() {
       const length = this.length;
@@ -58,6 +60,20 @@ export class MessengerService {
 
     this.$messages.subscribe(messages => {
       this.position += messages.length;
+
+      messages.map(val => {
+        console.log(val);
+        if (val.filename) {
+          this.api.downloadFile(val.filename).subscribe(next => {
+            const reader = new FileReader();
+            reader.readAsDataURL(next);
+            reader.onload = () => {
+              val.image = reader.result.toString();
+            }
+          })
+        }
+      })
+
       if (!this.messages.isEmpty() && messages.length != 0) {
         if (messages[0].timestamp < this.messages.get(0).timestamp) {
           this.messages.push(...messages);
@@ -90,8 +106,11 @@ export class MessengerService {
     this.socket.emit('getMessages', this._loc);
   }
 
-  sendMessage(body: string) {
-    this.socket.emit('sendMessage', new Message(undefined, this.storage.retrieveUsername(), body));
+  sendMessage(body: string, filename: string) {
+    this.socket.emit(
+      'sendMessage',
+      new Message(undefined, this.storage.retrieveUsername(), body, filename)
+    );
   }
 
 }

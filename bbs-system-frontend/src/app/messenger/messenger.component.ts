@@ -56,6 +56,7 @@ export class MessengerComponent implements OnInit, OnDestroy {
 
     this._errorSub = this.messenger.$error.subscribe(error => {
       if (error == "TokenError") {
+        this.storage.deleteToken();
         console.error("TokenError");
         this.router.navigate(["/login"]);
       } else if (error == "UserNotFoundError") {
@@ -88,13 +89,20 @@ export class MessengerComponent implements OnInit, OnDestroy {
   }
 
   sendMessage() {
-    if (this.imageUrl) {
+    if (this.image) {
       this.api.uploadFile(this.image).then(next => {
         this.messenger.sendMessage(this.body, next);
         this.messageForm.reset();
+        this.image = null;
+        this.imageUrl = null;
+      }).catch(err => {
+        if (err == "FileTooLongError") {
+          window.alert("File size limit is 2MB");
+        }
       });
     } else {
       this.messenger.sendMessage(this.body, null);
+      this.messageForm.reset();
     }
   }
 
@@ -109,9 +117,11 @@ export class MessengerComponent implements OnInit, OnDestroy {
         this.imageUrl = reader.result;
         console.log(this.imageUrl)
       };
+    } else {
+      this.image = null;
+      this.imageUrl = null;
     }
   }
-
 
   load() {
     this.messenger.getMessages();
@@ -119,6 +129,11 @@ export class MessengerComponent implements OnInit, OnDestroy {
 
   onTyping() {
     this.messenger.$thisTyping.next();
+  }
+
+  onImageClick(image: string): boolean {
+    window.open('').document.write(`<img src="${image}">`);
+    return false;
   }
 
   get formUsername(): string { return this.navForm.get('username').value; }

@@ -6,6 +6,9 @@
     <div class="message" *ngFor="let message of messenger.messages">
       From: {{ message.from }}<br>
       Body: {{ message.body }}<br>
+      <a [href]="message.image" (click)="onImageClick(message.image)">
+        <img *ngIf="message.image" width="40px" height="40px" [src]="message.image" alt="attached image">
+      </a>
     </div>
     <p *ngIf="!messenger.messages.isEmpty">There don't seem to be any messages here.</p>
     <button (click)="load()">Load older messages.</button>
@@ -31,7 +34,7 @@
       alt="message image"><br>
       <label>
           image:<br>
-          <input type="file" accept=".png" (change)="onFileChange($event)" formControlName="image">
+          <input type="file" accept=".png" (input)="onFileChange($event)" formControlName="image">
         </label>
       <button type="submit" [disabled]="!messageForm.valid">Submit</button>
     </form>

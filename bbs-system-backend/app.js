@@ -28,7 +28,7 @@ app.use(cors(corsOptions));
 
 app.use(logger('dev'));
 
-//app.use(express.json({ extended: false, limit: '4mb' }));
+app.use(express.json({ extended: false, limit: '4mb' }));
 app.use(express.urlencoded({ extended: false, limit: '4mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 

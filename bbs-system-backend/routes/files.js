@@ -1,14 +1,26 @@
 const express = require('express');
 const router = express.Router();
 
-const crypto = require('crypto');
-const fs = require('fs');
+const path = require('path');
 
-const connection = require('../utility/db');
 const sendError = require('../utility/error');
 const verify = require('../utility/verify');
+
+const mime = require('mime');
+
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '.' + mime.getExtension(file.mimetype))
+  },
+})
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 2 * 1024^2 }
+}).single('upload');
 
 router.use('/', function(req, res, next) {
   const token = req.header('Authorization');
@@ -23,16 +35,21 @@ router.use('/', function(req, res, next) {
 })
 
 router.get('/', function(req, res, next) {
-  fs.readFile(`./uploads/${req.query.filename}`, (err, data) => {
+  res.sendFile(path.resolve(`./uploads/${req.query.filename}`),
+    { headers: {'Content-Type': 'image/png'} }, err => {
     if (err) {
       sendError(res, 'FileNotFoundError', 404);
       console.error('Error', err);
     }
-    res.send(data);
-  });
+  })
 })
 
 router.post('/', upload.single('upload'), function(req, res, next) {
+  upload(req, res, function(err) {
+    if (err.message == "File too large") {
+      sendError("FileTooLongError");
+    }
+  })
   res.json(req.file.filename);
 })
 

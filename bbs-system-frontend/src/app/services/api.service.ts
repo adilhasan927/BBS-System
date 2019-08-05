@@ -288,10 +288,12 @@ export class ApiService {
   });
 }
 
-  downloadFile(filename: string): Observable<Blob> {
+  downloadFile(filename: string): Observable<any> {
     const url = this.queryURL + '/files';
     const httpOptions = {
-      headers: this.httpOptions.headers,
+      headers: {
+        Accept: 'image/png'
+      },
       params: {
         filename: filename
       },

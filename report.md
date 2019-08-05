@@ -79,3 +79,72 @@ The error-handling code on the backend was modifed to return the correct HTTP st
 The frontend was modified to make use of the HTTP status code returned by the server in client-side error-handling.
 The application was changed to provide the JWT in the `Authorisation` header of an HTTP request, using the `Bearer` token scheme.
 The API was changed to be a stateless REST maturity level 2 API.
+
+### July 22nd, 2019
+
+Implemented subforums in the web application. Subforums contained an array of posts, which themselves contained an array of comments. Subforums used a `[type].[name]` naming scheme.
+Implemented posting to user profiles.
+Posting to user profiles was modelled through subforums with the format `user.[username]`. Other subforums used the `main.[forumname]` name format.
+
+### July 23rd, 2019
+
+Implemented user creation of subforums. Only `main.[forumname]` subforums can be created by a user; others cannot. Signup automatically creates a corresponding `user.[username]` subforums, to serve as the profile subforum to which profile posts are posted.
+Tabbing of subforums was implemented.
+In an SPA, the traditional solution of a user opening different subforums in different tabs is undesirable. Instead, tabbing is implemented in the app.
+Instead, the app maintains a list of opened subforums and displays them as tabs in the navigation menu. These are stored in and retrieved from `sessionStorage`.
+
+### July 24th, 2019
+
+Along with the list of subforum names the app stores a list of scroll positions. When a subforum tab is navigated to its scroll position is automatically restored.
+
+### July 25th, 2019
+
+Implemented private messaging.
+Private messaging must be real-time and biderectional. For this HTTP is inadequate, as under HTTP the server can only respond to requests the client makes.
+Instead we use the WebSocket protocol, which allows for the server to push data to the client. For a mature and featureful solution to this we turn to the Socket.IO framework.
+Our initial implementation of private messaging was minimal, having a single central room to which all messages were directed and to which all clients lsitened. No storage of messages was yet implemented.
+
+### July 26th, 2019
+
+Private messaging was refactored to be person-to-person, with every pair of users messaging each other in a different room with a name derived from their usernames.
+Messages were stored in the database, from which the message history of a conversation could be retrieved.
+Pagination of messages was implemented, as was validation of user input and error-handling.
+Reconnection handling was implemented, with the client and server reconnecting after an interruption in the connection.
+
+### July 29th, 2019
+
+The friends list was implemented on the backend and the frontend API service.
+The friends list allowed users to send friend requests to other users, which they could cancel. The receiving user would have the choice of accepting or rejecting the request. A user could also delete users from their friends list.
+
+### July 30th, 2019
+
+The friends list UI was implemented on the front end and integrated with the API service.
+The messenger only allowed for messaging users on one's friends list.
+The code handling navigation between tabs and scroll location persistance had become quite tangled. It existed in three different areas, the navigation component, the posts-page component and the storage service, with complex interactions in between.
+It was refactored for simplicity and maintainability. The logic controlling scroll persistence was moved to reside only in the posts-page component, with the navigation component handling inter-tab navigation and the storage service, `storage.service.ts`, handling saving tab information to `localStorage`.
+
+### July 31th, 2019
+
+The scroll persistance was subject to a race condition, wherein the component would scroll to the stored position before the list of posts had been loaded. This caused the final scroll position to not match what it had been when the user navigated away from the page.
+To resolve this the posts-page component would track the loading of the posts component, which itself would track the laoding of the post component instances the list of posts was modelled as.
+Only once the event signalling the completion of loading propagated up to the posts-page component would the page be scrolled to the retrieved position.
+
+### August 1st, 2019
+
+An issue with the messenger component was that the messenger state was lost whenever the user navigated away from it.
+To resolve this the messenger state was moved to the messenger service, `messenger.service.ts`. The messenger component would display the state exposed to it by the messenger service.
+It would also subscribe to the error observable and perform any necessary error-handling tasks.
+This was necessary as Angular services should not perform UI tasks such as redirecting to other pages or displaying alerts. Rather, they should act as background utilities.
+As a consequence of this the client-side application code could continue to receive information from the server, even when the user had navigated away from the messenger page and thereby the messenger component had been destroyed.
+A typing indicator was implemented. Typing would produce a typing indicator on the messenger page of the other user connected to a room, which would disappear with a pause in typing.
+
+### July 2nd, 2019
+
+File uploads were implemented, using the multer module to handle multipart form data. Users could upload files to the server by sending a `POST` request to the `/api/files` endpoint, receiving the filename in response.
+A filesize limit of 2MB was enforced, with file types limited to `.png` files. The files were stored in an `/uploads/` directory.
+Message attachments were implemented as including the filename from the `POST` request response as a field in the message. Upon receipt of a message with a non-`null` `message.filename` the messenger automatically fetched it from the server.
+
+### July 5th, 2019
+
+The default multer-provided algorithm for detemrining a unique filename was replaced, allowing files to be stored with the correct `.png` extensions. The `Accept` header of the HTTP request and the `Content-Type` header of the HTTP response were changed to the `image/png` MIME type. The `mime` module was used on the backend to map file extensions to MIME types.
+Messages were displayed as small, 100x100px thumbnail-style images on the messenger page, although actual thumbnails with reduced file size were not implemented. Clicking it would display the image on its own in a new tab, at full size.

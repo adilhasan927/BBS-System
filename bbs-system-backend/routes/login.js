@@ -47,7 +47,6 @@ router.post('/', async function(req, res, next) {
   .then(val => {
     if (val == 1) {
       res.send(JSON.stringify({
-        successful: true,
         body: token,
       }));
     } else {

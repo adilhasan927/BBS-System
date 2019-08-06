@@ -148,3 +148,295 @@ Message attachments were implemented as including the filename from the `POST` r
 
 The default multer-provided algorithm for detemrining a unique filename was replaced, allowing files to be stored with the correct `.png` extensions. The `Accept` header of the HTTP request and the `Content-Type` header of the HTTP response were changed to the `image/png` MIME type. The `mime` module was used on the backend to map file extensions to MIME types.
 Messages were displayed as small, 100x100px thumbnail-style images on the messenger page, although actual thumbnails with reduced file size were not implemented. Clicking it would display the image on its own in a new tab, at full size.
+
+## API documentation
+
+### JWT endpoints
+
+Endpoints marked as JWT require JWT authentication to use. The JWT is provided in the `Authorization` request header using the `Bearer` token scheme. The JWT is issued by the server.
+
+POSTing to /api/login or /api/signup returns a JWT with a `username` claim. Email verification links require a JWT with a `username` and an `emailed` claim.
+
+### Captcha endpoints
+
+Captcha endpoints require a captcha to be completed to be used. The JSON-encoded request body should be of the format `{ captchaResponse: ..., ... }`, where `captchaResponse` contains the reCaptcha widget response.
+
+### Endpoints list
+
+#### /api/account/email
+
+##### POST /api/account/email
+
+JWT: Yes
+Captcha: Yes
+Query parameters: null
+JWT claims required: username, emailed
+Other headers: null
+Request body: null
+Response body: null
+Notes: Uses a JWT with an `emailed` claim set to `true`, issued only for email varification.
+Usage: Resends email verification link.
+
+#### /api/account/profile
+
+##### GET /api/account/profile
+
+JWT: Yes
+Captcha: No
+Query parameters: null
+JWT claims required: username
+Other headers: null
+Request body: null
+Response body:
+
+```JSON
+{ body: {
+  profile: {
+    profileText: ..., //string
+    profileImage: ... //base64 image/png
+  },
+  verified: ..., //boolean
+}
+```
+
+Notes: null
+Usage: Returns profile data.
+
+##### PUT /api/account/profile
+
+JWT: Yes
+Captcha: No
+Query parameters: null
+JWT claims required: username
+Other headers: null
+Request body:
+
+```JSON
+{
+  profile: {
+    profileText: ..., //string
+    profileImage: ... //base64 image/png
+  }
+}
+```
+
+Response body: null
+Notes: Profile image must be 100x100px `image/png` file.
+Usage: Sets profile data.
+
+#### /api/friends/accepted
+
+##### GET /api/friends/accepted
+
+JWT: Yes
+Captcha: No
+Query parameters: username
+JWT claims required: username
+Other headers: null
+Request body: null
+Response body: null
+Notes: `username` query param indicates user queried.
+Usage: Returns whether queried user is in friends list.
+
+##### DELETE /api/friends/accepted
+
+JWT: Yes
+Captcha: No
+Query parameters: username
+JWT claims required: username
+Other headers: null
+Request body: null
+Response body: null
+Notes: `username` query param indicates user queried.
+Usage: Deletes queried user from friends list.
+
+#### /api/comment
+
+##### GET /api/comment
+
+JWT: Yes
+Captcha: No
+Query parameters: PostID, position, limit, listingID
+JWT claims required: username
+Other headers: null
+Request body: null
+Response body: null
+Notes: `PostID` query param indicates post comments retrieved from.
+`position` query param indicates position in list, used for pagination.
+`limit` query param indicates number of comments to retrieved, used for pagination.
+`listingID` query param indicates name of subforum post is in.
+Usage: Gets section of list of comments on post.
+
+##### POST /api/comment
+
+JWT: Yes
+Captcha: No
+Query parameters: PostID, listingID
+JWT claims required: username
+Other headers: null
+Request body:
+
+```JSON
+{
+  body: ... // string
+}
+```
+
+Response body: null
+Notes: `PostID` query param indicates post comment posted to.
+`listingID` query param indicates name of subforum post is in.
+`body` JSON field indicates text of comment.
+Usage: Posts comment to post.
+
+#### /api/post
+
+##### GET /api/post
+
+JWT: Yes
+Captcha: No
+Query parameters: position, limit, listingID
+JWT claims required: username
+Other headers: null
+Request body: null
+Response body: null
+Notes: `position` query param indicates position in list, used for pagination.
+`limit` query param indicates number of posts to retrieved, used for pagination.
+`listingID` query param indicates name of subforum post is in.
+Usage: Gets section of list of posts in subforum.
+
+##### POST /api/post
+
+JWT: Yes
+Captcha: No
+Query parameters: listingID
+JWT claims required: username
+Other headers: null
+Request body:
+
+```JSON
+{
+  body: ... // string
+}
+```
+
+Response body:
+
+```JSON
+{
+  body: id // string
+}
+```
+
+Notes: `listingID` query param indicates name of subforum post is to be posted to.
+`body` JSON field indicates ID of created post.
+Usage: Posts post to subforum.
+
+#### /api/files
+
+##### GET /api/files
+
+JWT: Yes
+Captcha: No
+Query parameters: filename
+JWT claims required: username
+Other headers: null
+Request body: null
+Response body: binary blob
+Notes: `filename` query parameter indicates name of file to get.
+Response will be binary blob encoding `image/png` file.
+Usage: Gets user-uploaded file from server.
+
+##### POST /api/files
+
+JWT: Yes
+Captcha: No
+Query parameters: null
+JWT claims required: username
+Other headers: null
+Request body: `multipart/form-data` file
+Response body: string
+Notes: 2MB file size limit.
+File should be in `image/png` format to be displayed correctly.
+Response will be filename of uploaded file.
+Usage: Uploads file to server.
+
+#### /api/forums
+
+##### POST /api/forums
+
+JWT: Yes
+Captcha: Yes
+Query parameters: null
+JWT claims required: username
+Other headers: null
+Request body:
+
+```JSON
+{
+  listingID: ..., // string
+  description: ... // string
+}
+```
+
+Response body: null
+Notes: `listingID` request body field indicates subforum name.
+`description` request body field indicates subforum description.
+Subforum names must use the `main.[forumname]` format.
+Usage: Creates subforum.
+
+#### /api/login
+
+##### POST /api/login
+
+JWT: No
+Captcha: Yes
+Query parameters: null
+JWT claims required: null
+Other headers: Authorization (Basic)
+Request body: null
+Response body:
+
+```JSON
+{
+  body: token // string
+}
+```
+
+Notes: Username and password provided in the `Authorization` header using the `Basic` scheme.
+JWT returned as `body` field of response body.
+JWT has `username` claim defined, conferring access to auth-requiring endpoints other than `/api/account/email`.
+Usage: Logs user in, returning JWT.
+
+#### /api/signup
+
+##### POST /api/signup
+
+JWT: No
+Captcha: Yes
+Query parameters: null
+JWT claims required: null
+Other headers: null
+Request body:
+
+```JSON
+{
+  credentials: {
+    username: ..., // string
+    password: ..., // string
+    email: ... // string
+  }
+}
+```
+
+Response body:
+
+```JSON
+{
+  body: token // string
+}
+```
+
+Notes: Account credentials provided in the `credentials` field of the request body.
+JWT returned as `body` field of response body.
+JWT has `username` claim defined, conferring access to auth-requiring endpoints other than `/api/account/email`.
+Usage: Creates user account, returning JWT.

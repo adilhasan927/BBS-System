@@ -7,7 +7,7 @@ module.exports = function verifyUser(address, username) {
     const link = "http://127.0.0.1:4200"
     + "/verify-email/"
     + jwt.sign( {
-        email: address,
+        emailed: true,
         username: username,
     }, getSecret(), { expiresIn: "2 days"} );
     const transporter = nodemailer.createTransport({

@@ -57,9 +57,7 @@ router.post('/', async function(req, res, next) {
       createSubforum(dbs, 'user.'+username, username)
   }).then(val => {
     res.send(JSON.stringify({
-      successful: true,
       body: token,
-      captchaSuccess: true,
     }));
   }).catch(err => {
     if (err.code == '11000)') {

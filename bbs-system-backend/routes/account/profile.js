@@ -64,10 +64,7 @@ router.put('/', async function(req, res, next) {
       "profile.profileImage": profileImage,
     } },
   ).then(val => {
-    res.send({
-      successful: true,
-      body: null,
-    });
+    res.send();
   }).catch(err => {
     sendError(res, "DBError", 500);
   });

@@ -68,7 +68,6 @@ router.post('/', async function(req, res, next) {
     } }
   }).then(val => {
     res.send(JSON.stringify({
-      successful: true,
       body: id,
     }));
   }).catch(err => {

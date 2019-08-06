@@ -39,10 +39,7 @@ router.get('/', async function(req, res, next) {
   .toArray()
   .then(comments => {
     console.log(comments);
-    res.send({
-      successful: true,
-      body: comments,
-    });
+    res.send();
   }).catch(err => {
     console.log(err);
     sendError(res, "DBError", 500);
@@ -67,9 +64,7 @@ router.post('/', async function(req, res, next) {
         body: body,
     } } }
   ).then(val => {
-    res.send(JSON.stringify({
-      successful: true,
-    }));
+    res.send();
   }).catch(err => {
     console.log(err);
     sendError(res, "DBError", 500);

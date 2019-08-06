@@ -206,6 +206,18 @@ The default multer-provided algorithm for detemrining a unique filename was repl
 
 Messages were displayed as small, 100x100px thumbnail-style images on the messenger page, although actual thumbnails with reduced file size were not implemented. Clicking it would display the image on its own in a new tab, at full size.
 
+## Build instruction
+
+Make sure Git, npm, Node.js, and MongoDB are present on your system. Clone the `bbs-system` repository using git. Issue the `npm install` command in the `bbs-system-backend` and `bbs-system-frontend` directories to install the project dependencies.
+
+Issue the `mongod` command to start the database server. It will by default broadcast on localhost:27017. Issue the `npm start` command in the `bbs-system-backend` folder to start the backend server. It will by default broadcast on localhost:3200. Issue the `ng serve` command in the `bbs-system-frontend` folder to start the frontend testing server. It will by default broadcast on localhost:4200.
+
+Alternatively, issueing the `ng build --prod` command will build the frontend application for deployment somewhere other than the testing server, configured for production.
+
+Navigate to [http://127.0.0.1:4200](http://127.0.0.1:4200) to view the application frontend. Using 127.0.0.1 instead of localhost is necessary because Google's reCaptcha service does not support localhost URLs.
+
+Configuration of the application is not currently implemented; changing the default backend server port or reCaptcha site key will require changing hardcoded values in multiple place in the application code.
+
 ## API documentation
 
 ### JWT endpoints

@@ -10,10 +10,11 @@ const jwt = require('jsonwebtoken');
 function verifyUser(address, username) {
     const link = "http://127.0.0.1:4200"
     + "/verify-email/"
-    + jwt.sign( {
-        emailed: true,
+    + jwt.sign({
+        //emailed: true,
         username: username,
     }, getSecret(), { expiresIn: "2 days"} );
+    console.log("username:" + username);
     const transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
         port: 587,

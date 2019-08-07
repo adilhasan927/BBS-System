@@ -13,7 +13,7 @@ router.use('/', function(req, res, next) {
       sendError(res, "TokenError", +err.message);
     } else {
       req.query.username = val.username;
-      req.query.emailed = emailed;
+      req.query.emailed = val.emailed;
       next();
     }
   })
@@ -21,6 +21,7 @@ router.use('/', function(req, res, next) {
 
 router.post('/', async function(req, res, next) {
   const username = req.query.username;
+  const emailed = req.query.username;
   const dbs = await connection;
   if (emailed) {
     dbs.db('documents')

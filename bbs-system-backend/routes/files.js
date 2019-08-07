@@ -19,7 +19,7 @@ var storage = multer.diskStorage({
 })
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 2 * 1024^2 }
+  limits: { fileSize: 2 * 1024 * 1024 }
 }).single('upload');
 
 router.use('/', function(req, res, next) {
@@ -46,8 +46,10 @@ router.get('/', function(req, res, next) {
 
 router.post('/', upload, function(req, res, next) {
   upload(req, res, function(err) {
-    if (err.message == "File too large") {
-      sendError("FileTooLongError");
+    if (err) {
+      if (err.message == "File too large") {
+        sendError("FileTooLongError");
+      }
     }
   })
   res.json(req.file.filename);

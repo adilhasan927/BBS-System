@@ -63,6 +63,7 @@ router.post('/', async function(req, res, next) {
     if (err.code == '11000)') {
       sendError(res, "DuplicateError", 400)
     } else {
+      console.log(err)
       sendError(res, "DBError", 500)
     }
   })

@@ -58,12 +58,12 @@ function init(io) {
     socket.on('getMessages', loc => {
       if (!loggedIn) return;
       console.log(currentRoom, loc);
-      getMessages(socket, currentRoom, loc);
+      getMessages(io, socket, currentRoom, loc);
     })
 
     socket.on('sendMessage', message => {
       if (!loggedIn) return;
-      sendMessage(socket, currentRoom, message);
+      sendMessage(io, socket, currentRoom, message);
     })
 
     socket.on('typing', debounce(_ => {
@@ -75,11 +75,12 @@ function init(io) {
 
 /**
  * Retrieve messages from DB and emit to socket.
+ * @param {import('socket.io').Server} io
  * @param {SocketIO.Socket} socket // socket to emit to.
  * @param {string} currentRoom // conversation room user is in.
  * @param {Location} loc // messages to retrieve.
  */
-function getMessages(socket, currentRoom, loc) {
+function getMessages(io, socket, currentRoom, loc) {
   connection.then(dbs => {
     dbs.db('documents')
     .collection('conversations')
@@ -94,14 +95,14 @@ function getMessages(socket, currentRoom, loc) {
     .toArray()
     .then(arr => {
       if (arr) {
-        socket.emit('messages', arr);
+        io.to(socket.id).emit('messages', arr);
       } else {
-        socket.emit('messages', []);
+        io.to(socket.id).emit('messages', []);
       }
       console.log("Messages fetched from db.");
     }).catch(err => {
       console.log(err);
-      socket.emit('error', "DBError");
+      io.to(socket.id).emit('error', "DBError");
     })
   })
 }
@@ -123,11 +124,12 @@ class Location {
 
 /**
  * Saves message to DB and sends to users in room.
+ * @param {import('socket.io').Server} io
  * @param {string} currentRoom // conversation room user is in.
  * @param {SocketIO.Socket} socket // socket that sent message.
  * @param {Message} message // message to send.
  */
-function sendMessage(socket, currentRoom, message) {
+function sendMessage(io, socket, currentRoom, message) {
   message.timestamp = Date.now();
   socket.to(currentRoom).emit('messages', [message]);
 
@@ -141,7 +143,7 @@ function sendMessage(socket, currentRoom, message) {
     }, { upsert: true }).then(_ => {
       console.log("message added to db.")
     }).catch(err => {
-      socket.to(socket.id).emit('error', "DBError");
+      io.to(socket.id).emit('error', "DBError");
     })
   })
 }

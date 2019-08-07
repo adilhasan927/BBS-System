@@ -1,8 +1,6 @@
-# Report on the BBS System project
+# Project history
 
-## Project history
-
-### July 8th, 2019
+## July 8th, 2019
 
 Work on the BBS System web app project began on this date.
 
@@ -16,7 +14,7 @@ The backend was scaffolded through the ExpressJS CLI (`express --view pug bbs-sy
 
 The `bbs-system` folder was initialised as a git repo (`git init`) and as a Visual Studio Code workspace (VS Code GUI. The intial Git commit was performed (`git add . ; git commit`).
 
-### July 9th, 2019
+## July 9th, 2019
 
 The first lines of project code were authored on this date. The login and signup page was implemented on the Angualar frontend, and the corresponding backend code on the Express backend.
 
@@ -26,7 +24,7 @@ The app at this stage was quite minimal, with the login and signup pages missing
 The database was configured, with collections created and indexed.
 Code was written in the backend to interface with the database.
 
-### July 10th, 2019
+## July 10th, 2019
 
 It became possible to submit content to the databse, with the first iteration of the posting feature implemented. At this point there was no implementation of subforums; rather all posts were made to a single central board.
 
@@ -34,7 +32,7 @@ The codebase was refactored to remove the placeholder code from the automated sc
 
 The user profiles feature was scaffolded.
 
-### July 11th, 2019
+## July 11th, 2019
 
 The user profiles API was implemented on the backend, with routes defined corresponding to the API endpoints. The API-handling code was then written in the API service. After this the UI code for the profile page component was written, communicating with the API through the API service.
 
@@ -49,7 +47,7 @@ This practice promotes code reuse and separation of concerns.
 
 Basic CSS styling was also implemented.
 
-### July 12th, 2019
+## July 12th, 2019
 
 Commenting on posts was implemented. This required significant modifcations to the database structure. As mongodb is a schemaless database, no modification of existing documents was required; only application code needed to be changed.
 
@@ -61,7 +59,7 @@ Data validation should still be implemented on the frontend to inform the user o
 
 Password confirmation was also implemented on the signup page, as an Angualr. This is used so that the user doesn't mistype their password when setting it, and find themselves unable to log in.
 
-### July 15th, 2019
+## July 15th, 2019
 
 Captchas were implemented, using Google's reCaptcha service. Captchas are useful to prevent automated attacks, i.e. to deter spambots from creating accounts and spamming the site.
 
@@ -73,7 +71,7 @@ The application was changed to use JSON Web Tokens (JWTs) for user authenticatio
 
 The JWT can store an expiry date and other claims, which can be read by the backend and frontend and verified by verifying the signature on the JWT.
 
-### July 16th, 2019
+## July 16th, 2019
 
 The JWT stored a username claim, which the frontend used to find out the username of the current user.
 
@@ -87,7 +85,7 @@ Passing of errors from the backend and the frontend was implemented. It is impor
 
 It is also important to notify the user of errors, as silent failures are also detrimental to the US.
 
-## July 17th, 2019
+# July 17th, 2019
 
 Server-side validation of user-submitted data was implemented.
 
@@ -101,13 +99,13 @@ True offline capability could be provided by implementing the application as a P
 
 Refactoring of independent UI features into distinct components was conducted.
 
-### July 18th, 2019
+## July 18th, 2019
 
 The caching HttpInterceptor war implemented. It stores the most recent GET request to a resource and returns its result as the server response when the client is offline.
 
 The error-handling code on the backend was modifed to return the correct HTTP status code to the client in the event of an error. Usage of standard HTTP features is part of designing a RESTful API.
 
-### July 19th, 2019
+## July 19th, 2019
 
 The frontend was modified to make use of the HTTP status code returned by the server in client-side error-handling.
 
@@ -115,14 +113,14 @@ The application was changed to provide the JWT in the `Authorisation` header of 
 
 The API was changed to be a stateless REST maturity level 2 API.
 
-### July 22nd, 2019
+## July 22nd, 2019
 
 Implemented subforums in the web application. Subforums contained an array of posts, which themselves contained an array of comments. Subforums used a `[type].[name]` naming scheme.
 Implemented posting to user profiles.
 
 Posting to user profiles was modelled through subforums with the format `user.[username]`. Other subforums used the `main.[forumname]` name format.
 
-### July 23rd, 2019
+## July 23rd, 2019
 
 Implemented user creation of subforums. Only `main.[forumname]` subforums can be created by a user; others cannot. Signup automatically creates a corresponding `user.[username]` subforums, to serve as the profile subforum to which profile posts are posted.
 
@@ -132,11 +130,11 @@ In an SPA, the traditional solution of a user opening different subforums in dif
 
 Instead, the app maintains a list of opened subforums and displays them as tabs in the navigation menu. These are stored in and retrieved from `sessionStorage`.
 
-### July 24th, 2019
+## July 24th, 2019
 
 Along with the list of subforum names the app stores a list of scroll positions. When a subforum tab is navigated to its scroll position is automatically restored.
 
-### July 25th, 2019
+## July 25th, 2019
 
 Implemented private messaging.
 
@@ -146,7 +144,7 @@ Instead we use the WebSocket protocol, which allows for the server to push data 
 
 Our initial implementation of private messaging was minimal, having a single central room to which all messages were directed and to which all clients lsitened. No storage of messages was yet implemented.
 
-### July 26th, 2019
+## July 26th, 2019
 
 Private messaging was refactored to be person-to-person, with every pair of users messaging each other in a different room with a name derived from their usernames.
 
@@ -155,13 +153,13 @@ Messages were stored in the database, from which the message history of a conver
 Pagination of messages was implemented, as was validation of user input and error-handling.
 Reconnection handling was implemented, with the client and server reconnecting after an interruption in the connection.
 
-### July 29th, 2019
+## July 29th, 2019
 
 The friends list was implemented on the backend and the frontend API service.
 
 The friends list allowed users to send friend requests to other users, which they could cancel. The receiving user would have the choice of accepting or rejecting the request. A user could also delete users from their friends list.
 
-### July 30th, 2019
+## July 30th, 2019
 
 The friends list UI was implemented on the front end and integrated with the API service.
 
@@ -171,7 +169,7 @@ The code handling navigation between tabs and scroll location persistance had be
 
 It was refactored for simplicity and maintainability. The logic controlling scroll persistence was moved to reside only in the posts-page component, with the navigation component handling inter-tab navigation and the storage service, `storage.service.ts`, handling saving tab information to `localStorage`.
 
-### July 31th, 2019
+## July 31th, 2019
 
 The scroll persistance was subject to a race condition, wherein the component would scroll to the stored position before the list of posts had been loaded. This caused the final scroll position to not match what it had been when the user navigated away from the page.
 
@@ -179,7 +177,7 @@ To resolve this the posts-page component would track the loading of the posts co
 
 Only once the event signalling the completion of loading propagated up to the posts-page component would the page be scrolled to the retrieved position.
 
-### August 1st, 2019
+## August 1st, 2019
 
 An issue with the messenger component was that the messenger state was lost whenever the user navigated away from it.
 
@@ -192,7 +190,7 @@ As a consequence of this the client-side application code could continue to rece
 
 A typing indicator was implemented. Typing would produce a typing indicator on the messenger page of the other user connected to a room, which would disappear with a pause in typing.
 
-### July 2nd, 2019
+## July 2nd, 2019
 
 File uploads were implemented, using the multer module to handle multipart form data. Users could upload files to the server by sending a `POST` request to the `/api/files` endpoint, receiving the filename in response.
 
@@ -200,492 +198,8 @@ A filesize limit of 2MB was enforced, with file types limited to `.png` files. T
 
 Message attachments were implemented as including the filename from the `POST` request response as a field in the message. Upon receipt of a message with a non-`null` `message.filename` the messenger automatically fetched it from the server.
 
-### July 5th, 2019
+## July 5th, 2019
 
 The default multer-provided algorithm for detemrining a unique filename was replaced, allowing files to be stored with the correct `.png` extensions. The `Accept` header of the HTTP request and the `Content-Type` header of the HTTP response were changed to the `image/png` MIME type. The `mime` module was used on the backend to map file extensions to MIME types.
 
 Messages were displayed as small, 100x100px thumbnail-style images on the messenger page, although actual thumbnails with reduced file size were not implemented. Clicking it would display the image on its own in a new tab, at full size.
-
-## Build and development instructions
-
-Make sure Git, npm, Node.js, and MongoDB are present on your system. Clone the `bbs-system` repository using git. Issue the `npm install` command in the `bbs-system-backend` and `bbs-system-frontend` directories to install the project dependencies.
-
-A start script, [start.bat](./start.bat) is located in the program root directory. It may be used to start the application for development on Windows. Alternatively, the following platform-agnostic steps can be followed.
-
-Issue the `mongod` command to start the database server. It will by default broadcast on [localhost:27017](http://localhost:27017). Issue the `npm start` command in the `bbs-system-backend` folder to start the backend server. It will by default broadcast on localhost:3200. Issue the `ng serve` command in the `bbs-system-frontend` folder to start the frontend testing server. It will by default broadcast on [localhost:4200](http://localhost:4200).
-
-Alternatively, issueing the `ng build --prod` command will build the frontend application for deployment somewhere other than the testing server, configured for production.
-
-Navigate to [http://127.0.0.1:4200](http://127.0.0.1:4200) to view the application frontend. You will need to disable your browser's CORS protections for the frontend application code to be able to communicate with the backend.
-
-For Chrome on Windows these tasks can be done by running the following command in `cmd.exe`.
-
-```bat
-start chrome.exe http://127.0.0.1:4200 --user-data-dir="C:/Chrome dev session" --disable-web-security
-```
-
-Using 127.0.0.1 instead of localhost is necessary because Google's reCaptcha service does not support localhost URLs.
-
-The backend server port, frontend FQDN and CORS whitelisted origins can be configured on the backend in the [config.json](./bbs-system-backend/config.json) file.
-
-Configuration of the application on the frontend is not currently fully implemented. Changing the reCaptcha site key or the backend server FQDN will require changing hardcoded values in multiple places in the frontend application code.
-
-## API documentation
-
-### JWT endpoints
-
-Endpoints marked as JWT require JWT authentication to use. The JWT is provided in the `Authorization` request header using the `Bearer` token scheme. The JWT is issued by the server.
-
-POSTing to /api/login or /api/signup returns a JWT with a `username` claim. Email verification links require a JWT with a `username` and an `emailed` claim.
-
-### Captcha endpoints
-
-Captcha endpoints require a captcha to be completed to be used. The JSON-encoded request body should be of the format `{ captchaResponse: ..., ... }`, where `captchaResponse` contains the reCaptcha widget response.
-
-### Endpoints list
-
-#### /api/account/email
-
-##### POST /api/account/email
-
-JWT: Yes
-
-Captcha: Yes
-
-Query parameters: null
-
-JWT claims required: username, emailed
-
-Other headers: null
-
-Request body: null
-
-Response body: null
-
-Notes: Uses a JWT with an `emailed` claim set to `true`, issued only for email varification.
-
-Usage: Resends email verification link.
-
-#### /api/account/profile
-
-##### GET /api/account/profile
-
-JWT: Yes
-
-Captcha: No
-
-Query parameters: null
-
-JWT claims required: username
-
-Other headers: null
-
-Request body: null
-
-Response body:
-
-```JSON
-{ body: {
-  profile: {
-    profileText: ..., //string
-    profileImage: ... //base64 image/png
-  },
-  verified: ..., //boolean
-}
-```
-
-Notes: null
-Usage: Returns profile data.
-
-##### PUT /api/account/profile
-
-JWT: Yes
-
-Captcha: No
-
-Query parameters: null
-
-JWT claims required: username
-
-Other headers: null
-
-Request body:
-
-```JSON
-{
-  profile: {
-    profileText: ..., //string
-    profileImage: ... //base64 image/png
-  }
-}
-```
-
-Response body: null
-
-Notes: Profile image must be 100x100px `image/png` file.
-
-Usage: Sets profile data.
-
-#### /api/friends/accepted
-
-##### GET /api/friends/accepted
-
-JWT: Yes
-
-Captcha: No
-
-Query parameters: username
-
-JWT claims required: username
-
-Other headers: null
-
-Request body: null
-
-Response body: null
-
-Notes: `username` query param indicates user queried.
-
-Usage: Returns whether queried user is in friends list.
-
-##### DELETE /api/friends/accepted
-
-JWT: Yes
-
-Captcha: No
-
-Query parameters: username
-
-JWT claims required: username
-
-Other headers: null
-
-Request body: null
-
-Response body: null
-
-Notes: `username` query param indicates user queried.
-
-Usage: Deletes queried user from friends list.
-
-#### /api/comment
-
-##### GET /api/comment
-
-JWT: Yes
-
-Captcha: No
-
-Query parameters: PostID, position, limit, listingID
-
-JWT claims required: username
-
-Other headers: null
-
-Request body: null
-
-Response body: null
-
-Notes: `PostID` query param indicates post comments retrieved from.
-`position` query param indicates position in list, used for pagination.
-`limit` query param indicates number of comments to retrieved, used for pagination.
-`listingID` query param indicates name of subforum post is in.
-
-Usage: Gets section of list of comments on post.
-
-##### POST /api/comment
-
-JWT: Yes
-
-Captcha: No
-
-Query parameters: PostID, listingID
-
-JWT claims required: username
-
-Other headers: null
-
-Request body:
-
-```JSON
-{
-  body: ... // string
-}
-```
-
-Response body: null
-
-Notes: `PostID` query param indicates post comment posted to.
-`listingID` query param indicates name of subforum post is in.
-`body` JSON field indicates text of comment.
-
-Usage: Posts comment to post.
-
-#### /api/post
-
-##### GET /api/post
-
-JWT: Yes
-
-Captcha: No
-
-Query parameters: position, limit, listingID
-
-JWT claims required: username
-
-Other headers: null
-
-Request body: null
-
-Response body: null
-
-Notes: `position` query param indicates position in list, used for pagination.
-`limit` query param indicates number of posts to retrieved, used for pagination.
-`listingID` query param indicates name of subforum post is in.
-
-Usage: Gets section of list of posts in subforum.
-
-##### POST /api/post
-
-JWT: Yes
-
-Captcha: No
-
-Query parameters: listingID
-
-JWT claims required: username
-
-Other headers: null
-
-Request body:
-
-```JSON
-{
-  body: ... // string
-}
-```
-
-Response body:
-
-```JSON
-{
-  body: id // string
-}
-```
-
-Notes: `listingID` query param indicates name of subforum post is to be posted to.
-`body` JSON field indicates ID of created post.
-
-Usage: Posts post to subforum.
-
-#### /api/files
-
-##### GET /api/files
-
-JWT: Yes
-
-Captcha: No
-
-Query parameters: filename
-
-JWT claims required: username
-
-Other headers: null
-
-Request body: null
-
-Response body: binary blob
-
-Notes: `filename` query parameter indicates name of file to get.
-Response will be binary blob encoding `image/png` file.
-
-Usage: Gets user-uploaded file from server.
-
-##### POST /api/files
-
-JWT: Yes
-
-Captcha: No
-
-Query parameters: null
-
-JWT claims required: username
-
-Other headers: null
-
-Request body: `multipart/form-data` file
-
-Response body: string
-
-Notes: 2MB file size limit.
-File should be in `image/png` format to be displayed correctly.
-Response will be filename of uploaded file.
-
-Usage: Uploads file to server.
-
-#### /api/forums
-
-##### POST /api/forums
-
-JWT: Yes
-
-Captcha: Yes
-
-Query parameters: null
-
-JWT claims required: username
-
-Other headers: null
-
-Request body:
-
-```JSON
-{
-  listingID: ..., // string
-  description: ... // string
-}
-```
-
-Response body: null
-
-Notes: `listingID` request body field indicates subforum name.
-`description` request body field indicates subforum description.
-Subforum names must use the `main.[forumname]` format.
-
-Usage: Creates subforum.
-
-#### /api/login
-
-##### POST /api/login
-
-JWT: No
-
-Captcha: Yes
-
-Query parameters: null
-
-JWT claims required: null
-
-Other headers: Authorization (Basic)
-
-Request body: null
-
-Response body:
-
-```JSON
-{
-  body: token // string
-}
-```
-
-Notes: Username and password provided in the `Authorization` header using the `Basic` scheme.
-
-JWT returned as `body` field of response body.
-
-JWT has `username` claim defined, conferring access to auth-requiring endpoints other than `/api/account/email`.
-
-Usage: Logs user in, returning JWT.
-
-#### /api/signup
-
-##### POST /api/signup
-
-JWT: No
-
-Captcha: Yes
-
-Query parameters: null
-
-JWT claims required: null
-
-Other headers: null
-
-Request body:
-
-```JSON
-{
-  credentials: {
-    username: ..., // string
-    password: ..., // string
-    email: ... // string
-  }
-}
-```
-
-Response body:
-
-```JSON
-{
-  body: token // string
-}
-```
-
-Notes: Account credentials provided in the `credentials` field of the request body.
-JWT returned as `body` field of response body.
-JWT has `username` claim defined, conferring access to auth-requiring endpoints other than `/api/account/email`.
-
-Usage: Creates user account, returning JWT.
-
-### Sockets API
-
-Socket.IO is used for the real-time messaging service. The default path of '/socket.io' is used
-
-Upon connection establishment the client should emit the `listen` event, authenticating themselves for room access. They should then emit the `joinConversation` event to join a conversation room.
-
-The `sendMessages` event should be used to send messages. The client should listen for the `messages` event to receive messages; `getMessages` should only be used to read message history, not as some kind of real-time polling mechanism.
-
-Ordering messages with regards to age is the responsibility of the client; for this purpose a `timestamp` field is included in each message.
-
-#### listen
-
-Takes JWT with `username` claim as argument and authenticates user.
-
-Should be emitted whenever the `connection` event is.
-
-#### joinConversation
-
-Takes username of user client requests to chat with as argument.
-
-Should be emitted whenever the client requests to join a conversation with a user.
-
-Joining a conversation is required to send and receive events related to it. A conversation with a user can only be joined if the username is in the client's friends list. A client may be in only one conversation at a time. Joined rooms are cleared upon disconnection.
-
-#### messages
-
-Given list of messages as argument. Emitted by the server whenever messages are to be sent to a client.
-
-This may be emitted if the client is sent a message by another client. It may also be emitted as the result of the client emitting the `getMessages` event. The message list of a message event is ordered by timestamp, but message events may not be emitted in order.
-
-#### getMessages
-
-Takes a location object as argument. The location object has the following structure.
-
-```JSON
-{
-  position: ..., // number
-  limit: ... // number
-}
-```
-
-Position specifies an offset from the latest message, at which to retrieve messages. Limit specifies how many messages to retrieve. This is used for retrieval of past messages.
-
-Emission of a `getMessages` event by the client results in the server emitting a `messages` event with the specified messages.
-
-#### sendMessages
-
-Takes a message object as argument. The message object has the following structure.
-
-```JSON
-{
-  timestamp: ..., // number
-  from: ..., // string
-  body: ..., // string
-  filename: ... // string
-}
-```
-
-The `timestamp` field does not determine the timestamp of the stored message; it is overwritten by the server with the server-determined timestamp upon receipt.
-
-Emission of a `sendMessage` event by the client results in the server emitting a `messages` event containing the message in its associated messages array.
-
-Although currently an independent `messages` event is emitted for each `sendMessage` event, with a singleton messages array containing the message, this behaviour is subject to change and should not be relied upon.

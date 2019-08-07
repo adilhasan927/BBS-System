@@ -103,15 +103,32 @@
 {\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 July 5th, 2019\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 The default multer-provided algorithm for detemrining a unique filename was replaced, allowing files to be stored with the correct {\f1 .png} extensions. The {\f1 Accept} header of the HTTP request and the {\f1 Content-Type} header of the HTTP response were changed to the {\f1 image/png} MIME type. The {\f1 mime} module was used on the backend to map file extensions to MIME types.\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 Messages were displayed as small, 100x100px thumbnail-style images on the messenger page, although actual thumbnails with reduced file size were not implemented. Clicking it would display the image on its own in a new tab, at full size.\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Build instruction\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Build and development instructions\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 Make sure Git, npm, Node.js, and MongoDB are present on your system. Clone the {\f1 bbs-system} repository using git. Issue the {\f1 npm install} command in the {\f1 bbs-system-backend} and {\f1 bbs-system-frontend} directories to install the project dependencies.\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 Issue the {\f1 mongod} command to start the database server. It will by default broadcast on localhost:27017. Issue the {\f1 npm start} command in the {\f1 bbs-system-backend} folder to start the backend server. It will by default broadcast on localhost:3200. Issue the {\f1 ng serve} command in the {\f1 bbs-system-frontend} folder to start the frontend testing server. It will by default broadcast on localhost:4200.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 A start script, {\field{\*\fldinst{HYPERLINK "./start.bat"}}{\fldrslt{\ul
+start.bat
+}}}
+ is located in the program root directory. It may be used to start the application for development on Windows. Alternatively, the following platform-agnostic steps can be followed.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Issue the {\f1 mongod} command to start the database server. It will by default broadcast on {\field{\*\fldinst{HYPERLINK "http://localhost:27017"}}{\fldrslt{\ul
+localhost:27017
+}}}
+. Issue the {\f1 npm start} command in the {\f1 bbs-system-backend} folder to start the backend server. It will by default broadcast on localhost:3200. Issue the {\f1 ng serve} command in the {\f1 bbs-system-frontend} folder to start the frontend testing server. It will by default broadcast on {\field{\*\fldinst{HYPERLINK "http://localhost:4200"}}{\fldrslt{\ul
+localhost:4200
+}}}
+.\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 Alternatively, issueing the {\f1 ng build --prod} command will build the frontend application for deployment somewhere other than the testing server, configured for production.\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 Navigate to {\field{\*\fldinst{HYPERLINK "http://127.0.0.1:4200"}}{\fldrslt{\ul
 http://127.0.0.1:4200
 }}}
- to view the application frontend. Using 127.0.0.1 instead of localhost is necessary because Google\u8217's reCaptcha service does not support localhost URLs.\par}
-{\pard \ql \f0 \sa180 \li0 \fi0 Configuration of the application is not currently implemented; changing the default backend server port or reCaptcha site key will require changing hardcoded values in multiple place in the application code.\par}
+ to view the application frontend. You will need to disable your browser\u8217's CORS protections for the frontend application code to be able to communicate with the backend.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 For Chrome on Windows these tasks can be done by running the following command in {\f1 cmd.exe}.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \f1 start chrome.exe http://127.0.0.1:4200 --user-data-dir="C:/Chrome dev session" --disable-web-security\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Using 127.0.0.1 instead of localhost is necessary because Google\u8217's reCaptcha service does not support localhost URLs.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 The backend server port, frontend FQDN and CORS whitelisted origins can be configured on the backend in the {\field{\*\fldinst{HYPERLINK "./bbs-system-backend/config.json"}}{\fldrslt{\ul
+config.json
+}}}
+ file.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Configuration of the application on the frontend is not currently fully implemented. Changing the reCaptcha site key or the backend server FQDN will require changing hardcoded values in multiple places in the frontend application code.\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 API documentation\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 JWT endpoints\par}
 {\pard \ql \f0 \sa180 \li0 \fi0 Endpoints marked as JWT require JWT authentication to use. The JWT is provided in the {\f1 Authorization} request header using the {\f1 Bearer} token scheme. The JWT is issued by the server.\par}

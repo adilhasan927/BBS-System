@@ -1,0 +1,5 @@
+{
+  "backendPort": "3000",
+  "frontendFqdn": "localhost:4200",
+  "corsOrigins": []
+}

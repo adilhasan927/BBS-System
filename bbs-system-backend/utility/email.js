@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const getSecret = require('./secrets');
 const jwt = require('jsonwebtoken');
+const config = require('../config.json');
 
 /**
  * Send verification email to user.
@@ -8,7 +9,7 @@ const jwt = require('jsonwebtoken');
  * @param {string} username 
  */
 function verifyUser(address, username) {
-    const link = "http://127.0.0.1:4200"
+    const link = config.frontendFqdn
     + "/verify-email/"
     + jwt.sign({
         //emailed: true,

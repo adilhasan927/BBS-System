@@ -14,6 +14,8 @@ var forumsRouter = require('./routes/forums');
 var friendsRouter = require('./routes/friends');
 var filesRouter = require('./routes/files');
 
+const config = require('./config.json');
+
 var app = express();
 
 // view engine setup
@@ -21,7 +23,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 const corsOptions = {
-  origin: '127.0.0.1',
+  origin: config.corsOrigins,
   optionsSuccessStatus: 200,
 }
 app.use(cors(corsOptions));

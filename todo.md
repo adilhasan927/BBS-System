@@ -14,8 +14,4 @@
 * ~~Implement error handling in messenger.~~
 * ~~Implement typing indicator in messenger.~~
 * ~~Implement file uploads in messenger.~~
-* Write report on project.
-  * ~~Write project history.~~
-  * Write project documentation.
-    * Write API documentation.
-    * Write code documentation.
+* ~~Write report on project.~~

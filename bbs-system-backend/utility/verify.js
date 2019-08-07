@@ -1,7 +1,13 @@
 const jwt = require('jsonwebtoken');
 const getSecret = require('./secrets');
 
-module.exports = function verifyToken(token, callback, bearer=true) {
+/**
+ * Verify JWT signature.
+ * @param {string} token // JWT
+ * @param {import('jsonwebtoken').VerifyCallback} callback 
+ * @param {boolean} bearer // Bearer scheme used? 
+ */
+function verifyToken(token, callback, bearer=true) {
   if (bearer) {
     if (!/^Bearer\s/.test(token)){
       console.log(token);
@@ -21,3 +27,5 @@ module.exports = function verifyToken(token, callback, bearer=true) {
     }
   })
 }
+
+module.exports = verifyToken

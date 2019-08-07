@@ -1,12 +1,12 @@
-const sendError = require('../utility/error');
 const MongoClient = require('mongodb').MongoClient;
 const insertOneWriteOpResult = require('mongodb').insertOneWriteOpResult;
 
 /**
+ * Add subforum to DB.
  * @param {MongoClient} dbs
  * @returns {Promise<insertOneWriteOpResult}
  */
-module.exports = function createSubforum(dbs, name, admin, description) {
+function createSubforum(dbs, name, admin, description) {
   return dbs.db('documents') 
   .collection('subforums')
   .insertOne({
@@ -16,3 +16,5 @@ module.exports = function createSubforum(dbs, name, admin, description) {
     description: description ? description: null,
   })
 }
+
+module.exports = createSubforum;

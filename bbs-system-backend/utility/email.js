@@ -2,8 +2,12 @@ const nodemailer = require('nodemailer');
 const getSecret = require('./secrets');
 const jwt = require('jsonwebtoken');
 
-// Refactor to use real email address.
-module.exports = function verifyUser(address, username) {
+/**
+ * Send verification email to user.
+ * @param {string} address 
+ * @param {string} username 
+ */
+function verifyUser(address, username) {
     const link = "http://127.0.0.1:4200"
     + "/verify-email/"
     + jwt.sign( {
@@ -31,3 +35,5 @@ module.exports = function verifyUser(address, username) {
         }
     });
 }
+
+module.exports = verifyUser;

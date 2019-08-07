@@ -58,12 +58,12 @@ function init(io) {
     socket.on('getMessages', loc => {
       if (!loggedIn) return;
       console.log(currentRoom, loc);
-      getMessages(io, socket, currentRoom, loc);
+      getMessages(socket, currentRoom, loc);
     })
 
     socket.on('sendMessage', message => {
       if (!loggedIn) return;
-      sendMessage(io, socket, currentRoom, message);
+      sendMessage(socket, currentRoom, message);
     })
 
     socket.on('typing', debounce(_ => {
@@ -74,11 +74,12 @@ function init(io) {
 }
 
 /**
- * @param {SocketIO.Server} io
- * @param {SocketIO.Socket} socket
- * @param {Location} loc 
+ * Retrieve messages from DB and emit to socket.
+ * @param {SocketIO.Socket} socket // socket to emit to.
+ * @param {string} currentRoom // conversation room user is in.
+ * @param {Location} loc // messages to retrieve.
  */
-function getMessages(io, socket, currentRoom, loc) {
+function getMessages(socket, currentRoom, loc) {
   connection.then(dbs => {
     dbs.db('documents')
     .collection('conversations')
@@ -93,26 +94,26 @@ function getMessages(io, socket, currentRoom, loc) {
     .toArray()
     .then(arr => {
       if (arr) {
-        io.to(socket.id).emit('messages', arr);
+        socket.emit('messages', arr);
       } else {
-        io.to(socket.it).emit('messages', []);
+        socket.emit('messages', []);
       }
       console.log("Messages fetched from db.");
     }).catch(err => {
       console.log(err);
-      io.to(currentRoom).emit('error', "DBError");
+      socket.emit('error', "DBError");
     })
   })
 }
 
 /**
+ * Defines a section of the messages list.
  * @class Location
  */
 class Location {
   /**
-   * 
-   * @param {number} position 
-   * @param {number} limit 
+   * @param {number} position // start position, relative to latest message.
+   * @param {number} limit // how many messages to retrieve.
    */
   constructor(position, limit) {
     this.position = position;
@@ -121,13 +122,14 @@ class Location {
 }
 
 /**
- * @param {SocketIO.Server} io
- * @param {SocketIO.Socket} socket
- * @param {Message} message
+ * Saves message to DB and sends to users in room.
+ * @param {string} currentRoom // conversation room user is in.
+ * @param {SocketIO.Socket} socket // socket that sent message.
+ * @param {Message} message // message to send.
  */
-function sendMessage(io, socket, currentRoom, message) {
+function sendMessage(socket, currentRoom, message) {
   message.timestamp = Date.now();
-  io.to(currentRoom).emit('messages', [message]);
+  socket.to(currentRoom).emit('messages', [message]);
 
   connection.then(dbs => {
     dbs.db('documents')
@@ -139,7 +141,7 @@ function sendMessage(io, socket, currentRoom, message) {
     }, { upsert: true }).then(_ => {
       console.log("message added to db.")
     }).catch(err => {
-      io.to(socket.id).emit('error', "DBError");
+      socket.to(socket.id).emit('error', "DBError");
     })
   })
 }

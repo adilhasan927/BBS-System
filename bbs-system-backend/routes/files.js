@@ -44,7 +44,7 @@ router.get('/', function(req, res, next) {
   })
 })
 
-router.post('/', upload.single('upload'), function(req, res, next) {
+router.post('/', upload, function(req, res, next) {
   upload(req, res, function(err) {
     if (err.message == "File too large") {
       sendError("FileTooLongError");

@@ -1,6 +1,6 @@
 # BBS System
 
-Code very messy, I have improved since then.
+Code a bit messy, I have improved since then.
 
 Refer to [history.md](./history.md) for project history. Refer to [build.md](./build.md) for instructions on building and running the application. Refer to [api.md](./api.md) for API documentation.
 
